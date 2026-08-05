@@ -1,0 +1,618 @@
+@import 'tailwindcss';
+
+/* ------------------------------------------------------------------ *
+ * Design tokens
+ * Two themes, one black+purple identity. Violet is the signal colour —
+ * it means "the system is live" wherever it appears, the same restraint
+ * principle the previous orange palette used. Raw values live outside
+ * `@theme` so `[data-theme]` can swap them per-theme; `@theme` just
+ * aliases them into Tailwind's token space. See DESIGN.md.
+ * ------------------------------------------------------------------ */
+:root {
+  --bg: oklch(0.09 0.01 300);
+  --bg-deep: oklch(0.06 0.008 300);
+  --surface: oklch(0.14 0.014 300);
+  --surface-2: oklch(0.18 0.016 300);
+
+  --ink: oklch(0.97 0.01 290);
+  --ink-2: oklch(0.75 0.02 290);
+  --ink-3: oklch(0.6 0.02 290);
+
+  --line: oklch(0.28 0.02 290);
+  --line-soft: oklch(0.22 0.018 290);
+
+  --accent: oklch(0.62 0.23 295);
+  --accent-dim: oklch(0.42 0.18 295);
+  --accent-2: oklch(0.72 0.19 300);
+  --danger: oklch(0.58 0.19 25);
+}
+
+/* This site is dark-only; there is no light theme to switch to. Kept as an
+   explicit override (rather than folded into `:root`) because the cinematic
+   intro stage sets `data-theme="dark"` on itself and its own `--color-*`
+   re-aliasing below relies on this selector existing. */
+[data-theme='dark'] {
+  --bg: oklch(0.09 0.01 300);
+  --bg-deep: oklch(0.06 0.008 300);
+  --surface: oklch(0.14 0.014 300);
+  --surface-2: oklch(0.18 0.016 300);
+
+  --ink: oklch(0.97 0.01 290);
+  --ink-2: oklch(0.75 0.02 290);
+  --ink-3: oklch(0.6 0.02 290);
+
+  --line: oklch(0.28 0.02 290);
+  --line-soft: oklch(0.22 0.018 290);
+
+  --accent: oklch(0.62 0.23 295);
+  --accent-dim: oklch(0.42 0.18 295);
+  --accent-2: oklch(0.72 0.19 300);
+  --danger: oklch(0.58 0.19 25);
+
+  /* Tailwind's utility classes (e.g. `text-ink`) read `--color-*`, not the
+     raw variables directly. `--color-ink: var(--ink)` etc. are declared once
+     inside `@theme` (emitted at `:root`), so their COMPUTED value is fixed
+     against `:root`'s `--ink` and simply inherits down — redeclaring `--ink`
+     here does not make `--color-ink` re-resolve. Re-aliasing them locally,
+     mirroring `@theme` below, forces that re-resolution within this subtree. */
+  --color-bg: var(--bg);
+  --color-bg-deep: var(--bg-deep);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+
+  --color-line: var(--line);
+  --color-line-soft: var(--line-soft);
+
+  --color-accent: var(--accent);
+  --color-accent-dim: var(--accent-dim);
+  --color-accent-2: var(--accent-2);
+  --color-danger: var(--danger);
+}
+
+@theme {
+  --color-bg: var(--bg);
+  --color-bg-deep: var(--bg-deep);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+
+  --color-line: var(--line);
+  --color-line-soft: var(--line-soft);
+
+  --color-accent: var(--accent);
+  --color-accent-dim: var(--accent-dim);
+  --color-accent-2: var(--accent-2);
+  --color-danger: var(--danger);
+
+  --font-sans: 'Schibsted Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Semantic z-index scale — never arbitrary values. */
+:root {
+  --z-base: 0;
+  --z-raised: 10;
+  --z-sticky: 20;
+  --z-nav: 30;
+  --z-overlay: 40;
+}
+
+/* ------------------------------------------------------------------ *
+ * Base
+ * ------------------------------------------------------------------ */
+@layer base {
+  * {
+    border-color: var(--color-line-soft);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    font-synthesis-weight: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: color-mix(in oklch, var(--color-accent) 40%, transparent);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* Only the canvas hero suppresses the ring — it manages its own focus state. */
+  canvas:focus-visible {
+    outline-offset: 6px;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Components
+ * ------------------------------------------------------------------ */
+@layer components {
+  .shell {
+    width: 100%;
+    max-width: 78rem;
+    margin-inline: auto;
+    padding-inline: clamp(1.25rem, 5vw, 4rem);
+  }
+
+  /* 60ch of this typeface lands at roughly 72 actual characters — `ch`
+     measures the digit zero, which is wider than the lowercase average. */
+  .prose-col {
+    max-width: 60ch;
+  }
+
+  /* Mono label — used sparingly for genuine instrumentation, not as an
+     eyebrow above every heading. */
+  .mono {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-ink-3);
+  }
+
+  .rule {
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      var(--color-line) 0%,
+      var(--color-line) 55%,
+      transparent 100%
+    );
+  }
+
+  /* Buttons ------------------------------------------------------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    height: 3rem;
+    padding-inline: 1.4rem;
+    border-radius: 8px;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+    white-space: nowrap;
+    transition:
+      background-color 0.35s var(--ease-out-quart),
+      color 0.35s var(--ease-out-quart),
+      border-color 0.35s var(--ease-out-quart),
+      transform 0.35s var(--ease-out-quart);
+  }
+
+  .btn:active {
+    transform: translateY(1px);
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-2) 100%);
+    background-size: 170% 170%;
+    background-position: 0% 50%;
+    color: #fff;
+    box-shadow: 0 0 0 0 transparent;
+    transition:
+      background-position 0.6s var(--ease-out-quart),
+      box-shadow 0.45s var(--ease-out-quart),
+      transform 0.35s var(--ease-out-quart);
+  }
+
+  .btn-primary:hover {
+    background-position: 100% 50%;
+    box-shadow: 0 10px 34px -8px color-mix(in oklch, var(--color-accent) 75%, transparent);
+  }
+
+  .btn-ghost {
+    border: 1px solid var(--color-line);
+    color: var(--color-ink-2);
+    transition:
+      border-color 0.35s var(--ease-out-quart),
+      color 0.35s var(--ease-out-quart),
+      background-color 0.35s var(--ease-out-quart),
+      box-shadow 0.35s var(--ease-out-quart);
+  }
+
+  .btn-ghost:hover {
+    border-color: color-mix(in oklch, var(--color-accent) 55%, transparent);
+    color: var(--color-ink);
+    background: color-mix(in oklch, var(--color-accent) 8%, transparent);
+    box-shadow: 0 0 24px -6px color-mix(in oklch, var(--color-accent) 55%, transparent);
+  }
+
+  /* Icon link ----------------------------------------------------- */
+  .icon-link {
+    display: inline-grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 7px;
+    color: var(--color-ink-3);
+    transition:
+      color 0.3s var(--ease-out-quart),
+      background-color 0.3s var(--ease-out-quart);
+  }
+
+  .icon-link:hover {
+    color: var(--color-ink);
+    background: var(--color-surface);
+  }
+
+  /* Live indicator — one of the few places colour is allowed out. */
+  .live-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-accent-2);
+    box-shadow: 0 0 0 0 color-mix(in oklch, var(--color-accent-2) 60%, transparent);
+    animation: pulse-dot 2.8s var(--ease-out-quart) infinite;
+  }
+
+  @keyframes pulse-dot {
+    0% {
+      box-shadow: 0 0 0 0 color-mix(in oklch, var(--color-accent-2) 55%, transparent);
+    }
+    70% {
+      box-shadow: 0 0 0 7px transparent;
+    }
+    100% {
+      box-shadow: 0 0 0 0 transparent;
+    }
+  }
+
+  /* Tech tag ------------------------------------------------------ */
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    height: 1.75rem;
+    padding-inline: 0.6rem;
+    border: 1px solid var(--color-line-soft);
+    border-radius: 5px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.01em;
+    color: var(--color-ink-2);
+    background: color-mix(in oklch, var(--color-surface) 60%, transparent);
+  }
+
+  /* Portrait plate ------------------------------------------------ */
+
+  /* Perspective lives on the parent: a rotated element needs an ancestor
+     with `perspective` set, not itself, or the 3D foreshortening is lost. */
+  .tilt-stage {
+    perspective: 1200px;
+  }
+
+  .portrait-frame {
+    --rx: 0;
+    --ry: 0;
+    --tilt-scale: 1;
+    background: var(--color-bg-deep);
+    box-shadow:
+      0 1px 0 0 color-mix(in oklch, var(--color-ink) 6%, transparent) inset,
+      0 40px 90px -60px color-mix(in oklch, var(--color-accent) 70%, transparent);
+    /* Whole-card 3D tilt (see hooks/useTilt.ts), layered on top of
+       ProfileReveal's own energy-sweep transformation. `rotateX/Y` and
+       `scale` are transform-only — cheap to composite at pointermove
+       frequency. */
+    transform: rotateX(calc(var(--rx) * 1deg)) rotateY(calc(var(--ry) * 1deg))
+      scale(var(--tilt-scale));
+    transition: transform 500ms var(--ease-out-quart);
+  }
+
+  /* A shorter transition while actively tracking the pointer keeps the tilt
+     responsive; the long one only applies to the settle-back on release. */
+  .portrait-frame.is-tracking {
+    transition-duration: 90ms;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .portrait-frame {
+      transition: none;
+    }
+  }
+
+  /* A soft highlight that leans opposite the tilt, so the card reads as a lit
+     pane of glass. Oversized and clipped by the frame's own `overflow:
+     hidden`, so panning it is a `transform`, never a gradient repaint. */
+  .tilt-glare {
+    position: absolute;
+    inset: -20%;
+    pointer-events: none;
+    opacity: 0;
+    mix-blend-mode: overlay;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.55), transparent 60%);
+    transform: translate(calc(var(--ry) * 4%), calc(var(--rx) * -4%));
+    transition:
+      opacity 400ms var(--ease-out-quart),
+      transform 90ms linear;
+  }
+
+  .portrait-frame.is-tracking .tilt-glare {
+    opacity: 0.22;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tilt-glare {
+      transition: none;
+      opacity: 0;
+    }
+  }
+
+  /* Four hairline corner marks. Instrument registration, not a border. */
+  .corner {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  .corner::before,
+  .corner::after {
+    content: '';
+    position: absolute;
+    background: color-mix(in oklch, var(--color-ink) 42%, transparent);
+  }
+
+  .corner::before {
+    width: 100%;
+    height: 1px;
+  }
+
+  .corner::after {
+    width: 1px;
+    height: 100%;
+  }
+
+  .corner-tl {
+    top: 11px;
+    left: 11px;
+  }
+  .corner-tr {
+    top: 11px;
+    right: 11px;
+  }
+  .corner-bl {
+    bottom: 11px;
+    left: 11px;
+  }
+  .corner-br {
+    bottom: 11px;
+    right: 11px;
+  }
+
+  .corner-tr::before,
+  .corner-tr::after {
+    right: 0;
+  }
+  .corner-bl::before {
+    bottom: 0;
+  }
+  .corner-br::before,
+  .corner-br::after {
+    right: 0;
+    bottom: 0;
+  }
+
+  .idle-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-line);
+    transition: background-color 0.5s var(--ease-out-quart);
+  }
+
+  /* Profile reveal --------------------------------------------------
+     The energy-sweep transformation on the hero portrait. Positions are
+     written directly by ProfileReveal.tsx's GSAP timeline (clip-path,
+     `left`, `opacity`) — these rules only own colour/blend/shape. */
+
+  /* Ambient glow intensifies slightly while revealed, on top of the
+     resting glow the frame already carries via its own box-shadow. */
+  .portrait-frame.is-revealed {
+    box-shadow:
+      0 1px 0 0 color-mix(in oklch, var(--color-ink) 6%, transparent) inset,
+      0 40px 100px -50px color-mix(in oklch, var(--color-accent) 85%, transparent);
+  }
+
+  .profile-reveal-band {
+    top: 0;
+    bottom: 0;
+    width: 46%;
+    background: linear-gradient(
+      100deg,
+      transparent 0%,
+      color-mix(in oklch, var(--color-accent-2) 88%, white) 50%,
+      transparent 100%
+    );
+    mix-blend-mode: screen;
+  }
+
+  /* No opacity transition here on purpose: under normal motion this
+     layer's opacity is written every frame by the GSAP timeline, and a
+     CSS transition would fight that with its own easing, reading as lag
+     instead of tight sync. Reduced motion sets its own transition inline
+     (see ProfileReveal.tsx), since there it toggles via React state, not
+     a per-frame write. */
+  .profile-reveal-glow {
+    background: radial-gradient(
+      70% 45% at 50% 4%,
+      color-mix(in oklch, var(--color-accent) 55%, transparent),
+      transparent 72%
+    );
+    mix-blend-mode: screen;
+    transform: translate(var(--glow-x, 0px), var(--glow-y, 0px));
+  }
+
+  .profile-reveal-particle {
+    background: var(--color-accent-2);
+    box-shadow: 0 0 6px 1px color-mix(in oklch, var(--color-accent-2) 70%, transparent);
+  }
+
+  /* Architecture diagram edges ------------------------------------
+     A slow traveling dash suggesting live data flow through the pipeline.
+     Gated by the diagram's own IntersectionObserver (data-in-view on the
+     <figure>) so it only runs while the diagram is actually on screen. */
+  .diagram-edge {
+    stroke-dasharray: 5 9;
+    animation: diagram-flow 1.6s linear infinite;
+    animation-play-state: paused;
+  }
+
+  [data-in-view='true'] .diagram-edge {
+    animation-play-state: running;
+  }
+
+  @keyframes diagram-flow {
+    to {
+      stroke-dashoffset: -28;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .diagram-edge {
+      animation: none;
+      stroke-dasharray: none;
+    }
+  }
+
+  /* Case-study flow diagram (Project overview) ---------------------
+     A soft pulse behind the big connecting arrow between the two flow
+     boxes, so the "data is moving through this" cue reads clearly at a
+     glance instead of as a thin, easy-to-miss line. Gated the same way
+     as .diagram-edge: only runs while the diagram is on screen. */
+  .flow-strip-arrow {
+    background: color-mix(in oklch, var(--color-accent) 14%, transparent);
+    box-shadow: 0 0 0 0 color-mix(in oklch, var(--color-accent) 45%, transparent);
+    animation: flow-strip-pulse 2.2s ease-in-out infinite;
+    animation-play-state: paused;
+  }
+
+  [data-in-view='true'] .flow-strip-arrow {
+    animation-play-state: running;
+  }
+
+  @keyframes flow-strip-pulse {
+    0%,
+    100% {
+      box-shadow: 0 0 0 0 color-mix(in oklch, var(--color-accent) 45%, transparent);
+    }
+    50% {
+      box-shadow: 0 0 0 12px transparent;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .flow-strip-arrow {
+      animation: none;
+    }
+  }
+
+  /* Underline-on-hover link -------------------------------------- */
+  .link-u {
+    position: relative;
+    color: var(--color-ink);
+    text-decoration: none;
+  }
+
+  .link-u::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 100%;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.45s var(--ease-out-expo);
+  }
+
+  .link-u:hover::after,
+  .link-u:focus-visible::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Scroll reveal
+ * Content is visible by default; the reveal only enhances it. If the
+ * observer never fires (headless render, hidden tab, no JS) the page
+ * still ships fully readable.
+ * ------------------------------------------------------------------ */
+@layer utilities {
+  @media (prefers-reduced-motion: no-preference) {
+    [data-reveal-root='on'] [data-reveal] {
+      opacity: 0;
+      transform: translateY(18px);
+      transition:
+        opacity 0.9s var(--ease-out-quart),
+        transform 0.9s var(--ease-out-quart);
+      transition-delay: var(--reveal-delay, 0ms);
+    }
+
+    [data-reveal-root='on'] [data-reveal='shown'] {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* Printing never scrolls, so the reveal must never apply to it. */
+  @media print {
+    [data-reveal-root='on'] [data-reveal] {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+}
