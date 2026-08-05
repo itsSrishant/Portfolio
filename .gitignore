@@ -18,8 +18,6 @@ tsconfig.tsbuildinfo
 .claude/settings.local.json
 .worktrees
 
-public/assets/portfolio-intro/*
-!public/assets/portfolio-intro/README.md
 
 # Local planning docs (design specs/plans from AI-assisted sessions) --
 # kept on this machine only, not part of the public repo.
