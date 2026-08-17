@@ -19,8 +19,18 @@
       property="og:description"
       content="I build intelligent systems and software that solve real-world problems."
     />
-    <meta property="og:image" content="/srishant-portrait.jpg" />
+    <!-- og:image must be an absolute URL per the Open Graph spec — a
+         relative path here isn't guaranteed to resolve correctly across
+         every platform that unfurls a shared link. Same placeholder
+         domain as everywhere else — see the TODO in src/lib/site.ts. -->
+    <meta property="og:image" content="https://srishant-kulkarni-portfolio.example/srishant-portrait.jpg" />
+    <meta property="og:url" content="https://srishant-kulkarni-portfolio.example/" />
     <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Baseline for the homepage, present even before JS runs.
+         DocumentMeta.tsx (src/components/DocumentMeta.tsx) updates this
+         to match on every client-side route change. -->
+    <link rel="canonical" href="https://srishant-kulkarni-portfolio.example/" />
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/srishant-portrait.jpg" />

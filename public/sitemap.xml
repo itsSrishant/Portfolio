@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Hand-written, not generated — this is a small, static Vite SPA with no
+  server-side build step to generate this from src/data/profile.ts's
+  `projects` array automatically. Whenever a project is added to or
+  removed from that array, add or remove its matching <url> entry here
+  too. If this list ever grows past a handful of entries, it's worth
+  writing a small postbuild script to generate this from that array
+  instead of maintaining both by hand.
+
+  The domain below is a placeholder — see the TODO in src/lib/site.ts.
+  Update both together once this is actually deployed.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://srishant-kulkarni-portfolio.example/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://srishant-kulkarni-portfolio.example/work/voice-ai-platform</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://srishant-kulkarni-portfolio.example/work/seooptimiz</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+</urlset>
