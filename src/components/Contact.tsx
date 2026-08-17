@@ -1,4 +1,4 @@
-import { GitHubIcon, LinkedInIcon, ArrowIcon } from './Icons';
+import { GitHubIcon, LinkedInIcon, ArrowIcon, DocumentIcon } from './Icons';
 import { profile, linksReady } from '../data/profile';
 
 /** Oversized type, almost no chrome. The address is the interface. */
@@ -38,22 +38,24 @@ export default function Contact() {
             <ArrowIcon className="h-5 w-5 shrink-0 self-center" />
           </a>
 
-          {(linksReady.github || linksReady.linkedin) && (
-            <div className="mt-6 flex flex-wrap gap-3">
-              {linksReady.github && (
-                <a href={profile.github} target="_blank" rel="noreferrer noopener" className="btn btn-ghost">
-                  <GitHubIcon />
-                  GitHub
-                </a>
-              )}
-              {linksReady.linkedin && (
-                <a href={profile.linkedin} target="_blank" rel="noreferrer noopener" className="btn btn-ghost">
-                  <LinkedInIcon />
-                  LinkedIn
-                </a>
-              )}
-            </div>
-          )}
+          <div className="mt-6 flex flex-wrap gap-3">
+            <a href={profile.resumeUrl} target="_blank" rel="noreferrer noopener" className="btn btn-primary">
+              <DocumentIcon />
+              Resume
+            </a>
+            {linksReady.github && (
+              <a href={profile.github} target="_blank" rel="noreferrer noopener" className="btn btn-ghost">
+                <GitHubIcon />
+                GitHub
+              </a>
+            )}
+            {linksReady.linkedin && (
+              <a href={profile.linkedin} target="_blank" rel="noreferrer noopener" className="btn btn-ghost">
+                <LinkedInIcon />
+                LinkedIn
+              </a>
+            )}
+          </div>
         </div>
 
         <div

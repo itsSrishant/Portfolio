@@ -314,6 +314,22 @@
     letter-spacing: 0.01em;
     color: var(--color-ink-2);
     background: color-mix(in oklch, var(--color-surface) 60%, transparent);
+    transition:
+      border-color 0.25s var(--ease-out-quart),
+      background-color 0.25s var(--ease-out-quart),
+      color 0.25s var(--ease-out-quart);
+  }
+
+  /* Applies everywhere .tag is used, including the purely decorative
+     lists (Skills, Experience stack) — a quiet "the cursor registered
+     this" cue costs nothing there. Tag *buttons* that also drive a
+     highlight (the case-study tech lists) layer their own stronger
+     active state in JS on top of this, so this is always the floor,
+     never the only feedback an interactive tag gives. */
+  .tag:hover {
+    border-color: color-mix(in oklch, var(--color-accent) 55%, transparent);
+    background: color-mix(in oklch, var(--color-accent) 10%, var(--color-surface));
+    color: var(--color-ink);
   }
 
   /* Portrait plate ------------------------------------------------ */

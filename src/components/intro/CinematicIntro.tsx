@@ -13,6 +13,34 @@ const NARROW_BREAKPOINT = 820;
  *  device doesn't fire wheel/touch/key events the listeners below expect. */
 const SAFETY_MS = 12000;
 
+/**
+ * Home unmounts and remounts on every client-side navigation away from and
+ * back to `/` (a project's case study is a real route, not a modal), which
+ * would otherwise replay this from scratch each time — a five-second
+ * scroll-lock every time someone taps "back" reads as broken, not
+ * cinematic. sessionStorage instead of a module-level flag specifically:
+ * a module flag would also survive a hard refresh, which should still
+ * play the intro once.
+ */
+const SESSION_KEY = 'intro-played';
+
+function hasPlayedThisSession(): boolean {
+  try {
+    return sessionStorage.getItem(SESSION_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+
+function markPlayedThisSession(): void {
+  try {
+    sessionStorage.setItem(SESSION_KEY, '1');
+  } catch {
+    // Storage blocked (private mode, etc.) — the intro simply replays on
+    // the next mount instead of persisting, which is a harmless downgrade.
+  }
+}
+
 function useIsNarrowViewport(): boolean {
   const [narrow, setNarrow] = useState(
     () => typeof window !== 'undefined' && window.innerWidth < NARROW_BREAKPOINT,
@@ -79,10 +107,10 @@ export default function CinematicIntro() {
 
   const reducedMotion = usePrefersReducedMotion();
   const isNarrow = useIsNarrowViewport();
-  const [played, setPlayed] = useState(reducedMotion);
+  const [played, setPlayed] = useState(() => reducedMotion || hasPlayedThisSession());
 
   useLayoutEffect(() => {
-    if (reducedMotion) {
+    if (reducedMotion || hasPlayedThisSession()) {
       setPlayed(true);
       document.documentElement.setAttribute('data-hero-revealed', 'true');
       return;
@@ -111,6 +139,7 @@ export default function CinematicIntro() {
         unlockScroll();
         document.documentElement.setAttribute('data-hero-revealed', 'true');
         setPlayed(true);
+        markPlayedThisSession();
       },
     });
 

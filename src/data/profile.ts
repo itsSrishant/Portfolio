@@ -22,11 +22,26 @@ export const profile = {
   initials: 'SK',
   roles: ['AI & Data Science Student', 'Software Engineer'],
   tagline: 'I build intelligent systems and software that solve real-world problems.',
-  location: 'Thane, Maharashtra, India',
+  location: 'Mumbai, Maharashtra, India',
   email: 'imsrishant@gmail.com',
 
   github: 'https://github.com/itsSrishant',
   linkedin: 'https://www.linkedin.com/in/srishantkulkarni/',
+
+  /**
+   * To update the resume: don't edit anything in this file, and never
+   * open the PDF itself in a text/code editor to "add" or change
+   * content — a PDF is a binary format (starts with a `%PDF-1.4` header
+   * and locates every object via exact byte offsets in a cross-reference
+   * table), so editing it as text corrupts it immediately.
+   *
+   * Instead: drag the new resume into `public/`, name it exactly
+   * `srishant-kulkarni-resume.pdf` (overwriting the old one), and stop —
+   * this field already points at that filename, and both the Contact
+   * section button and the nav icon read from it, so nothing else needs
+   * to change.
+   */
+  resumeUrl: '/srishant-kulkarni-resume.pdf',
 
   education: {
     degree: 'B.Tech Artificial Intelligence & Data Science',
@@ -119,6 +134,7 @@ export const experience = [
 
 export const projects = [
   {
+    slug: 'voice-ai-platform',
     title: 'AI Voice Assistant Platform',
     context: 'Internship project · PlatinumOne Business Services',
     year: '2026',
@@ -165,6 +181,37 @@ export const projects = [
     demo: null,
     privateNote: 'Source is internal to the company and not publicly available.',
   },
+  {
+    slug: 'seooptimiz',
+    title: 'SEOOptimiz',
+    context: 'Independent project',
+    year: '2026',
+    status: 'Live',
+    lede: 'A deterministic website analysis engine — paste a URL, and it scores the site across six dimensions using 60+ measurable signals instead of an LLM guessing whether the site is "good."',
+    body: "Most audit tools are one of two extremes: hundreds of metrics with no way to tell what matters, or a single score with no way to see why. SEOOptimiz connects the two — every pillar score traces back to the concrete signals that produced it, and none of those signals come from a model deciding what looks right.",
+    features: [
+      {
+        label: 'Six weighted pillars',
+        text: 'SEO (25%), Responsiveness (20%), Accessibility (15%), Structure (15%), Trust (15%) and Conversion (10%) combine into one weighted overall score.',
+      },
+      {
+        label: '60+ deterministic signals',
+        text: 'Title metadata, heading hierarchy, alt text coverage, HTTPS and security headers, canonical configuration, ARIA usage, CTA clarity and more — each one a rule-based check, not a model judgment.',
+      },
+      {
+        label: 'No LLM in the scoring path',
+        text: 'The analysis engine evaluates concrete, measurable signals with deterministic rules, so the same URL produces the same score every time.',
+      },
+      {
+        label: 'Exportable report',
+        text: 'Results export to a structured PDF, so a scorecard is something a client or teammate can actually keep and act on.',
+      },
+    ],
+    stack: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'cheerio', 'GSAP', 'Lenis', 'Vercel'],
+    repo: 'https://github.com/itsSrishant/SEOOptimiz',
+    demo: 'https://seo-optimiz.vercel.app/',
+    privateNote: null,
+  },
 ] as const;
 
 export type Project = (typeof projects)[number];
@@ -179,7 +226,7 @@ export const skills = [
   { group: 'Backend', items: ['FastAPI', 'Spring Boot', 'REST APIs'] },
   {
     group: 'AI',
-    items: ['LLMs', 'RAG', 'Embeddings', 'FAISS', 'Speech-to-Text', 'Text-to-Speech'],
+    items: ['LLMs', 'RAG', 'Embeddings', 'Speech-to-Text', 'Text-to-Speech'],
   },
   { group: 'Databases', items: ['PostgreSQL', 'SQLite'] },
   { group: 'Tools', items: ['Git', 'GitHub', 'Docker', 'VS Code'] },

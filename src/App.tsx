@@ -1,26 +1,20 @@
+import { Routes, Route } from 'react-router-dom';
 import Nav from './components/Nav';
-import Hero from './components/Hero';
-import About from './components/About';
-import Experience from './components/Experience';
-import Projects from './components/Projects';
-import Skills from './components/Skills';
-import Contact from './components/Contact';
 import Footer from './components/Footer';
-import { useReveal } from './hooks/useReveal';
+import RouteEffects from './components/RouteEffects';
+import Home from './pages/Home';
+import WorkDetail from './pages/WorkDetail';
 
 export default function App() {
-  useReveal();
-
   return (
     <>
+      <RouteEffects />
       <Nav />
       <main id="main">
-        <Hero />
-        <About />
-        <Experience />
-        <Projects />
-        <Skills />
-        <Contact />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/work/:slug" element={<WorkDetail />} />
+        </Routes>
       </main>
       <Footer />
     </>

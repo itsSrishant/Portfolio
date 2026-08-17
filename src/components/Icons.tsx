@@ -36,6 +36,25 @@ export function MailIcon({ className = '' }: IconProps) {
   );
 }
 
+export function DocumentIcon({ className = '' }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.7"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className={`${base} ${className}`}
+    >
+      <path d="M7 2.75h7.5L19 7.25V19.5a1.75 1.75 0 0 1-1.75 1.75H7A1.75 1.75 0 0 1 5.25 19.5v-15A1.75 1.75 0 0 1 7 2.75Z" />
+      <path d="M14.25 2.75V7.5H19" />
+      <path d="M8.5 13h7M8.5 16.5h5" />
+    </svg>
+  );
+}
+
 export function ArrowIcon({ className = '' }: IconProps) {
   return (
     <svg

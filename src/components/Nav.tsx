@@ -1,18 +1,30 @@
 import { useEffect, useState } from 'react';
-import { GitHubIcon, LinkedInIcon } from './Icons';
+import { useLocation } from 'react-router-dom';
+import { GitHubIcon, LinkedInIcon, DocumentIcon } from './Icons';
+import HashLink from './HashLink';
 import { navItems, profile, linksReady } from '../data/profile';
 
 /**
- * Fully hidden through the cinematic intro — not just transparent — so it
- * never competes with the character sequence. It fades in only once
- * CinematicIntro (Hero.tsx) has flagged the hero content as revealed, via
- * the data-hero-revealed attribute it sets on <html>.
+ * Fully hidden through the cinematic intro on the homepage — not just
+ * transparent — so it never competes with the character sequence. It
+ * fades in only once CinematicIntro has flagged the hero content as
+ * revealed, via the data-hero-revealed attribute it sets on <html>.
+ *
+ * That gating only makes sense on the homepage, which is the only route
+ * with an intro. Case-study pages have no hero to hide behind, so the nav
+ * is simply visible there from the first paint.
  */
 export default function Nav() {
-  const [scrolled, setScrolled] = useState(false);
+  const { pathname } = useLocation();
+  const onHome = pathname === '/';
+  const [scrolled, setScrolled] = useState(!onHome);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
+    if (!onHome) {
+      setScrolled(true);
+      return;
+    }
     const sync = () => setScrolled(document.documentElement.dataset.heroRevealed === 'true');
     sync();
     // A scroll listener alone isn't enough any more: CinematicIntro now
@@ -27,7 +39,7 @@ export default function Nav() {
       window.removeEventListener('scroll', sync);
       observer.disconnect();
     };
-  }, []);
+  }, [onHome]);
 
   // A menu that stays open behind a navigation is a trap; close it on escape
   // and lock the page behind it while it is up.
@@ -47,12 +59,12 @@ export default function Nav() {
 
   return (
     <>
-      <a
-        href="#about"
+      <HashLink
+        hash="#about"
         className="btn btn-primary sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-40"
       >
         Skip to content
-      </a>
+      </HashLink>
 
       <header
         className="fixed inset-x-0 top-0 transition-[opacity,background-color,border-color,backdrop-filter] duration-500"
@@ -66,25 +78,25 @@ export default function Nav() {
         }}
       >
         <nav className="shell flex h-[68px] items-center justify-between" aria-label="Primary">
-          <a
-            href="#top"
+          <HashLink
+            hash="#top"
             className="group inline-flex items-baseline gap-2.5"
             aria-label={`${profile.name} — back to top`}
           >
             <span className="text-[1.05rem] font-bold tracking-[-0.02em]">{profile.initials}</span>
             <span className="text-ink-3 hidden text-[0.9rem] sm:inline">{profile.name}</span>
-          </a>
+          </HashLink>
 
           <div className="flex items-center gap-1">
             <ul className="mr-3 hidden items-center gap-1 md:flex">
               {navItems.map((item) => (
                 <li key={item.href}>
-                  <a
-                    href={item.href}
+                  <HashLink
+                    hash={item.href}
                     className="text-ink-2 hover:text-ink hover:bg-surface inline-flex h-9 items-center rounded-[7px] px-3 text-[0.9rem] transition-colors duration-300"
                   >
                     {item.label}
-                  </a>
+                  </HashLink>
                 </li>
               ))}
             </ul>
@@ -112,9 +124,18 @@ export default function Nav() {
                   <LinkedInIcon />
                 </a>
               )}
-              <a href="#contact" className="btn btn-ghost ml-2 h-9!">
-                Contact me
+              <a
+                href={profile.resumeUrl}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="icon-link"
+                aria-label="Resume (PDF)"
+              >
+                <DocumentIcon />
               </a>
+              <HashLink hash="#contact" className="btn btn-ghost ml-2 h-9!">
+                Contact me
+              </HashLink>
             </div>
 
             <button
@@ -153,23 +174,23 @@ export default function Nav() {
           <ul>
             {navItems.map((item) => (
               <li key={item.href} className="border-line-soft border-b">
-                <a
-                  href={item.href}
+                <HashLink
+                  hash={item.href}
                   onClick={() => setOpen(false)}
                   className="block py-5 text-[1.75rem] font-medium tracking-[-0.02em]"
                 >
                   {item.label}
-                </a>
+                </HashLink>
               </li>
             ))}
             <li className="border-line-soft border-b">
-              <a
-                href="#contact"
+              <HashLink
+                hash="#contact"
                 onClick={() => setOpen(false)}
                 className="block py-5 text-[1.75rem] font-medium tracking-[-0.02em]"
               >
                 Contact
-              </a>
+              </HashLink>
             </li>
           </ul>
 
@@ -184,6 +205,9 @@ export default function Nav() {
                 <LinkedInIcon />
               </a>
             )}
+            <a href={profile.resumeUrl} target="_blank" rel="noreferrer noopener" className="icon-link" aria-label="Resume (PDF)">
+              <DocumentIcon />
+            </a>
           </div>
         </nav>
       </div>

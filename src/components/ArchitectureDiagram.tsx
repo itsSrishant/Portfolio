@@ -20,7 +20,7 @@ import { useEffect, useRef, useState } from 'react';
  * prefers-reduced-motion.
  */
 
-interface NodeDef {
+export interface NodeDef {
   id: string;
   x: number;
   y: number;
@@ -31,7 +31,7 @@ interface NodeDef {
   accent?: boolean;
 }
 
-interface EdgeDef {
+export interface EdgeDef {
   id: string;
   from: string;
   to: string;
@@ -39,7 +39,10 @@ interface EdgeDef {
   kind: 'main' | 'accent' | 'dashed';
 }
 
-const nodes: NodeDef[] = [
+/** The voice platform's pipeline — the diagram's original (and still
+ *  default) content, kept here as named exports so every existing call
+ *  site keeps working with zero props. */
+export const VOICE_NODES: NodeDef[] = [
   { id: 'caller-in', x: 14, y: 118, w: 96, h: 46, label: 'Caller', sub: 'audio in' },
   { id: 'stt', x: 150, y: 118, w: 108, h: 46, label: 'Speech → text', sub: 'streaming' },
   { id: 'llm', x: 298, y: 110, w: 130, h: 62, label: 'Language model', sub: 'streamed reply', accent: true },
@@ -50,7 +53,7 @@ const nodes: NodeDef[] = [
   { id: 'postcall', x: 468, y: 218, w: 108, h: 46, label: 'Post-call', sub: 'analysis' },
 ];
 
-const edges: EdgeDef[] = [
+export const VOICE_EDGES: EdgeDef[] = [
   { id: 'e-in-stt', from: 'caller-in', to: 'stt', d: 'M110 141H144', kind: 'main' },
   { id: 'e-stt-llm', from: 'stt', to: 'llm', d: 'M258 141H292', kind: 'main' },
   { id: 'e-llm-tts', from: 'llm', to: 'tts', d: 'M428 141H462', kind: 'main' },
@@ -60,6 +63,11 @@ const edges: EdgeDef[] = [
   { id: 'e-tts-postcall', from: 'tts', to: 'postcall', d: 'M428 241H462', kind: 'dashed' },
 ];
 
+export const VOICE_ARIA_LABEL =
+  "System diagram. A caller's speech enters a streaming speech-to-text stage, which passes text to a language model. The language model reads retrieved passages from a knowledge base built from uploaded documents, and is constrained by a guardrail layer. Its streamed reply is spoken back through text-to-speech to the caller. The full transcript is also written to post-call analysis.";
+
+export const VOICE_CAPTION = 'UPLOADED DOCUMENTS → CHUNKED → INDEXED → RETRIEVED PER TURN';
+
 const EDGE_COLOR = {
   main: { base: 'rgba(233,233,242,0.4)', active: 'rgba(233,233,242,0.9)' },
   accent: { base: 'rgba(139,123,240,0.65)', active: 'rgba(139,123,240,1)' },
@@ -68,13 +76,25 @@ const EDGE_COLOR = {
 
 interface ArchitectureDiagramProps {
   className?: string;
+  nodes?: NodeDef[];
+  edges?: EdgeDef[];
+  ariaLabel?: string;
+  /** Small mono caption under the diagram — omit to leave it blank. */
+  caption?: string;
   /** Lets an ancestor (e.g. a "technology → architecture" hover list) drive
    *  the same spotlight this diagram already applies to its own hover —
    *  additive only, so nothing changes when it's left unset. */
   externalHighlight?: string | null;
 }
 
-export default function ArchitectureDiagram({ className = '', externalHighlight = null }: ArchitectureDiagramProps) {
+export default function ArchitectureDiagram({
+  className = '',
+  nodes = VOICE_NODES,
+  edges = VOICE_EDGES,
+  ariaLabel = VOICE_ARIA_LABEL,
+  caption = VOICE_CAPTION,
+  externalHighlight = null,
+}: ArchitectureDiagramProps) {
   const figureRef = useRef<HTMLElement>(null);
   const [hoveredLocal, setHoveredLocal] = useState<string | null>(null);
   const hovered = hoveredLocal ?? externalHighlight;
@@ -117,7 +137,7 @@ export default function ArchitectureDiagram({ className = '', externalHighlight 
         viewBox="0 0 760 300"
         className="h-auto w-full"
         role="img"
-        aria-label="System diagram. A caller's speech enters a streaming speech-to-text stage, which passes text to a language model. The language model reads retrieved passages from a knowledge base built from uploaded documents, and is constrained by a guardrail layer. Its streamed reply is spoken back through text-to-speech to the caller. The full transcript is also written to post-call analysis."
+        aria-label={ariaLabel}
       >
         <defs>
           <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
@@ -211,17 +231,19 @@ export default function ArchitectureDiagram({ className = '', externalHighlight 
           );
         })}
 
-        <text
-          x={363}
-          y={293}
-          textAnchor="middle"
-          fill="#8a8a9c"
-          fontSize="8.5"
-          fontFamily="'Geist Mono', ui-monospace, monospace"
-          letterSpacing="0.12em"
-        >
-          UPLOADED DOCUMENTS → CHUNKED → INDEXED → RETRIEVED PER TURN
-        </text>
+        {caption && (
+          <text
+            x={363}
+            y={293}
+            textAnchor="middle"
+            fill="#8a8a9c"
+            fontSize="8.5"
+            fontFamily="'Geist Mono', ui-monospace, monospace"
+            letterSpacing="0.12em"
+          >
+            {caption}
+          </text>
+        )}
       </svg>
     </figure>
   );

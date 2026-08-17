@@ -1,6 +1,26 @@
 import { useEffect, useRef, useState } from 'react';
 import ArchitectureDiagram from './ArchitectureDiagram';
+import ProcessTimeline from './ProcessTimeline';
+import Beat from './casestudy/Beat';
 import type { Project } from '../data/profile';
+
+const HOW_IT_WORKS_STEPS = [
+  {
+    number: '01',
+    title: 'A caller speaks',
+    body: 'Audio streams in from the browser and moves straight into speech-to-text — no waiting for the call to finish.',
+  },
+  {
+    number: '02',
+    title: 'Retrieval grounds the reply',
+    body: "The question is matched against the client's own uploaded documents, so the model answers from what's actually there.",
+  },
+  {
+    number: '03',
+    title: 'Guardrails keep it honest',
+    body: "Responses stay inside the system's intended scope, with a defined handoff for anything outside it.",
+  },
+];
 
 /**
  * The case study for the flagship project — a scroll-driven narrative
@@ -216,18 +236,6 @@ function FlowDiagram() {
   );
 }
 
-function Beat({ index, title, children }: { index: number; title: string; children: React.ReactNode }) {
-  return (
-    <div className="border-line-soft border-t pt-12 pb-12 first:border-t-0 first:pt-0">
-      <div className="border-line-soft bg-surface inline-flex items-center gap-3 rounded-xl border px-4 py-2.5">
-        <span className="mono text-accent">{String(index).padStart(2, '0')}</span>
-        <span className="text-ink text-[0.95rem] font-medium">{title}</span>
-      </div>
-      {children}
-    </div>
-  );
-}
-
 export default function CaseStudy({ project }: { project: Project }) {
   const [highlightedNode, setHighlightedNode] = useState<string | null>(null);
 
@@ -272,7 +280,8 @@ export default function CaseStudy({ project }: { project: Project }) {
           conversation manager, retrieval, the language model, a guardrail layer, and text-to-speech — with a
           knowledge-base pipeline feeding retrieval, and a transcript branching off into post-call analysis.
         </p>
-        <div className="border-line-soft bg-bg-deep mt-8 overflow-x-auto rounded-[14px] border p-6 sm:p-8">
+        <ProcessTimeline steps={HOW_IT_WORKS_STEPS} />
+        <div className="border-line-soft bg-bg-deep mt-12 overflow-x-auto rounded-[14px] border p-6 sm:p-8">
           <ArchitectureDiagram className="m-0 min-w-155" externalHighlight={highlightedNode} />
         </div>
       </Beat>
