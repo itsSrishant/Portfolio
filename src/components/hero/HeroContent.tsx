@@ -24,7 +24,7 @@ const HeroContent = forwardRef<HTMLDivElement>(function HeroContent(_props, ref)
               <span className="block">{profile.firstName}</span>
               <span className="text-ink-2 block">{profile.lastName}</span>
             </h1>
-            <div className="mt-6 flex flex-col gap-y-1.5 sm:flex-row sm:items-center sm:gap-x-3 sm:gap-y-0">
+            <div className="mt-6 flex flex-col gap-y-1.5 sm:flex-row sm:items-center sm:gap-x-3 sm:gap-y-0" aria-label={profile.roles.join(' and ')}>
               {profile.roles.map((role, i) => (
                 <span key={role} className="flex items-center gap-3">
                   {i > 0 && <span className="bg-line hidden h-3 w-px sm:block" aria-hidden />}
@@ -33,6 +33,7 @@ const HeroContent = forwardRef<HTMLDivElement>(function HeroContent(_props, ref)
               ))}
             </div>
           </div>
+
 
           <div className="order-2 mx-auto w-full max-w-[24rem] lg:col-span-5 lg:row-span-2 lg:mx-0 lg:max-w-none lg:self-center">
             <ProfileReveal />

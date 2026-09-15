@@ -30,13 +30,30 @@ export function personJsonLd(): Record<string, unknown> {
     url: SITE_URL,
     jobTitle: profile.roles.join(' / '),
     email: profile.email,
+    image: `${SITE_URL}/srishant-portrait.jpg`,
+    description: `${profile.education.degree} student at ${profile.education.shortInstitution}. ${profile.tagline}`,
     address: {
       '@type': 'PostalAddress',
       addressLocality: profile.location,
     },
+    alumniOf: {
+      '@type': 'EducationalOrganization',
+      name: profile.education.institution,
+    },
+    knowsAbout: [
+      'Artificial Intelligence',
+      'Machine Learning',
+      'Voice AI',
+      'Retrieval-Augmented Generation',
+      'React',
+      'TypeScript',
+      'Python',
+      'FastAPI',
+    ],
     ...(sameAs.length > 0 ? { sameAs } : {}),
   };
 }
+
 
 /**
  * One CreativeWork block per project case-study page. CreativeWork, not

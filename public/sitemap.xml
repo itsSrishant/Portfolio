@@ -7,24 +7,22 @@
   too. If this list ever grows past a handful of entries, it's worth
   writing a small postbuild script to generate this from that array
   instead of maintaining both by hand.
-
-  The domain below is a placeholder — see the TODO in src/lib/site.ts.
-  Update both together once this is actually deployed.
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://srishant-kulkarni-portfolio.example/</loc>
+    <loc>https://srishantkulkarni-portfolio.vercel.app/</loc>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://srishant-kulkarni-portfolio.example/work/voice-ai-platform</loc>
+    <loc>https://srishantkulkarni-portfolio.vercel.app/work/voice-ai-platform</loc>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://srishant-kulkarni-portfolio.example/work/seooptimiz</loc>
+    <loc>https://srishantkulkarni-portfolio.vercel.app/work/seooptimiz</loc>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
 </urlset>
+

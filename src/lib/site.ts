@@ -14,7 +14,7 @@
  * automatically. Shipping the placeholder below as-is would repeat the
  * exact non-resolving-URL mistake found and fixed in SEOOptimiz itself.
  */
-export const SITE_URL = 'https://srishant-kulkarni-portfolio.example';
+export const SITE_URL = 'https://srishantkulkarni-portfolio.vercel.app';
 
 export const SITE_NAME = 'Srishant Kulkarni';
 
@@ -23,4 +23,4 @@ export const SITE_NAME = 'Srishant Kulkarni';
 // exactly what a fresh load already shows — not a second, drifting copy.
 export const DEFAULT_TITLE = 'Srishant Kulkarni — AI & Software Engineer';
 export const DEFAULT_DESCRIPTION =
-  'Srishant Kulkarni — B.E. Artificial Intelligence & Data Science student and software engineer. I build AI-powered voice systems, web applications and backend services.';
+  'AI & Data Science engineering student building AI-powered voice systems, web apps, and backend services. VESIT Mumbai. Internship at PlatinumOne Business Services.';

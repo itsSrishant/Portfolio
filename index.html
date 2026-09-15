@@ -9,28 +9,33 @@
     <title>Srishant Kulkarni — AI &amp; Software Engineer</title>
     <meta
       name="description"
-      content="Srishant Kulkarni — B.E. Artificial Intelligence &amp; Data Science student and software engineer. I build AI-powered voice systems, web applications and backend services."
+      content="AI &amp; Data Science engineering student building AI-powered voice systems, web apps, and backend services. VESIT Mumbai. Internship at PlatinumOne Business Services."
     />
     <meta name="author" content="Srishant Kulkarni" />
+    <meta name="robots" content="index, follow" />
 
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Srishant Kulkarni" />
     <meta property="og:title" content="Srishant Kulkarni — AI &amp; Software Engineer" />
     <meta
       property="og:description"
       content="I build intelligent systems and software that solve real-world problems."
     />
-    <!-- og:image must be an absolute URL per the Open Graph spec — a
-         relative path here isn't guaranteed to resolve correctly across
-         every platform that unfurls a shared link. Same placeholder
-         domain as everywhere else — see the TODO in src/lib/site.ts. -->
-    <meta property="og:image" content="https://srishant-kulkarni-portfolio.example/srishant-portrait.jpg" />
-    <meta property="og:url" content="https://srishant-kulkarni-portfolio.example/" />
-    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="og:image" content="https://srishantkulkarni-portfolio.vercel.app/srishant-portrait.jpg" />
+    <meta property="og:url" content="https://srishantkulkarni-portfolio.vercel.app/" />
+    <meta property="og:locale" content="en_US" />
 
-    <!-- Baseline for the homepage, present even before JS runs.
-         DocumentMeta.tsx (src/components/DocumentMeta.tsx) updates this
-         to match on every client-side route change. -->
-    <link rel="canonical" href="https://srishant-kulkarni-portfolio.example/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Srishant Kulkarni — AI &amp; Software Engineer" />
+    <meta
+      name="twitter:description"
+      content="I build intelligent systems and software that solve real-world problems."
+    />
+    <meta name="twitter:image" content="https://srishantkulkarni-portfolio.vercel.app/srishant-portrait.jpg" />
+
+    <!-- Baseline canonical for the homepage — DocumentMeta.tsx updates
+         this on every client-side route change. -->
+    <link rel="canonical" href="https://srishantkulkarni-portfolio.vercel.app/" />
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/srishant-portrait.jpg" />
@@ -42,9 +47,41 @@
       href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..900&family=Geist+Mono:wght@400;500&display=swap"
     />
     <link rel="preload" as="image" href="/srishant-portrait.jpg" fetchpriority="high" />
+
+    <!-- Static Person JSON-LD — present even before JS runs, so crawlers
+         that don't execute JavaScript still get structured identity data.
+         DocumentMeta.tsx enriches this further and adds per-project schemas
+         once React has mounted. -->
+    <script type="application/ld+json" id="ld-person-static">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Srishant Kulkarni",
+      "url": "https://srishantkulkarni-portfolio.vercel.app",
+      "jobTitle": "AI & Data Science Student / Software Engineer",
+      "email": "imsrishant@gmail.com",
+      "image": "https://srishantkulkarni-portfolio.vercel.app/srishant-portrait.jpg",
+      "description": "B.Tech Artificial Intelligence & Data Science student at VESIT, Mumbai, building AI-powered voice systems, web applications, and backend services.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Mumbai, Maharashtra, India"
+      },
+      "alumniOf": {
+        "@type": "EducationalOrganization",
+        "name": "Vivekanand Education Society's Institute of Technology",
+        "url": "https://vesit.ves.ac.in"
+      },
+      "knowsAbout": ["Artificial Intelligence", "Machine Learning", "Voice AI", "Retrieval-Augmented Generation", "React", "TypeScript", "Python", "FastAPI"],
+      "sameAs": [
+        "https://github.com/itsSrishant",
+        "https://www.linkedin.com/in/srishantkulkarni/"
+      ]
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
+
