@@ -67,6 +67,7 @@ export default function Nav() {
       </HashLink>
 
       <header
+        role="banner"
         className="fixed inset-x-0 top-0 transition-[opacity,background-color,border-color,backdrop-filter] duration-500"
         style={{
           zIndex: 'var(--z-nav)',

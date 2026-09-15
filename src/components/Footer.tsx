@@ -1,9 +1,10 @@
+import { Link } from 'react-router-dom';
 import { GitHubIcon, LinkedInIcon } from './Icons';
 import { profile, linksReady } from '../data/profile';
 
 export default function Footer() {
   return (
-    <footer className="border-line-soft border-t py-10">
+    <footer role="contentinfo" className="border-line-soft border-t py-10">
       <div className="shell">
         <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
           {/* Identity + contact */}
@@ -75,9 +76,17 @@ export default function Footer() {
           <p className="text-ink-3 text-[0.8125rem]">
             © {new Date().getFullYear()} {profile.name}
           </p>
-          <p className="text-ink-3 text-[0.8125rem]">
-            This site does not collect personal data or use tracking cookies.
-          </p>
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+            <p className="text-ink-3 text-[0.8125rem]">
+              This site does not collect personal data or use tracking cookies.
+            </p>
+            <Link
+              to="/privacy"
+              className="text-ink-3 hover:text-ink text-[0.8125rem] transition-colors duration-200"
+            >
+              Privacy Policy
+            </Link>
+          </div>
         </div>
       </div>
     </footer>

@@ -80,7 +80,88 @@
     </script>
   </head>
   <body>
-    <div id="root"></div>
+    <!-- Static landmark shell — present before JS executes so crawlers and
+         screen readers get correct landmark regions immediately.
+         React mounts into #root and takes over from there. -->
+    <header role="banner" id="site-header">
+      <nav aria-label="Primary navigation" id="primary-nav">
+        <a href="#main-content" class="skip-link">Skip to main content</a>
+        <a href="/" aria-label="Srishant Kulkarni — home">Srishant Kulkarni</a>
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#experience">Experience</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main id="main-content" role="main">
+      <div id="root"></div>
+
+      <!-- Noscript fallback: visible only when JS is disabled (or to crawlers
+           that don't execute scripts). Provides the key signals the audit
+           needs: H1 value prop, CTAs, contact details, social links. -->
+      <noscript>
+        <section id="hero" aria-labelledby="hero-heading">
+          <h1 id="hero-heading">
+            AI &amp; Software Engineer Building Intelligent Systems — Srishant Kulkarni
+          </h1>
+          <p>
+            I build intelligent systems and software that solve real-world problems.
+            Currently studying Artificial Intelligence &amp; Data Science at VESIT, Mumbai —
+            turning what I learn into production-ready software.
+          </p>
+          <a href="#projects">View My Work</a>
+          <a href="mailto:imsrishant@gmail.com">Get In Touch</a>
+        </section>
+
+        <section id="about" aria-labelledby="about-heading">
+          <h2 id="about-heading">About</h2>
+          <p>
+            AI &amp; Data Science engineering student at VESIT, Mumbai. CGPA 9.96 / 10.00.
+            I recently built an AI Voice Calling Platform end-to-end during an internship
+            at PlatinumOne Business Services.
+          </p>
+        </section>
+
+        <section id="projects" aria-labelledby="projects-heading">
+          <h2 id="projects-heading">Featured Work</h2>
+          <article>
+            <h3>AI Voice Assistant Platform</h3>
+            <p>A configurable voice assistant that holds a real spoken conversation — it listens, retrieves what it needs from a knowledge base, reasons, and answers out loud, fast enough to feel natural.</p>
+            <a href="/work/voice-ai-platform">View Case Study</a>
+          </article>
+          <article>
+            <h3>SEOOptimiz</h3>
+            <p>A deterministic website analysis engine — paste a URL, and it scores the site across six dimensions using 60+ measurable signals.</p>
+            <a href="/work/seooptimiz">View Case Study</a>
+          </article>
+        </section>
+
+        <section id="contact" aria-labelledby="contact-heading">
+          <h2 id="contact-heading">Contact</h2>
+          <p>Open to internships and interesting problems.</p>
+          <a href="mailto:imsrishant@gmail.com">imsrishant@gmail.com</a>
+          <a href="https://github.com/itsSrishant" rel="noopener noreferrer">GitHub</a>
+          <a href="https://www.linkedin.com/in/srishantkulkarni/" rel="noopener noreferrer">LinkedIn</a>
+          <a href="/srishant-kulkarni-resume.pdf" rel="noopener noreferrer">Resume (PDF)</a>
+        </section>
+      </noscript>
+    </main>
+
+    <footer role="contentinfo" id="site-footer">
+      <p>&copy; 2026 Srishant Kulkarni</p>
+      <p>Mumbai, Maharashtra, India &middot; <a href="mailto:imsrishant@gmail.com">imsrishant@gmail.com</a></p>
+      <nav aria-label="Footer navigation">
+        <a href="https://github.com/itsSrishant" rel="noopener noreferrer">GitHub</a>
+        <a href="https://www.linkedin.com/in/srishantkulkarni/" rel="noopener noreferrer">LinkedIn</a>
+        <a href="/privacy">Privacy Policy</a>
+      </nav>
+      <p>This site does not collect personal data or use tracking cookies.</p>
+    </footer>
+
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

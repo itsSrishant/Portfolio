@@ -5,6 +5,7 @@ import RouteEffects from './components/RouteEffects';
 import DocumentMeta from './components/DocumentMeta';
 import Home from './pages/Home';
 import WorkDetail from './pages/WorkDetail';
+import Privacy from './pages/Privacy';
 
 export default function App() {
   return (
@@ -12,10 +13,11 @@ export default function App() {
       <RouteEffects />
       <DocumentMeta />
       <Nav />
-      <main id="main">
+      <main id="main-content" role="main">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/work/:slug" element={<WorkDetail />} />
+          <Route path="/privacy" element={<Privacy />} />
         </Routes>
       </main>
       <Footer />

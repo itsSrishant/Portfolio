@@ -20,9 +20,10 @@ const HeroContent = forwardRef<HTMLDivElement>(function HeroContent(_props, ref)
             <h1
               className="mt-2 font-bold tracking-[-0.03em]"
               style={{ fontSize: 'clamp(3rem, 9vw, 5.6rem)', lineHeight: 0.94 }}
+              aria-label={`${profile.name} — AI & Software Engineer building intelligent systems`}
             >
-              <span className="block">{profile.firstName}</span>
-              <span className="text-ink-2 block">{profile.lastName}</span>
+              <span className="block" aria-hidden>{profile.firstName}</span>
+              <span className="text-ink-2 block" aria-hidden>{profile.lastName}</span>
             </h1>
             <div className="mt-6 flex flex-col gap-y-1.5 sm:flex-row sm:items-center sm:gap-x-3 sm:gap-y-0" aria-label={profile.roles.join(' and ')}>
               {profile.roles.map((role, i) => (
@@ -47,11 +48,11 @@ const HeroContent = forwardRef<HTMLDivElement>(function HeroContent(_props, ref)
             </p>
 
             <div className="mt-9 flex flex-wrap items-center gap-3">
-              <a href="#projects" className="btn btn-ghost">
+              <a href="#projects" className="btn btn-primary" id="cta-view-work">
                 View My Work
                 <ArrowIcon />
               </a>
-              <a href="#contact" className="btn btn-ghost">
+              <a href="#contact" className="btn btn-ghost" id="cta-contact">
                 Get In Touch
               </a>
 
