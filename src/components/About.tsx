@@ -46,33 +46,6 @@ export default function About() {
         </aside>
       </div>
 
-      {/* Social proof — verifiable stats, no fabricated metrics */}
-      <div
-        className="mt-16 grid grid-cols-3 gap-4 sm:gap-6"
-        data-reveal
-        style={{ '--reveal-delay': '200ms' } as React.CSSProperties}
-        aria-label="Credentials at a glance"
-      >
-        {[
-          { value: education.detail.split(' /')[0], label: 'Academic GPA', sub: education.shortInstitution },
-          { value: '1', label: 'Internship completed', sub: 'PlatinumOne Business Services · 2026' },
-          { value: '2', label: 'Projects shipped', sub: 'AI & web applications' },
-        ].map(({ value, label, sub }) => (
-          <div
-            key={label}
-            className="border-line-soft bg-surface/40 flex flex-col gap-1 rounded-xl border p-5 sm:p-6"
-          >
-            <span
-              className="font-bold tracking-[-0.03em]"
-              style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', lineHeight: 1 }}
-            >
-              {value}
-            </span>
-            <span className="text-ink text-[0.875rem] font-medium leading-snug">{label}</span>
-            <span className="text-ink-3 text-[0.75rem] leading-snug">{sub}</span>
-          </div>
-        ))}
-      </div>
     </Section>
   );
 }

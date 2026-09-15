@@ -78,64 +78,48 @@ export default function Nav() {
           borderBottom: `1px solid ${scrolled ? 'var(--color-line-soft)' : 'transparent'}`,
         }}
       >
-        <nav className="shell flex h-[68px] items-center justify-between" aria-label="Primary">
-          <HashLink
-            hash="#top"
-            className="group inline-flex items-baseline gap-2.5"
-            aria-label={`${profile.name} — back to top`}
-          >
-            <span className="text-[1.05rem] font-bold tracking-[-0.02em]">{profile.initials}</span>
-            <span className="text-ink-3 hidden text-[0.9rem] sm:inline">{profile.name}</span>
-          </HashLink>
+        <nav className="shell flex h-[72px] items-center justify-between" aria-label="Primary">
+          {/* Left: Logo */}
+          <div className="flex flex-1 justify-start">
+            <HashLink
+              hash="#top"
+              className="group inline-flex items-baseline gap-2.5"
+              aria-label={`${profile.name} — back to top`}
+            >
+              <span className="text-[1.05rem] font-bold tracking-[-0.02em]">{profile.initials}</span>
+              <span className="text-ink-3 hidden text-[0.9rem] lg:inline">{profile.name}</span>
+            </HashLink>
+          </div>
 
-          <div className="flex items-center gap-1">
-            <ul className="mr-3 hidden items-center gap-1 md:flex">
+          {/* Center: Nav links */}
+          <div className="hidden md:flex flex-1 justify-center">
+            <ul className="flex items-center gap-1 rounded-full bg-surface/30 p-1 ring-1 ring-line-soft backdrop-blur-md">
               {navItems.map((item) => (
                 <li key={item.href}>
                   <HashLink
                     hash={item.href}
-                    className="text-ink-2 hover:text-ink hover:bg-surface inline-flex h-9 items-center rounded-[7px] px-3 text-[0.9rem] transition-colors duration-300"
+                    className="text-ink-2 hover:text-ink hover:bg-surface/60 inline-flex h-8 items-center rounded-full px-4 text-[0.875rem] font-medium transition-colors duration-300"
                   >
                     {item.label}
                   </HashLink>
                 </li>
               ))}
             </ul>
+          </div>
 
-            <div className="hidden items-center gap-0.5 sm:flex">
-              {linksReady.github && (
-                <a
-                  href={profile.github}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="icon-link"
-                  aria-label="GitHub"
-                >
-                  <GitHubIcon />
-                </a>
-              )}
-              {linksReady.linkedin && (
-                <a
-                  href={profile.linkedin}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="icon-link"
-                  aria-label="LinkedIn"
-                >
-                  <LinkedInIcon />
-                </a>
-              )}
+          {/* Right: Actions */}
+          <div className="flex flex-1 items-center justify-end gap-2">
+            <div className="hidden sm:flex items-center gap-2">
               <a
                 href={profile.resumeUrl}
                 target="_blank"
                 rel="noreferrer noopener"
-                className="icon-link"
-                aria-label="Resume (PDF)"
+                className="btn btn-ghost h-9! rounded-full px-5 text-[0.875rem]"
               >
-                <DocumentIcon />
+                Resume
               </a>
-              <HashLink hash="#contact" className="btn btn-ghost ml-2 h-9!">
-                Contact me
+              <HashLink hash="#contact" className="btn btn-primary h-9! rounded-full px-5 text-[0.875rem]">
+                Contact
               </HashLink>
             </div>
 

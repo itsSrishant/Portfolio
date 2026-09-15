@@ -7,23 +7,14 @@ import { experience } from '../data/profile';
 gsap.registerPlugin(ScrollTrigger);
 
 /**
- * A self-drawing rail beside the contribution list: a thread that fills in
- * with the accent color as the reader scrolls past each contribution,
- * tipped by a glowing marker, with a numbered tick lighting up at each
- * contribution's position. Progress is written straight to the DOM from
- * ScrollTrigger's onUpdate (no React state), matching the direct-write
- * convention used elsewhere for per-frame animation values.
- *
- * Kept narrow (a fixed-width column, not a 12-col grid share) — the rail is
- * a thin line and two-digit numbers, not a second content column, so it
- * shouldn't claim a third of the row the way it did before.
+ * A sleek, centered timeline rail that fills in as the reader scrolls.
+ * On desktop (md+), items alternate left and right. On mobile, they stay right.
  */
 function ContributionRail({ articleRef, count }: { articleRef: React.RefObject<HTMLElement | null>; count: number }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const fillRef = useRef<HTMLDivElement>(null);
   const nodeRef = useRef<HTMLDivElement>(null);
   const tickRefs = useRef<Array<HTMLSpanElement | null>>([]);
-  const numberRefs = useRef<Array<HTMLSpanElement | null>>([]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -39,17 +30,18 @@ function ContributionRail({ articleRef, count }: { articleRef: React.RefObject<H
       const items = Array.from(article.querySelectorAll<HTMLElement>('[data-contribution-item]'));
       const containerRect = container.getBoundingClientRect();
       tickOffsets = items.map((item) => {
-        const r = item.getBoundingClientRect();
+        const title = item.querySelector('h4');
+        const target = title || item; // Align with title if possible, else whole item
+        const r = target.getBoundingClientRect();
+        // Pointing exactly at the center of the heading text vertically
         return containerRect.height > 0 ? (r.top + r.height / 2 - containerRect.top) / containerRect.height : 0;
       });
       tickRefs.current.forEach((el, i) => {
         if (el) el.style.top = `${(tickOffsets[i] ?? 0) * 100}%`;
       });
-      numberRefs.current.forEach((el, i) => {
-        if (el) el.style.top = `${(tickOffsets[i] ?? 0) * 100}%`;
-      });
     };
     measure();
+    // Re-measure when images load or layout shifts
     window.addEventListener('resize', measure);
 
     const applyProgress = (progress: number) => {
@@ -61,11 +53,7 @@ function ContributionRail({ articleRef, count }: { articleRef: React.RefObject<H
         const lit = progress >= (tickOffsets[i] ?? 1);
         el.style.backgroundColor = lit ? 'var(--accent)' : 'var(--bg)';
         el.style.borderColor = lit ? 'var(--accent)' : 'var(--line-soft)';
-      });
-      numberRefs.current.forEach((el, i) => {
-        if (!el) return;
-        const lit = progress >= (tickOffsets[i] ?? 1);
-        el.style.color = lit ? 'var(--accent)' : 'var(--ink-3)';
+        el.style.boxShadow = lit ? '0 0 10px 2px color-mix(in oklch, var(--accent) 40%, transparent)' : 'none';
       });
     };
 
@@ -90,22 +78,22 @@ function ContributionRail({ articleRef, count }: { articleRef: React.RefObject<H
   }, [articleRef]);
 
   return (
-    <div ref={containerRef} className="relative hidden w-9 flex-none self-stretch sm:block">
-      <div className="bg-line-soft absolute top-0 left-0 h-full w-0.75 rounded-full" />
+    <div ref={containerRef} className="absolute top-0 bottom-0 left-[1.1rem] md:left-1/2 w-[2px] md:-translate-x-1/2 z-0">
+      <div className="bg-line-soft/60 absolute top-0 left-0 h-full w-full rounded-full" />
       <div
         ref={fillRef}
-        className="absolute top-0 left-0 h-full w-0.75 scale-y-0 rounded-full"
+        className="absolute top-0 left-0 h-full w-full scale-y-0 rounded-full"
         style={{
           backgroundColor: 'var(--accent)',
-          boxShadow: '0 0 18px 3px var(--accent), 0 0 40px 6px color-mix(in oklch, var(--accent) 55%, transparent)',
+          boxShadow: '0 0 18px 2px var(--accent)',
         }}
       />
       <div
         ref={nodeRef}
-        className="absolute left-[1.5px] h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-0"
+        className="absolute left-[1px] h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-0"
         style={{
           backgroundColor: 'var(--accent-2)',
-          boxShadow: '0 0 22px 6px var(--accent), 0 0 45px 12px color-mix(in oklch, var(--accent) 60%, transparent)',
+          boxShadow: '0 0 16px 4px var(--accent)',
         }}
       />
       {Array.from({ length: count }).map((_, i) => (
@@ -114,28 +102,13 @@ function ContributionRail({ articleRef, count }: { articleRef: React.RefObject<H
           ref={(el) => {
             tickRefs.current[i] = el;
           }}
-          className="border-line-soft bg-bg absolute left-[1.5px] h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border transition-colors duration-300"
+          className="border-line-soft bg-bg absolute left-[1px] h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-[2px] transition-all duration-300"
         />
-      ))}
-      {Array.from({ length: count }).map((_, i) => (
-        <span
-          key={i}
-          ref={(el) => {
-            numberRefs.current[i] = el;
-          }}
-          className="mono absolute left-3.5 -translate-y-1/2 transition-colors duration-300"
-        >
-          {String(i + 1).padStart(2, '0')}
-        </span>
       ))}
     </div>
   );
 }
 
-/**
- * One real role, given the room a real role deserves. A grid of identical cards
- * would make a single genuine internship look like padding.
- */
 export default function Experience() {
   return (
     <Section id="experience" title="Experience">
@@ -149,45 +122,79 @@ export default function Experience() {
 function ExperienceEntry({ job }: { job: (typeof experience)[number] }) {
   const articleRef = useRef<HTMLElement>(null);
 
+  useEffect(() => {
+    if (!articleRef.current) return;
+    const ctx = gsap.context(() => {
+      const cards = gsap.utils.toArray('.contribution-card') as HTMLElement[];
+      cards.forEach((card) => {
+        gsap.fromTo(
+          card,
+          { opacity: 0, y: 40 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: card,
+              start: 'top 85%',
+            },
+          }
+        );
+      });
+    }, articleRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <article ref={articleRef} className="border-line-soft border-t pt-8" data-reveal>
-      <header>
-        <h3 className="text-[1.4rem] font-semibold tracking-[-0.02em] sm:text-[1.6rem]">{job.role}</h3>
-        <p className="text-ink-2 mt-1">{job.company}</p>
-        <span className="mono mt-3 block">
-          {job.period}
-          {job.periodIsPlaceholder && (
-            /* Honest placeholder: better a visible gap than an invented date. */
-            <span className="text-ink-3 normal-case"> · dates to confirm</span>
-          )}
-        </span>
-        <p className="text-ink-2 prose-col mt-5 leading-[1.75]">{job.summary}</p>
+    <article ref={articleRef} className="border-line-soft border-t pt-10" data-reveal>
+      <header className="bg-surface/30 p-8 md:p-10 rounded-[2rem] border border-line-soft shadow-sm">
+        <div className="max-w-3xl">
+          <h3 className="text-[1.4rem] font-semibold tracking-[-0.02em] sm:text-[1.6rem]">{job.role}</h3>
+          <p className="text-ink-2 mt-1 text-[1.1rem]">{job.company}</p>
+          <span className="mono mt-4 block">
+            {job.period}
+            {job.periodIsPlaceholder && (
+              <span className="text-ink-3 normal-case"> · dates to confirm</span>
+            )}
+          </span>
+          <p className="text-ink-2 prose-col mt-6 leading-[1.75] text-[1.05rem]">{job.summary}</p>
+        </div>
       </header>
 
-      <div className="mt-10 flex gap-4 sm:gap-6">
+      {/* The Rail container is isolated here so it doesn't stretch down to the tech stack */}
+      <div className="mt-12 md:mt-20 relative w-full pb-4">
         <ContributionRail articleRef={articleRef} count={job.contributions.length} />
-        <div className="min-w-0 flex-1">
-          <ul>
-            {job.contributions.map((item) => (
+        
+        <ul className="relative z-10 w-full py-2">
+          {job.contributions.map((item, index) => {
+            const isEven = index % 2 === 0;
+            return (
               <li
                 key={item.title}
                 data-contribution-item
-                className="border-line-soft border-t py-6 first:border-t-0 first:pt-0"
+                className={`contribution-card relative mb-12 md:mb-16 last:mb-0 w-full md:w-[calc(50%-3rem)] pl-12 md:pl-0 ${
+                  isEven ? 'md:mr-auto md:pr-0 md:text-right' : 'md:ml-auto md:pl-0 md:text-left'
+                }`}
               >
-                <h4 className="text-ink text-[1rem] font-medium">{item.title}</h4>
-                <p className="text-ink-2 prose-col mt-2 text-[0.95rem] leading-[1.7]">{item.body}</p>
+                <div className="group relative bg-surface/30 p-6 md:p-8 rounded-2xl border border-line-soft shadow-sm hover:bg-surface/50 transition-colors duration-300">
+                  <h4 className="text-ink text-[1.15rem] font-medium tracking-[-0.01em]">{item.title}</h4>
+                  <p className="text-ink-2 mt-3 text-[0.95rem] leading-[1.7]">{item.body}</p>
+                </div>
               </li>
-            ))}
-          </ul>
+            );
+          })}
+        </ul>
+      </div>
 
-          <div className="border-line-soft mt-2 flex flex-wrap gap-2 border-t pt-6">
-            {job.stack.map((tech) => (
-              <span key={tech} className="tag">
-                {tech}
-              </span>
-            ))}
-          </div>
-        </div>
+      {/* Tech Stack is outside the relative timeline container */}
+      <div className="border-line-soft mt-8 flex flex-wrap gap-2 border-t pt-8">
+        {job.stack.map((tech) => (
+          <span key={tech} className="tag">
+            {tech}
+          </span>
+        ))}
       </div>
     </article>
   );

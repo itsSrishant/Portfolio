@@ -1,4 +1,4 @@
-import { GitHubIcon, LinkedInIcon, ArrowIcon, DocumentIcon, MailIcon } from './Icons';
+import { GitHubIcon, LinkedInIcon, ArrowIcon, DocumentIcon } from './Icons';
 import { profile, linksReady } from '../data/profile';
 
 /** Oversized type, almost no chrome. The address is the interface. */
@@ -39,15 +39,7 @@ export default function Contact() {
           </a>
 
           <div className="mt-6 flex flex-wrap gap-3">
-            <a
-              href={`mailto:${profile.email}`}
-              className="btn btn-primary"
-              id="cta-email"
-            >
-              <MailIcon />
-              Send me a message
-            </a>
-            <a href={profile.resumeUrl} target="_blank" rel="noreferrer noopener" className="btn btn-ghost">
+            <a href={profile.resumeUrl} target="_blank" rel="noreferrer noopener" className="btn btn-primary" id="cta-resume">
               <DocumentIcon />
               Resume
             </a>
