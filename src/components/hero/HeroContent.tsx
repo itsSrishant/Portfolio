@@ -2,6 +2,7 @@ import { forwardRef } from 'react';
 import ProfileReveal from '../ProfileReveal';
 import { GitHubIcon, LinkedInIcon, MailIcon, ArrowIcon } from '../Icons';
 import { profile, linksReady } from '../../data/profile';
+import StarsBackground from '../StarsBackground';
 
 /**
  * The hero, in normal document flow the whole time — CinematicIntro's
@@ -12,7 +13,8 @@ import { profile, linksReady } from '../../data/profile';
  */
 const HeroContent = forwardRef<HTMLDivElement>(function HeroContent(_props, ref) {
   return (
-    <section id="top" className="relative flex min-h-svh items-center pt-28 pb-16 lg:pt-32 lg:pb-24">
+    <section id="top" className="relative flex min-h-svh items-center pt-28 pb-16 lg:pt-32 lg:pb-24 overflow-hidden">
+      <StarsBackground />
       <div ref={ref} className="shell relative z-10 w-full">
         <div className="grid items-center gap-x-16 gap-y-10 lg:grid-cols-12">
           <div className="order-1 lg:col-span-7 lg:self-end">

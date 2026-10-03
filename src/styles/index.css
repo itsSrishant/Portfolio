@@ -347,6 +347,7 @@
     background: var(--color-bg-deep);
     box-shadow:
       0 1px 0 0 color-mix(in oklch, var(--color-ink) 6%, transparent) inset,
+      0 0 30px 5px color-mix(in oklch, var(--color-accent) 30%, transparent),
       0 40px 90px -60px color-mix(in oklch, var(--color-accent) 70%, transparent);
     /* Whole-card 3D tilt (see hooks/useTilt.ts), layered on top of
        ProfileReveal's own energy-sweep transformation. `rotateX/Y` and
