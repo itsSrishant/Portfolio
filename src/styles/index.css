@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
 /* ------------------------------------------------------------------ *
  * Design tokens
@@ -23,7 +24,7 @@
 
   --accent: oklch(0.62 0.23 295);
   --accent-dim: oklch(0.42 0.18 295);
-  --accent-2: oklch(0.72 0.19 300);
+  --accent-2: oklch(0.70 0.20 45);
   --danger: oklch(0.58 0.19 25);
 }
 
@@ -46,7 +47,7 @@
 
   --accent: oklch(0.62 0.23 295);
   --accent-dim: oklch(0.42 0.18 295);
-  --accent-2: oklch(0.72 0.19 300);
+  --accent-2: oklch(0.70 0.20 45);
   --danger: oklch(0.58 0.19 25);
 
   /* Tailwind's utility classes (e.g. `text-ink`) read `--color-*`, not the
@@ -91,7 +92,7 @@
   --color-accent-2: var(--accent-2);
   --color-danger: var(--danger);
 
-  --font-sans: 'Schibsted Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-sans: 'Space Grotesk', system-ui, -apple-system, sans-serif;
   --font-mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
 
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
@@ -211,7 +212,7 @@
     gap: 0.6rem;
     height: 3rem;
     padding-inline: 1.4rem;
-    border-radius: 8px;
+    border-radius: 9999px;
     font-size: 0.9375rem;
     font-weight: 500;
     letter-spacing: -0.005em;
@@ -267,7 +268,7 @@
     place-items: center;
     width: 2.5rem;
     height: 2.5rem;
-    border-radius: 7px;
+    border-radius: 9999px;
     color: var(--color-ink-3);
     transition:
       color 0.3s var(--ease-out-quart),
@@ -306,9 +307,9 @@
     display: inline-flex;
     align-items: center;
     height: 1.75rem;
-    padding-inline: 0.6rem;
+    padding-inline: 0.8rem;
     border: 1px solid var(--color-line-soft);
-    border-radius: 5px;
+    border-radius: 9999px;
     font-family: var(--font-mono);
     font-size: 0.75rem;
     letter-spacing: 0.01em;
@@ -631,5 +632,24 @@
 
   .no-scrollbar {
     scrollbar-width: none;
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-15px) rotate(1deg);
+    }
+  }
+
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
   }
 }

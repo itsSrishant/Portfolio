@@ -22,7 +22,7 @@ export default function Section({ id, title, meta, children, className = '', glo
   return (
     <section
       id={id}
-      className={`scroll-mt-24 py-20 sm:py-24 lg:py-32 ${className}`}
+      className={`scroll-mt-24 py-10 sm:py-16 lg:py-20 ${className}`}
       style={
         glow
           ? {

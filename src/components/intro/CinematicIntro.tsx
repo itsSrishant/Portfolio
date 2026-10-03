@@ -143,6 +143,17 @@ export default function CinematicIntro() {
       },
     });
 
+    // 3D Parallax Mouse Tracking
+    const handleMouseMove = (e: MouseEvent) => {
+      if (stageRef.current) {
+        const x = (e.clientX / window.innerWidth - 0.5) * 40; // -20px to 20px
+        const y = (e.clientY / window.innerHeight - 0.5) * 40; 
+        stageRef.current.style.setProperty('--mx', `${x}px`);
+        stageRef.current.style.setProperty('--my', `${y}px`);
+      }
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+
     if (cueRef.current) {
       tl.to(cueRef.current, { opacity: 0, ease: 'power1.out', duration: at(0.04) }, 0);
     }
@@ -172,6 +183,23 @@ export default function CinematicIntro() {
         { scale: 1.09, ease: 'none', duration: at(exitAt - fadeInStart) },
         at(fadeInStart),
       );
+
+      // Overload Glitch Effect on the Energy Building frame
+      if (key === 'energyBuilding') {
+        tl.to(
+          el,
+          { 
+            x: () => Math.random() * 8 - 4,
+            y: () => Math.random() * 8 - 4,
+            filter: 'hue-rotate(90deg) saturate(3) brightness(1.5)',
+            duration: 0.05,
+            repeat: 20, // Rapid violent shaking
+            yoyo: true,
+            ease: "rough({ template: none.out, strength: 2, points: 20, taper: none, randomize: true, clamp: false })"
+          },
+          at(fadeInStart + CROSSFADE)
+        );
+      }
     });
 
     if (flash) {
@@ -260,6 +288,7 @@ export default function CinematicIntro() {
 
     return () => {
       detachTriggers();
+      window.removeEventListener('mousemove', handleMouseMove);
       window.clearTimeout(safetyTimer);
       tl.kill();
       unlockScroll();
@@ -277,24 +306,32 @@ export default function CinematicIntro() {
           >
             <IntroEmbers intensityRef={emberIntensityRef} />
 
-            {/* Full-screen, object-contain: the character fills as much of
-                the viewport as it can without any part of it being cropped.
-                `screen` blend drops each frame's near-black background
-                against the page's own near-black background, so the (rare,
-                aspect-ratio-driven) letterbox strip reads as page
-                background rather than a visible seam. */}
-            {FRAME_ORDER.map((key) => (
-              <img
-                key={key}
-                ref={frameRefs[key]}
-                src={isNarrow ? introFrames[key].mobile : introFrames[key].desktop}
-                alt=""
-                aria-hidden
-                loading={key === 'rest' ? 'eager' : 'lazy'}
-                className="absolute inset-0 h-full w-full object-contain mix-blend-screen"
-                style={{ opacity: key === 'rest' ? 1 : 0 }}
-              />
-            ))}
+            {/* Dynamic Wakandan Spotlight (follows mouse) */}
+            <div 
+              className="absolute inset-0 pointer-events-none opacity-40 mix-blend-screen transition-opacity duration-300"
+              style={{
+                background: `radial-gradient(circle 600px at calc(50% + var(--mx, 0px) * 10) calc(50% + var(--my, 0px) * 10), rgba(255,122,0,0.15), transparent 60%)`,
+              }}
+            />
+
+            {/* Parallax Container for the Hologram frames */}
+            <div 
+              className="absolute inset-0 transition-transform duration-100 ease-out"
+              style={{ transform: 'translate3d(calc(var(--mx, 0px) * -1), calc(var(--my, 0px) * -1), 0)' }}
+            >
+              {FRAME_ORDER.map((key) => (
+                <img
+                  key={key}
+                  ref={frameRefs[key]}
+                  src={isNarrow ? introFrames[key].mobile : introFrames[key].desktop}
+                  alt=""
+                  aria-hidden
+                  loading={key === 'rest' ? 'eager' : 'lazy'}
+                  className="absolute inset-0 h-full w-full object-contain mix-blend-screen"
+                  style={{ opacity: key === 'rest' ? 1 : 0 }}
+                />
+              ))}
+            </div>
 
             {/* The curtain stays full-bleed — environmental energy filling
                 the screen, not a framed shot of a figure. */}

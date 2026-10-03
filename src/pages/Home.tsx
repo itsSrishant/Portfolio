@@ -4,6 +4,7 @@ import Experience from '../components/Experience';
 import Projects from '../components/Projects';
 import Skills from '../components/Skills';
 import Contact from '../components/Contact';
+import Marquee from '../components/Marquee';
 import { useReveal } from '../hooks/useReveal';
 
 export default function Home() {
@@ -18,6 +19,7 @@ export default function Home() {
       <Hero />
       <About />
       <Experience />
+      <Marquee />
       <Projects />
       <Skills />
       <Contact />

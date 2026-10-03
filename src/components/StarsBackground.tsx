@@ -25,7 +25,7 @@ export default function StarsBackground() {
 
     // Initial stars setup
     const stars: { x: number; y: number; size: number; alpha: number; delta: number; color: string; baseY: number; phase: number }[] = [];
-    const numStars = 200;
+    const numStars = 400; // Balanced density (between 200 and 800)
 
     for (let i = 0; i < numStars; i++) {
       const isPurple = Math.random() > 0.8;
@@ -41,7 +41,7 @@ export default function StarsBackground() {
       });
     }
 
-    const shootingStars: { x: number; y: number; length: number; speed: number; opacity: number }[] = [];
+    const shootingStars: { x: number; y: number; vx: number; vy: number; length: number; opacity: number }[] = [];
 
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
@@ -49,7 +49,8 @@ export default function StarsBackground() {
       // Draw and update stars
       for (const star of stars) {
         star.alpha += star.delta;
-        if (star.alpha <= 0 || star.alpha >= 1) {
+        // Limit max opacity to 0.5 so they don't clash with the text
+        if (star.alpha <= 0 || star.alpha >= 0.5) {
           star.delta = -star.delta;
         }
 
@@ -59,40 +60,73 @@ export default function StarsBackground() {
 
         ctx.beginPath();
         ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${star.color}, ${Math.max(0, Math.min(1, star.alpha))})`;
+        ctx.fillStyle = `rgba(${star.color}, ${Math.max(0, Math.min(0.5, star.alpha))})`;
         ctx.fill();
       }
 
-      // Spawn shooting stars (more of them as requested)
-      if (Math.random() < 0.05) { 
+      // Maintain up to 4 active shooting stars to ensure it never feels empty
+      if (shootingStars.length < 4 && Math.random() < 0.08) { 
+        // Spawn them just slightly off-screen or on the top/right edges so they are visible immediately
+        const startX = Math.random() * (width * 1.2); 
+        const startY = -Math.random() * 100 - 20; 
+        
+        const baseSpeed = Math.random() * 15 + 12;
+        const vx = -(baseSpeed * (0.8 + Math.random() * 0.4)); // Moves left
+        const vy = (baseSpeed * (0.8 + Math.random() * 0.4));  // Moves down
+
         shootingStars.push({
-          x: Math.random() * width * 1.5,
-          y: Math.random() * height * -0.5,
-          length: Math.random() * 100 + 40,
-          speed: Math.random() * 8 + 6,
-          opacity: 1,
+          x: startX,
+          y: startY,
+          vx: vx,
+          vy: vy,
+          length: Math.random() * 200 + 100, 
+          opacity: Math.random() * 0.5 + 0.5, 
         });
       }
 
       // Draw and update shooting stars
       for (let i = shootingStars.length - 1; i >= 0; i--) {
-        const ss = shootingStars[i];
+        const ss = shootingStars[i] as any; // typing workaround for vx/vy
         
+        // Calculate end of tail based on velocity vector to keep it aligned with movement
+        const speedSq = ss.vx * ss.vx + ss.vy * ss.vy;
+        const speed = Math.sqrt(speedSq);
+        const dirX = ss.vx / speed;
+        const dirY = ss.vy / speed;
+        
+        const endX = ss.x - (dirX * ss.length);
+        const endY = ss.y - (dirY * ss.length);
+
+        // Draw the cinematic tail
         ctx.beginPath();
         ctx.moveTo(ss.x, ss.y);
-        ctx.lineTo(ss.x - ss.length, ss.y + ss.length);
-        const gradient = ctx.createLinearGradient(ss.x, ss.y, ss.x - ss.length, ss.y + ss.length);
-        gradient.addColorStop(0, `rgba(255, 255, 255, ${ss.opacity})`);
-        gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+        ctx.lineTo(endX, endY);
+        const gradient = ctx.createLinearGradient(ss.x, ss.y, endX, endY);
+        gradient.addColorStop(0, `rgba(255, 255, 255, ${ss.opacity})`); 
+        gradient.addColorStop(0.1, `rgba(255, 122, 0, ${ss.opacity * 0.8})`); 
+        gradient.addColorStop(1, 'rgba(255, 255, 255, 0)'); 
+        
         ctx.strokeStyle = gradient;
-        ctx.lineWidth = 1.5;
+        ctx.lineWidth = 2.5; 
+        ctx.lineCap = 'round';
         ctx.stroke();
 
-        ss.x -= ss.speed;
-        ss.y += ss.speed;
-        ss.opacity -= 0.015;
+        // Draw the glowing head
+        ctx.beginPath();
+        ctx.arc(ss.x, ss.y, 1.5, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${ss.opacity})`;
+        ctx.shadowBlur = 12;
+        ctx.shadowColor = 'rgba(255, 122, 0, 1)';
+        ctx.fill();
+        ctx.shadowBlur = 0; // reset
 
-        if (ss.opacity <= 0) {
+        ss.x += ss.vx;
+        ss.y += ss.vy;
+        
+        // Fade out much slower so they easily cross the entire screen
+        ss.opacity -= 0.003; 
+
+        if (ss.opacity <= 0 || ss.x < -200 || ss.y > height + 200) {
           shootingStars.splice(i, 1);
         }
       }

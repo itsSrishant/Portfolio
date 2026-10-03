@@ -4,6 +4,48 @@ import { GitHubIcon, LinkedInIcon, DocumentIcon } from './Icons';
 import HashLink from './HashLink';
 import { navItems, profile, linksReady } from '../data/profile';
 
+const chars = '!<>-_\\\\/[]{}—=+*^?#_';
+function GlitchText({ text }: { text: string }) {
+  const [displayText, setDisplayText] = useState(text);
+  const [isHovered, setIsHovered] = useState(false);
+  
+  useEffect(() => {
+    if (!isHovered) {
+      setDisplayText(text);
+      return;
+    }
+    
+    let iterations = 0;
+    const maxIterations = 8;
+    const interval = setInterval(() => {
+      setDisplayText(
+        text.split('').map((char, index) => {
+          if (index < iterations) return text[index];
+          return chars[Math.floor(Math.random() * chars.length)];
+        }).join('')
+      );
+      
+      if (iterations >= maxIterations) {
+         clearInterval(interval);
+         setDisplayText(text);
+      }
+      iterations += 1;
+    }, 30);
+    
+    return () => clearInterval(interval);
+  }, [isHovered, text]);
+
+  return (
+    <span 
+      onMouseEnter={() => setIsHovered(true)} 
+      onMouseLeave={() => setIsHovered(false)}
+      className="inline-block"
+    >
+      {displayText}
+    </span>
+  );
+}
+
 /**
  * Fully hidden through the cinematic intro on the homepage — not just
  * transparent — so it never competes with the character sequence. It
@@ -100,7 +142,7 @@ export default function Nav() {
                     hash={item.href}
                     className="text-ink-2 hover:text-ink hover:bg-surface/60 inline-flex h-8 items-center rounded-full px-4 text-[0.875rem] font-medium transition-colors duration-300"
                   >
-                    {item.label}
+                    <GlitchText text={item.label} />
                   </HashLink>
                 </li>
               ))}

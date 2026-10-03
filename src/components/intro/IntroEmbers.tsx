@@ -58,21 +58,47 @@ export default function IntroEmbers({ intensityRef }: IntroEmbersProps) {
       }));
     }
 
+    let mouseX = 0;
+    let mouseY = 0;
+    
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+
     function frame(now: number) {
       const intensity = 0.15 + 0.85 * (intensityRef.current ?? 0);
       ctx!.clearRect(0, 0, w, h);
       for (const e of embers) {
+        // Base movement
         e.y -= (e.speed * intensity) / 60;
         e.x += Math.sin(now * 0.0006 + e.phase) * 0.15;
+        
+        // Mouse repulsion physics (Vibranium Wind)
+        const dx = e.x - mouseX;
+        const dy = e.y - mouseY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 150) {
+          const force = (150 - dist) / 150;
+          e.x += (dx / dist) * force * 5;
+          e.y += (dy / dist) * force * 5;
+        }
+
         if (e.y < -10) {
           e.y = h + 10;
           e.x = Math.random() * w;
         }
-        const alpha = 0.18 + 0.5 * intensity;
-        ctx!.fillStyle = `rgba(196, 132, 252, ${alpha})`;
+        
+        // Dynamic glow based on speed/intensity
+        const alpha = 0.18 + 0.6 * intensity;
+        ctx!.fillStyle = `rgba(255, 122, 0, ${alpha})`;
+        ctx!.shadowBlur = 10;
+        ctx!.shadowColor = 'rgba(255, 122, 0, 0.5)';
         ctx!.beginPath();
-        ctx!.arc(e.x, e.y, e.r, 0, Math.PI * 2);
+        ctx!.arc(e.x, e.y, e.r * (1 + intensity), 0, Math.PI * 2);
         ctx!.fill();
+        ctx!.shadowBlur = 0;
       }
       raf = requestAnimationFrame(frame);
     }

@@ -146,6 +146,36 @@ export default function SEOOptimizCaseStudy({ project }: { project: Project }) {
 
   return (
     <div className="mt-10">
+      {/* 00 — Interactive Video Frame (Hardware Style) */}
+      <div className="mb-16 group/frame relative rounded-sm border-2 border-line-soft bg-bg-deep p-2 shadow-[8px_8px_0_var(--color-accent-2)] transition-all duration-300 hover:shadow-[4px_4px_0_var(--color-accent-2)] hover:translate-x-[4px] hover:translate-y-[4px] hover:border-accent-2 z-10">
+        <div className="flex items-center gap-2 border-b-2 border-line-soft bg-surface/30 px-4 py-2 mb-2">
+          <div className="h-3 w-3 rounded-full bg-danger"></div>
+          <div className="h-3 w-3 rounded-full bg-accent-2 hover:animate-pulse"></div>
+          <div className="h-3 w-3 rounded-full bg-accent"></div>
+          <span className="mono ml-3 text-[10px] tracking-[0.2em] text-ink-3">SYS_PROCESS: DEMO_RENDER.MP4</span>
+        </div>
+        <div className="relative aspect-video w-full overflow-hidden bg-[#050505] flex items-center justify-center">
+          <video 
+            src="/seooptimiz-demo.mp4" 
+            autoPlay 
+            loop 
+            muted 
+            playsInline 
+            className="h-full w-full object-cover opacity-80 group-hover/frame:opacity-100 transition-opacity duration-500"
+            onError={(e) => {
+               e.currentTarget.style.display = 'none';
+               document.getElementById('video-placeholder')?.classList.remove('hidden');
+            }}
+          />
+          <div id="video-placeholder" className="absolute inset-0 flex hidden flex-col items-center justify-center border border-dashed border-accent-2/30 bg-[linear-gradient(45deg,rgba(255,122,0,0.03)_25%,transparent_25%,transparent_50%,rgba(255,122,0,0.03)_50%,rgba(255,122,0,0.03)_75%,transparent_75%,transparent)] bg-[length:24px_24px] p-6 text-center">
+             <span className="mono text-accent-2 mb-3 text-lg animate-pulse">[ FEED NOT FOUND ]</span>
+             <p className="text-ink-2 text-sm max-w-sm leading-relaxed">
+                Add your screen recording. Place the file in the <code className="bg-surface px-1 py-0.5 rounded text-accent">public/</code> folder and name it <code className="bg-surface px-1 py-0.5 rounded text-accent">seooptimiz-demo.mp4</code>. It will instantly stream into this hardware display.
+             </p>
+          </div>
+        </div>
+      </div>
+
       {/* 01 — Overview */}
       <Beat index={1} title="Overview">
         <p className="text-ink prose-col mt-5 text-[1.1rem] leading-[1.7]">{project.lede}</p>
