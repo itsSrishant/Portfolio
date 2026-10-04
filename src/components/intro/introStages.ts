@@ -10,7 +10,7 @@
  * seconds), not scroll distance — everything else about how they're used
  * (crossfade windows, the curtain split) stays the same shape.
  */
-export const DURATION = 1.8;
+export const DURATION = 1.2;
 
 /**
  * The curtain split (curtainBegin to curtainEnd) gets the biggest single

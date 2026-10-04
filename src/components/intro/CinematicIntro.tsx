@@ -143,9 +143,6 @@ export default function CinematicIntro() {
       },
     });
 
-    // 3D Parallax Mouse Tracking & Velocity Glitch
-    let lastX = 0;
-    let lastTime = 0;
     const handleMouseMove = (e: MouseEvent) => {
       if (stageRef.current) {
         // Position for radial gradient & parallax
@@ -159,21 +156,6 @@ export default function CinematicIntro() {
         const rotateX = -(e.clientY / window.innerHeight - 0.5) * 12;
         stageRef.current.style.setProperty('--rx', `${rotateX}deg`);
         stageRef.current.style.setProperty('--ry', `${rotateY}deg`);
-
-        // Velocity Glitch
-        const now = Date.now();
-        const dt = now - lastTime;
-        if (dt > 0 && dt < 100) {
-          const velocity = Math.abs(e.clientX - lastX) / dt;
-          if (velocity > 3) {
-            stageRef.current.classList.add('velocity-glitch');
-            setTimeout(() => {
-              stageRef.current?.classList.remove('velocity-glitch');
-            }, 80);
-          }
-        }
-        lastX = e.clientX;
-        lastTime = now;
       }
     };
     window.addEventListener('mousemove', handleMouseMove);
@@ -238,7 +220,7 @@ export default function CinematicIntro() {
       tl.fromTo(
         flash,
         { opacity: 0 },
-        { opacity: 0.85, duration: at(CROSSFADE * 0.5), ease: 'power2.out' },
+        { opacity: 0.3, duration: at(CROSSFADE * 0.5), ease: 'power2.out' },
         at(STAGE.curtainBegin - CROSSFADE * 0.5),
       );
       tl.to(flash, { opacity: 0, duration: at(CROSSFADE * 0.7), ease: 'power1.in' }, at(STAGE.curtainBegin));
@@ -337,11 +319,18 @@ export default function CinematicIntro() {
             className="relative flex h-full w-full items-center justify-center overflow-hidden bg-[#050507] transition-[filter,transform] duration-75"
           >
             <style>{`
-              .velocity-glitch {
+              .hover-glitch-active {
                 filter: hue-rotate(90deg) saturate(2.5) brightness(1.2);
-                transform: scale(1.02) skewX(2deg);
               }
             `}</style>
+            
+            {/* Invisible Hitbox for the Glitch Hover Effect */}
+            <div 
+              className="absolute z-50 w-[70vw] h-[70vh] sm:w-[400px] sm:h-[600px] cursor-crosshair"
+              style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}
+              onMouseEnter={() => stageRef.current?.classList.add('hover-glitch-active')}
+              onMouseLeave={() => stageRef.current?.classList.remove('hover-glitch-active')}
+            />
             
             <IntroEmbers intensityRef={emberIntensityRef} />
 
@@ -407,7 +396,7 @@ export default function CinematicIntro() {
                   alt=""
                   aria-hidden
                   loading={key === 'rest' ? 'eager' : 'lazy'}
-                  className="absolute inset-0 h-full w-full object-contain mix-blend-screen"
+                  className="absolute inset-0 h-full w-full object-contain"
                   style={{ opacity: key === 'rest' ? 1 : 0 }}
                 />
               ))}
