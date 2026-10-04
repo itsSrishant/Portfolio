@@ -69,8 +69,8 @@ export default function About() {
             </div>
 
             {/* Massive Blockquote Layout for the 2nd paragraph */}
-            <div className="relative my-4 rounded-3xl bg-surface/20 border border-line-soft p-8 sm:p-10 shadow-[inset_0_4px_20px_rgba(255,255,255,0.02)] transition-all duration-500 hover:border-white/30 hover:shadow-[0_20px_50px_-15px_rgba(255,255,255,0.15)] group/quote">
-              <span className="absolute -top-6 -left-2 text-[6rem] text-white/10 font-heading leading-none pointer-events-none select-none transition-transform duration-500 group-hover/quote:-translate-y-2 group-hover/quote:text-white/20">"</span>
+            <div className="relative my-4 rounded-3xl bg-surface/20 border border-line-soft p-8 sm:p-10 shadow-[inset_0_4px_20px_rgba(255,255,255,0.02)] transition-all duration-500 hover:border-white/70 hover:shadow-[0_0_60px_-10px_rgba(255,255,255,0.5),inset_0_0_20px_rgba(255,255,255,0.1)] group/quote">
+              <span className="absolute -top-6 -left-2 text-[6rem] text-white/10 font-heading leading-none pointer-events-none select-none transition-transform duration-500 group-hover/quote:-translate-y-2 group-hover/quote:text-white/50">"</span>
               <p className="relative z-10 text-[1.4rem] sm:text-[1.7rem] font-heading font-semibold text-ink leading-[1.4] tracking-tight">
                 {about.paragraphs[1]}
               </p>
