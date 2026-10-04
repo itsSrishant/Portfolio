@@ -178,6 +178,14 @@ function ExperienceEntry({ job }: { job: (typeof experience)[number] }) {
         <ul className="relative z-10 w-full py-2">
           {job.contributions.map((item, index) => {
             const isEven = index % 2 === 0;
+            
+            // Alternating extreme styling
+            const bgColor = isEven ? 'bg-[var(--accent)] text-white' : 'bg-[var(--accent-2)] text-bg-deep';
+            const shadowColor = isEven ? 'var(--color-accent)' : 'var(--color-accent-2)';
+            const titleColor = isEven ? 'text-white' : 'text-bg-deep';
+            const bodyColor = isEven ? 'text-white/90' : 'text-bg-deep/90';
+            const dividerColor = isEven ? 'bg-white/30' : 'bg-bg-deep/20';
+
             return (
               <li
                 key={item.title}
@@ -186,11 +194,19 @@ function ExperienceEntry({ job }: { job: (typeof experience)[number] }) {
                   isEven ? 'md:mr-auto md:pr-0 md:text-right' : 'md:ml-auto md:pl-0 md:text-left'
                 }`}
               >
-                <div className="group/card relative bg-surface/30 p-8 md:p-10 rounded-3xl border border-line-soft shadow-[inset_0_1px_10px_rgba(255,255,255,0.02)] hover:border-[var(--accent-2)] hover:-translate-y-2 hover:shadow-[0_20px_60px_-15px_var(--color-accent-2)] transition-all duration-500 overflow-hidden backdrop-blur-md">
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,122,0,0.1)_0%,transparent_60%)] opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
-                  <h4 className="text-ink text-[1.3rem] font-heading font-bold tracking-tight relative z-10">{item.title}</h4>
-                  <div className="h-px w-12 bg-line mt-4 mb-4" />
-                  <p className="text-ink-2 text-[1.05rem] leading-[1.8] relative z-10">{item.body}</p>
+                <div className={`group/card relative ${bgColor} p-8 md:p-10 rounded-3xl border border-transparent shadow-[0_10px_30px_-10px_${shadowColor}] hover:border-white/50 hover:-translate-y-2 transition-all duration-500 overflow-hidden backdrop-blur-md`}
+                     style={{ boxShadow: `0 10px 40px -10px ${shadowColor}` }}>
+                  
+                  {/* Dynamic Shimmering Scanline Layer */}
+                  <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.15)_50%,transparent_75%)] bg-[length:250%_250%] animate-[shimmer_3s_infinite_linear] pointer-events-none z-0"></div>
+                  
+                  {/* Hover Massive Glow Overlay (Injected via style to use dynamic CSS variables) */}
+                  <div className="absolute inset-0 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 pointer-events-none z-0" 
+                       style={{ boxShadow: `0 0 80px -10px ${shadowColor}, inset 0 0 30px rgba(255,255,255,0.3)` }}></div>
+
+                  <h4 className={`${titleColor} text-[1.3rem] font-heading font-bold tracking-tight relative z-10`}>{item.title}</h4>
+                  <div className={`h-px w-12 ${dividerColor} mt-4 mb-4 ${isEven ? 'md:ml-auto md:mr-0' : 'md:mr-auto md:ml-0'}`} />
+                  <p className={`${bodyColor} text-[1.05rem] leading-[1.8] relative z-10`}>{item.body}</p>
                 </div>
               </li>
             );
