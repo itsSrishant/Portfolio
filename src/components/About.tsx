@@ -69,8 +69,8 @@ export default function About() {
             </div>
 
             {/* Massive Blockquote Layout for the 2nd paragraph */}
-            <div className="relative my-4 rounded-3xl bg-surface/20 border border-line-soft p-8 sm:p-10 shadow-[inset_0_4px_20px_rgba(255,255,255,0.02)] transition-all duration-500 hover:border-accent hover:shadow-[0_20px_50px_-15px_var(--color-accent)] group/quote">
-              <span className="absolute -top-6 -left-2 text-[6rem] text-accent/20 font-heading leading-none pointer-events-none select-none transition-transform duration-500 group-hover/quote:-translate-y-2 group-hover/quote:text-accent/40">"</span>
+            <div className="relative my-4 rounded-3xl bg-surface/20 border border-line-soft p-8 sm:p-10 shadow-[inset_0_4px_20px_rgba(255,255,255,0.02)] transition-all duration-500 hover:border-white/30 hover:shadow-[0_20px_50px_-15px_rgba(255,255,255,0.15)] group/quote">
+              <span className="absolute -top-6 -left-2 text-[6rem] text-white/10 font-heading leading-none pointer-events-none select-none transition-transform duration-500 group-hover/quote:-translate-y-2 group-hover/quote:text-white/20">"</span>
               <p className="relative z-10 text-[1.4rem] sm:text-[1.7rem] font-heading font-semibold text-ink leading-[1.4] tracking-tight">
                 {about.paragraphs[1]}
               </p>
@@ -90,14 +90,14 @@ export default function About() {
             <dl className="text-[0.95rem] grid gap-5">
               
               {/* Solid White / Silver Box */}
-              <div className="group/card relative bg-ink text-bg-deep p-6 sm:p-7 rounded-[20px] shadow-sm overflow-hidden transform transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(255,255,255,0.3)]">
+              <div className="group/card relative bg-ink text-bg-deep p-6 sm:p-7 rounded-[20px] shadow-sm overflow-hidden transform transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(255,255,255,0.4)] hover:scale-[1.02]">
                 <dt className="mono mb-2 text-bg-deep/70 text-[0.7rem] uppercase tracking-widest font-bold">Education</dt>
                 <dd className="relative z-10">
                   <p className="font-heading text-xl font-bold tracking-tight mb-1">{education.degree}</p>
                   <p className="font-medium opacity-90">{education.institution}</p>
-                  <div className="mt-4 pt-4 border-t border-bg-deep/10 text-[0.85rem] font-medium opacity-80 flex justify-between">
-                    <span>{education.detail}</span>
-                    <span>{education.period}</span>
+                  <div className="mt-5 pt-4 border-t border-bg-deep/10 text-[0.85rem] font-medium flex justify-between items-center">
+                    <span className="bg-[#050505] text-ink px-3 py-1.5 rounded-full font-bold shadow-[inset_0_1px_3px_rgba(255,255,255,0.1)] tracking-wide">{education.detail}</span>
+                    <span className="opacity-80">{education.period}</span>
                   </div>
                 </dd>
               </div>
