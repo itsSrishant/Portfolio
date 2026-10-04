@@ -28,7 +28,7 @@ export default function StarsBackground() {
     const numStars = 400; // Balanced density (between 200 and 800)
 
     for (let i = 0; i < numStars; i++) {
-      const isPurple = Math.random() > 0.8;
+      const isOrange = Math.random() > 0.8;
       stars.push({
         x: Math.random() * width,
         y: Math.random() * height,
@@ -36,7 +36,7 @@ export default function StarsBackground() {
         size: Math.random() * 1.5 + 0.5,
         alpha: Math.random(),
         delta: Math.random() * 0.015 + 0.005,
-        color: isPurple ? '180, 100, 255' : '255, 255, 255',
+        color: isOrange ? '255, 122, 0' : '255, 255, 255',
         phase: Math.random() * Math.PI * 2,
       });
     }

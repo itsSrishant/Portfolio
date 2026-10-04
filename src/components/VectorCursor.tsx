@@ -88,8 +88,8 @@ export default function VectorCursor() {
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
-            // Purple RGB: 155, 48, 255
-            ctx.strokeStyle = `rgba(155, 48, 255, ${lineAlpha * 0.6})`;
+            // Orange RGB: 255, 122, 0
+            ctx.strokeStyle = `rgba(255, 122, 0, ${lineAlpha * 0.6})`;
             ctx.lineWidth = 0.8;
             ctx.stroke();
           }

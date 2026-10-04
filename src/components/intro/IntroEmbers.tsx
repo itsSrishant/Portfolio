@@ -13,7 +13,7 @@ interface IntroEmbersProps {
 }
 
 /**
- * A sparse field of drifting purple embers behind the character frames —
+ * A sparse field of drifting orange embers behind the character frames —
  * pure atmosphere, not story. Density stays constant; brightness and rise
  * speed scale with `intensityRef.current` (0..1, the intro's own scroll
  * progress), written directly from CinematicIntro's ScrollTrigger onUpdate
