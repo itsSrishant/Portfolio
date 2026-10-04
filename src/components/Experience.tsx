@@ -142,6 +142,24 @@ function ExperienceEntry({ job }: { job: (typeof experience)[number] }) {
           }
         );
       });
+
+      const traces = gsap.utils.toArray('.trace-fill') as HTMLElement[];
+      traces.forEach((trace) => {
+        gsap.fromTo(
+          trace,
+          { scaleX: 0 },
+          {
+            scaleX: 1,
+            duration: 0.6,
+            delay: 0.2,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: trace.closest('.contribution-card'),
+              start: 'top 85%',
+            },
+          }
+        );
+      });
     }, articleRef);
 
     return () => ctx.revert();
@@ -190,6 +208,14 @@ function ExperienceEntry({ job }: { job: (typeof experience)[number] }) {
                   isEven ? 'md:mr-auto md:pr-0 md:text-right' : 'md:ml-auto md:pl-0 md:text-left'
                 }`}
               >
+                {/* Glowing Circuit Trace */}
+                <div className={`absolute top-1/2 -translate-y-1/2 h-[2px] bg-line-soft/40 z-0
+                  left-[1.1rem] w-[1.9rem] 
+                  md:w-[3rem] ${isEven ? 'md:left-auto md:-right-[3rem]' : 'md:left-[-3rem] md:right-auto'}
+                `}>
+                  <div className={`trace-fill h-full w-full bg-[var(--accent-2)] shadow-[0_0_10px_var(--color-accent-2)] ${isEven ? 'origin-left md:origin-right' : 'origin-left'}`} />
+                </div>
+
                 <div className="group/card relative bg-bg-deep p-6 md:p-8 rounded-sm border-2 border-line-soft shadow-[4px_4px_0_var(--color-accent-2)] hover:border-accent-2 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0_var(--color-accent-2)] transition-all duration-200 overflow-hidden">
                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,122,0,0.05)_0%,transparent_60%)] opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
                   <h4 className="text-ink text-[1.15rem] font-medium tracking-[-0.01em] relative z-10">{item.title}</h4>
