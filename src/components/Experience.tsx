@@ -227,14 +227,6 @@ function ExperienceEntry({ job }: { job: (typeof experience)[number] }) {
         </ul>
       </div>
 
-      {/* Tech Stack is outside the relative timeline container */}
-      <div className="border-line-soft mt-8 flex flex-wrap gap-2 border-t pt-8">
-        {job.stack.map((tech) => (
-          <span key={tech} className="tag">
-            {tech}
-          </span>
-        ))}
-      </div>
     </article>
   );
 }
