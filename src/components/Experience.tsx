@@ -216,8 +216,40 @@ function ExperienceEntry({ job }: { job: (typeof experience)[number] }) {
                   <div className={`trace-fill h-full w-full bg-[var(--accent-2)] shadow-[0_0_10px_var(--color-accent-2)] ${isEven ? 'origin-left md:origin-right' : 'origin-left'}`} />
                 </div>
 
-                <div className="group/card relative bg-bg-deep p-6 md:p-8 rounded-sm border-2 border-line-soft shadow-[4px_4px_0_var(--color-accent-2)] hover:border-accent-2 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0_var(--color-accent-2)] transition-all duration-200 overflow-hidden">
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,122,0,0.05)_0%,transparent_60%)] opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                <div className="group/card relative bg-bg-deep p-6 md:p-8 rounded-sm border-2 border-line-soft shadow-[4px_4px_0_var(--color-accent-2)] hover:border-accent-2 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0_var(--color-accent-2)] transition-all duration-300 overflow-hidden">
+                  
+                  {/* Distinct Background Animations based on Index */}
+                  {index === 0 && (
+                    <>
+                      {/* Live Audio Wave */}
+                      <div className="absolute bottom-0 left-0 w-full h-12 flex items-end justify-between px-2 md:px-8 opacity-10 group-hover/card:opacity-50 transition-opacity duration-300 pointer-events-none">
+                        {Array.from({length: 16}).map((_, i) => (
+                          <div key={i} className="w-1.5 md:w-2 bg-[var(--accent-2)] rounded-t-sm origin-bottom animate-[waveform_1s_ease-in-out_infinite_alternate]" style={{ animationDelay: `${i * 0.1}s`, height: `${Math.random() * 80 + 20}%` }} />
+                        ))}
+                      </div>
+                    </>
+                  )}
+
+                  {index === 1 && (
+                    <>
+                      {/* Data Retrieval Scanner */}
+                      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:16px_16px] pointer-events-none opacity-20"></div>
+                      <div className="absolute top-0 bottom-0 left-0 w-[5%] bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent opacity-0 group-hover/card:opacity-[0.15] group-hover/card:animate-[scanline_2.5s_linear_infinite] pointer-events-none z-0" />
+                    </>
+                  )}
+
+                  {index === 2 && (
+                    <>
+                      {/* Server Cluster Pulse */}
+                      <div className="absolute top-6 right-6 flex gap-1.5 pointer-events-none z-0">
+                        <div className="w-1.5 h-1.5 rounded-full bg-[var(--accent-2)] opacity-30 group-hover/card:animate-[pulse_1s_ease-in-out_infinite]" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-[var(--accent-2)] opacity-30 group-hover/card:animate-[pulse_1s_ease-in-out_infinite] delay-150" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-[var(--accent-2)] opacity-30 group-hover/card:animate-[pulse_1s_ease-in-out_infinite] delay-300" />
+                      </div>
+                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,var(--color-accent-2)_0%,transparent_0%)] opacity-0 group-hover/card:bg-[radial-gradient(circle_at_top_right,rgba(255,122,0,0.1)_0%,transparent_100%)] transition-all duration-700 pointer-events-none z-0" />
+                    </>
+                  )}
+
                   <h4 className="text-ink text-[1.15rem] font-medium tracking-[-0.01em] relative z-10">{item.title}</h4>
                   <p className="text-ink-2 mt-3 text-[0.95rem] leading-[1.7] relative z-10">{item.body}</p>
                 </div>
