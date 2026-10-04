@@ -42,25 +42,9 @@ export default function Projects() {
               {/* Project Visual Area */}
               <div className="relative w-full md:w-5/12 aspect-[16/10] rounded-2xl border border-line-soft bg-bg-deep overflow-hidden flex items-center justify-center">
                  {isVoice ? (
-                   // Silver/White Audio Waveform mockup
-                   <div className="flex gap-1.5 items-center opacity-70 group-hover/project:scale-110 transition-transform duration-700">
-                     {Array.from({length: 16}).map((_, j) => (
-                       <div key={j} className="w-1.5 rounded-full bg-[var(--card-accent)]" style={{ height: `${20 + Math.random()*60}%`, animation: `pulse 1.5s infinite ${j*0.1}s alternate` }} />
-                     ))}
-                   </div>
+                   <img src="/images/ai-voice.png" alt="AI Voice Assistant Interface" className="w-full h-full object-cover opacity-80 group-hover/project:scale-105 group-hover/project:opacity-100 transition-all duration-700 ease-out" />
                  ) : (
-                   // Cyberpunk Analytics mockup
-                   <div className="flex flex-col gap-4 w-full h-full p-8 opacity-70 group-hover/project:scale-110 transition-transform duration-700">
-                     <div className="w-full h-24 border border-[var(--card-accent)]/30 rounded-lg bg-[linear-gradient(45deg,rgba(255,122,0,0.03)_25%,transparent_25%,transparent_50%,rgba(255,122,0,0.03)_50%,rgba(255,122,0,0.03)_75%,transparent_75%,transparent)] bg-[length:12px_12px]" />
-                     <div className="grid grid-cols-2 gap-4">
-                       <div className="h-16 rounded-lg border border-[var(--card-accent)]/20 bg-surface/50 relative overflow-hidden">
-                         <div className="absolute bottom-0 left-0 h-1/2 w-3/4 bg-[var(--card-accent)]/20" />
-                       </div>
-                       <div className="h-16 rounded-lg border border-[var(--card-accent)]/20 bg-surface/50 relative overflow-hidden">
-                         <div className="absolute bottom-0 left-0 h-3/4 w-1/2 bg-[var(--card-accent)]/20" />
-                       </div>
-                     </div>
-                   </div>
+                   <img src="/images/seo-optimiz.png" alt="SEOOptimiz Dashboard" className="w-full h-full object-cover opacity-80 group-hover/project:scale-105 group-hover/project:opacity-100 transition-all duration-700 ease-out" />
                  )}
                  {/* Subtle vignette over the visual */}
                  <div className="absolute inset-0 shadow-[inset_0_0_40px_var(--color-bg-deep)]" />
