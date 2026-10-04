@@ -4,7 +4,7 @@
 
 A custom-built portfolio exploring the intersection of **AI, software engineering, and interactive web experiences**.
 
-**[GitHub](https://github.com/itsSrishant)** · **[LinkedIn](https://www.linkedin.com/in/srishantkulkarni/)**
+**[Live Portfolio](https://srishantkulkarni-portfolio.vercel.app)** · **[GitHub](https://github.com/itsSrishant)** · **[LinkedIn](https://www.linkedin.com/in/srishantkulkarni/)**
 
 ---
 
@@ -85,6 +85,8 @@ The project involved working across **frontend, backend, AI integration, retriev
 
 The primary project showcased in this portfolio is the **AI Voice Assistant Platform** I worked on during my internship.
 
+**[View the Full Case Study](https://srishantkulkarni-portfolio.vercel.app/work/voice-ai-platform)**
+
 It was designed to turn a conventional conversational AI system into a **real-time spoken interaction**, allowing a user to talk naturally while the system listens, retrieves relevant information, reasons over the conversation, and responds through speech.
 
 #### Core Capabilities
@@ -108,6 +110,8 @@ It was connecting **voice, retrieval, reasoning, and response generation** quick
 ### 2. Full-Stack SEO & Performance Optimization
 
 I recently architected a comprehensive SEO and Performance Optimization overhaul for a production web application, maximizing its discoverability, accessibility, and loading speeds.
+
+**[View the Full Case Study](https://srishantkulkarni-portfolio.vercel.app/work/seooptimiz)**
 
 #### Core Capabilities
 
