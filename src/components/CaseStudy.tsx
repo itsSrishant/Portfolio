@@ -33,17 +33,6 @@ const HOW_IT_WORKS_STEPS = [
  * no metrics, no infra detail, no proprietary implementation specifics.
  */
 
-const FLOW_STEPS = [
-  'Caller speaks',
-  'Speech-to-text',
-  'Conversation reasoning',
-  'Knowledge retrieval',
-  'LLM',
-  'Guardrails',
-  'Text-to-speech',
-  'Caller hears response',
-];
-
 const PROBLEMS = [
   {
     title: 'Latency',
