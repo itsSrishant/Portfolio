@@ -27,7 +27,7 @@ export default function Section({ id, title, meta, children, className = '', glo
         glow
           ? {
               background:
-                'radial-gradient(60% 50% at 50% 0%, color-mix(in oklch, var(--accent) 15%, transparent) 0%, transparent 70%)',
+                'radial-gradient(60% 50% at 50% 0%, color-mix(in oklch, var(--accent-2) 15%, transparent) 0%, color-mix(in oklch, var(--accent) 10%, transparent) 35%, transparent 70%)',
             }
           : undefined
       }

@@ -13,12 +13,15 @@ export default function Contact() {
 
         <div data-reveal>
           <h2
-            className="font-semibold tracking-[-0.03em]"
+            className="group/headline relative inline-block font-semibold tracking-[-0.03em] cursor-default"
             style={{ fontSize: 'clamp(2.25rem, 6vw, 4.25rem)', lineHeight: 1.02 }}
           >
-            Open to internships
-            <br />
-            <span className="text-ink-3">and interesting problems.</span>
+            <span className="block transition-all duration-500 group-hover/headline:text-transparent group-hover/headline:bg-clip-text group-hover/headline:bg-gradient-to-r group-hover/headline:from-[#ff7a00] group-hover/headline:to-[#cc0000]">
+              Open to internships
+              <br />
+              <span className="text-ink-3 transition-colors duration-500 group-hover/headline:text-transparent">and interesting problems.</span>
+            </span>
+            <span className="absolute -bottom-2 left-0 w-0 h-[4px] bg-gradient-to-r from-[#ff7a00] to-[#cc0000] group-hover/headline:w-full transition-all duration-500 ease-out rounded-full pointer-events-none"></span>
           </h2>
 
           <p className="text-ink-2 prose-col mt-7 text-[1.05rem] leading-[1.75]">

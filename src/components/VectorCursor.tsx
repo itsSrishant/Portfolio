@@ -70,7 +70,7 @@ export default function VectorCursor() {
         const alpha = 1 - (p.life / p.maxLife);
         
         ctx.beginPath();
-        ctx.arc(p.x, p.y, 1.5, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, 2.0, 0, Math.PI * 2);
         // Vibrant Orange RGB: 255, 122, 0
         ctx.fillStyle = `rgba(255, 122, 0, ${alpha * 0.9})`;
         ctx.fill();
@@ -89,8 +89,8 @@ export default function VectorCursor() {
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
             // Purple RGB: 155, 48, 255
-            ctx.strokeStyle = `rgba(155, 48, 255, ${lineAlpha * 0.6})`;
-            ctx.lineWidth = 0.8;
+            ctx.strokeStyle = `rgba(155, 48, 255, ${lineAlpha * 0.85})`;
+            ctx.lineWidth = 1.2;
             ctx.stroke();
           }
         }
@@ -104,8 +104,8 @@ export default function VectorCursor() {
            ctx.beginPath();
            ctx.moveTo(p.x, p.y);
            ctx.lineTo(mouseX, mouseY);
-           ctx.strokeStyle = `rgba(255, 122, 0, ${lineAlpha * 0.5})`;
-           ctx.lineWidth = 1;
+           ctx.strokeStyle = `rgba(255, 122, 0, ${lineAlpha * 0.75})`;
+           ctx.lineWidth = 1.5;
            ctx.stroke();
         }
       }

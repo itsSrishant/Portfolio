@@ -60,14 +60,15 @@ const HeroContent = forwardRef<HTMLDivElement>(function HeroContent(_props, ref)
           <div className="order-1 lg:col-span-7 lg:self-end">
             <p className="text-ink-3 text-[0.95rem]">Hi, I&rsquo;m</p>
             <h1
-              className="mt-2 font-black tracking-[-0.04em]"
+              className="group/heroname relative inline-block mt-2 font-black tracking-[-0.04em] cursor-default"
               style={{ fontSize: 'clamp(3rem, 9vw, 6.2rem)', lineHeight: 0.92 }}
               aria-label={`${profile.name} — AI & Software Engineer building intelligent systems`}
             >
-              <span className="block text-ink" aria-hidden>{profile.firstName}</span>
-              <span className="block text-accent-2" aria-hidden>
+              <span className="block text-ink transition-colors duration-500 group-hover/heroname:text-accent-2" aria-hidden>{profile.firstName}</span>
+              <span className="block text-accent-2 transition-colors duration-500 group-hover/heroname:text-ink" aria-hidden>
                 {profile.lastName}
               </span>
+              <span className="absolute -bottom-2 left-0 w-0 h-[5px] bg-accent-2 group-hover/heroname:w-full transition-all duration-500 ease-out rounded-full pointer-events-none"></span>
             </h1>
             <div className="mt-6 flex flex-col gap-y-1.5 sm:flex-row sm:items-center sm:gap-x-3 sm:gap-y-0" aria-label={profile.roles.join(' and ')}>
               {profile.roles.map((role, i) => (
@@ -86,9 +87,9 @@ const HeroContent = forwardRef<HTMLDivElement>(function HeroContent(_props, ref)
             {/* Floating UI Elements (2.5D Depth) - Colors now mix orange and purple */}
             <div className="absolute -left-12 top-24 hidden lg:flex flex-col gap-1.5 p-3 rounded-xl border border-line-soft/30 backdrop-blur-md bg-surface/40 shadow-2xl animate-[float_6s_ease-in-out_infinite]">
               <div className="flex items-center gap-2 mb-1">
-                <div className="w-2.5 h-2.5 rounded-full bg-danger/80"></div>
-                <div className="w-2.5 h-2.5 rounded-full bg-accent-2/80"></div>
-                <div className="w-2.5 h-2.5 rounded-full bg-accent/80"></div>
+                <div className="w-2.5 h-2.5 rounded-full bg-danger shadow-[0_0_8px_color-mix(in_oklch,var(--color-danger)_80%,transparent)]"></div>
+                <div className="w-2.5 h-2.5 rounded-full bg-accent-2 shadow-[0_0_8px_color-mix(in_oklch,var(--color-accent-2)_80%,transparent)]"></div>
+                <div className="w-2.5 h-2.5 rounded-full bg-accent shadow-[0_0_8px_color-mix(in_oklch,var(--color-accent)_80%,transparent)]"></div>
               </div>
               <p className="mono text-[0.65rem] text-ink-3">~ status</p>
               <p className="mono text-xs text-accent-2 font-semibold">BUILDING_SYSTEMS</p>

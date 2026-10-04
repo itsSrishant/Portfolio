@@ -4,10 +4,12 @@ import { GitHubIcon, LinkedInIcon, DocumentIcon } from './Icons';
 import HashLink from './HashLink';
 import { navItems, profile, linksReady } from '../data/profile';
 
-const chars = '!<>-_\\\\/[]{}—=+*^?#_';
+const chars = '█▓▒░<>-_\\\\/[]{}—=+*^?#_01';
 function GlitchText({ text }: { text: string }) {
   const [displayText, setDisplayText] = useState(text);
   const [isHovered, setIsHovered] = useState(false);
+  
+  const isGlitching = isHovered && displayText !== text;
   
   useEffect(() => {
     if (!isHovered) {
@@ -16,20 +18,19 @@ function GlitchText({ text }: { text: string }) {
     }
     
     let iterations = 0;
-    const maxIterations = 8;
     const interval = setInterval(() => {
       setDisplayText(
-        text.split('').map((_, index) => {
-          if (index < iterations) return text[index];
+        text.split('').map((char, index) => {
+          if (index < Math.floor(iterations)) return char;
           return chars[Math.floor(Math.random() * chars.length)];
         }).join('')
       );
       
-      if (iterations >= maxIterations) {
+      if (iterations >= text.length) {
          clearInterval(interval);
          setDisplayText(text);
       }
-      iterations += 1;
+      iterations += 1 / 3;
     }, 30);
     
     return () => clearInterval(interval);
@@ -39,7 +40,7 @@ function GlitchText({ text }: { text: string }) {
     <span 
       onMouseEnter={() => setIsHovered(true)} 
       onMouseLeave={() => setIsHovered(false)}
-      className="inline-block"
+      className={`inline-block transition-all duration-75 ${isGlitching ? 'text-transparent bg-clip-text bg-gradient-to-r from-accent-2 to-accent drop-shadow-[0_0_8px_var(--color-accent-2)]' : ''}`}
     >
       {displayText}
     </span>

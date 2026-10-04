@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Nav from './components/Nav';
 import Footer from './components/Footer';
@@ -10,6 +11,20 @@ import WorkDetail from './pages/WorkDetail';
 import Privacy from './pages/Privacy';
 
 export default function App() {
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      document.querySelectorAll('.btn').forEach((btn) => {
+        const rect = btn.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        (btn as HTMLElement).style.setProperty('--x', `${x}px`);
+        (btn as HTMLElement).style.setProperty('--y', `${y}px`);
+      });
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
   return (
     <>
       <RouteEffects />
