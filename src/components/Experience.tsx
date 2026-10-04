@@ -222,7 +222,7 @@ function ExperienceEntry({ job }: { job: (typeof experience)[number] }) {
                   <div className={`trace-fill h-full w-full bg-[var(--accent-2)] shadow-[0_0_10px_var(--color-accent-2)] ${isEven ? 'origin-left md:origin-right' : 'origin-left'}`} />
                 </div>
 
-                <div className="group/card relative bg-bg-deep p-6 md:p-8 rounded-sm border-2 border-line-soft shadow-[4px_4px_0_var(--color-accent-2)] transition-all duration-500 overflow-hidden data-[lit=true]:border-accent-2 data-[lit=true]:translate-x-[4px] data-[lit=true]:translate-y-[4px] data-[lit=true]:shadow-[0_0_40px_-5px_var(--color-accent-2)]">
+                <div className="group/card relative bg-bg-deep p-6 md:p-8 rounded-sm border-2 border-line-soft shadow-[4px_4px_0_var(--color-accent-2)] transition-all duration-500 overflow-hidden hover:border-accent-2 hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-[0_0_40px_-5px_var(--color-accent-2)]">
                   
                   {/* Distinct Background Animations based on Index - Triggered on Scroll (data-lit) */}
                   {index === 0 && (
