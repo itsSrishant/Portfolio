@@ -57,7 +57,10 @@ export default function About() {
   return (
     <div ref={sectionRef} className="relative overflow-hidden">
       {/* Massive Parallax Watermark */}
-      <div className="absolute right-[-5%] top-20 opacity-[0.03] text-[16vw] font-black mono pointer-events-none select-none tracking-tighter z-0">
+      <div 
+        className="absolute right-[-15%] top-10 text-[20vw] font-black mono pointer-events-none select-none tracking-tighter z-0 opacity-20"
+        style={{ WebkitTextStroke: '2px rgba(255, 255, 255, 0.1)', color: 'transparent' }}
+      >
         &lt;SYS/&gt;
       </div>
 
