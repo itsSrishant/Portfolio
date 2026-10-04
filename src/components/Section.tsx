@@ -7,7 +7,7 @@ interface SectionProps {
   meta?: string;
   children: ReactNode;
   className?: string;
-  /** Ambient orange wash blooming from the top of the section. On by default. */
+  /** Ambient purple wash blooming from the top of the section. On by default. */
   glow?: boolean;
 }
 

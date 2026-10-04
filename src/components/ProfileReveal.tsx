@@ -38,7 +38,7 @@ const DURATION = 0.7;
 /**
  * The signature interaction, rebuilt around two aligned image layers
  * instead of a cursor-tracked canvas aperture: hovering (or, on touch,
- * tapping) the whole portrait triggers a diagonal orange energy sweep that
+ * tapping) the whole portrait triggers a diagonal purple energy sweep that
  * wipes the portrait away to reveal the armoured character beneath —
  * "my identity → energy activation → transformation → futuristic
  * character" — rather than a cursor-followed keyhole.

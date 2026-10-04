@@ -83,7 +83,7 @@ const HeroContent = forwardRef<HTMLDivElement>(function HeroContent(_props, ref)
           <div className="order-2 relative mx-auto w-full max-w-[24rem] lg:col-span-5 lg:row-span-2 lg:mx-0 lg:max-w-none lg:self-center">
             <ProfileReveal />
             
-            {/* Floating UI Elements (2.5D Depth) - Colors now mix orange and orange */}
+            {/* Floating UI Elements (2.5D Depth) - Colors now mix orange and purple */}
             <div className="absolute -left-12 top-24 hidden lg:flex flex-col gap-1.5 p-3 rounded-xl border border-line-soft/30 backdrop-blur-md bg-surface/40 shadow-2xl animate-[float_6s_ease-in-out_infinite]">
               <div className="flex items-center gap-2 mb-1">
                 <div className="w-2.5 h-2.5 rounded-full bg-danger/80"></div>
