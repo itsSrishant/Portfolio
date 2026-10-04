@@ -149,29 +149,25 @@ function ExperienceEntry({ job }: { job: (typeof experience)[number] }) {
 
   return (
     <article ref={articleRef} className="border-line-soft border-t pt-10" data-reveal>
-      <header className="group/dashboard bg-bg-deep rounded-sm border-2 border-line-soft shadow-[8px_8px_0_var(--color-accent-2)] overflow-hidden relative transition-all duration-300 hover:border-accent-2 hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-[4px_4px_0_var(--color-accent-2)]">
-        {/* Dashboard Top Bar */}
-        <div className="bg-surface/50 border-b border-line-soft px-6 py-3 flex items-center gap-2 relative z-20">
-          <div className="w-2.5 h-2.5 rounded-full bg-danger"></div>
-          <div className="w-2.5 h-2.5 rounded-full bg-accent-2"></div>
-          <div className="w-2.5 h-2.5 rounded-full bg-accent"></div>
-          <span className="mono text-[0.65rem] text-ink-3 ml-2 uppercase tracking-wider">sys_process: {job.company.replace(/\s+/g, '_').toLowerCase()}</span>
-        </div>
+      <header className="group/dashboard bg-[var(--accent)] text-white rounded-3xl p-8 md:p-12 shadow-[0_20px_50px_-15px_var(--color-accent)] overflow-hidden relative transition-all duration-500 hover:shadow-[0_0_80px_-15px_var(--color-accent),inset_0_0_30px_rgba(255,255,255,0.2)] hover:scale-[1.01]">
         
-        {/* Blueprint Grid Hover Background */}
-        <div className="absolute inset-0 opacity-0 group-hover/dashboard:opacity-100 transition-opacity duration-700 pointer-events-none bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:20px_20px] z-0"></div>
+        {/* Shimmer Hover Background */}
+        <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.1)_50%,transparent_75%)] bg-[length:250%_250%] animate-[shimmer_3s_infinite_linear] opacity-0 group-hover/dashboard:opacity-100 transition-opacity duration-700 pointer-events-none z-0"></div>
 
-        <div className="max-w-3xl p-8 md:p-10 relative z-10">
-          <h3 className="text-[1.4rem] font-semibold tracking-[-0.02em] sm:text-[1.6rem]">{job.role}</h3>
-          <p className="text-ink-2 mt-1 text-[1.1rem]">{job.company}</p>
-          <div className="mt-4 inline-flex items-center gap-2 bg-surface/50 border border-line-soft rounded-full px-3 py-1 text-[0.75rem] text-ink-2 mono shadow-inner">
-            <span className="w-1.5 h-1.5 rounded-full bg-accent-2 animate-[pulse_2s_ease-in-out_infinite]"></span>
-            [LOG: {job.period.toUpperCase()}]
-            {job.periodIsPlaceholder && (
-              <span className="text-ink-3 normal-case ml-1">· dates to confirm</span>
-            )}
+        <div className="max-w-4xl relative z-10 flex flex-col md:flex-row md:justify-between md:items-start gap-6">
+          <div>
+            <h3 className="text-[1.8rem] md:text-[2.2rem] font-heading font-bold tracking-tight leading-tight">{job.role}</h3>
+            <p className="text-white/90 mt-2 text-[1.2rem] font-medium">{job.company}</p>
           </div>
-          <p className="text-ink-2 prose-col mt-6 leading-[1.75] text-[1.05rem] relative z-10">{job.summary}</p>
+          
+          <div className="inline-flex items-center gap-2 bg-black/20 backdrop-blur-md border border-white/20 rounded-full px-4 py-2 text-[0.85rem] text-white mono shadow-inner self-start flex-shrink-0">
+            <span className="w-2 h-2 rounded-full bg-white animate-[pulse_2s_ease-in-out_infinite]"></span>
+            [LOG: {job.period.toUpperCase()}]
+          </div>
+        </div>
+
+        <div className="relative z-10 mt-8 pt-8 border-t border-white/20">
+          <p className="text-white/90 font-medium leading-[1.8] text-[1.1rem] max-w-4xl">{job.summary}</p>
         </div>
       </header>
 
@@ -190,10 +186,11 @@ function ExperienceEntry({ job }: { job: (typeof experience)[number] }) {
                   isEven ? 'md:mr-auto md:pr-0 md:text-right' : 'md:ml-auto md:pl-0 md:text-left'
                 }`}
               >
-                <div className="group/card relative bg-bg-deep p-6 md:p-8 rounded-sm border-2 border-line-soft shadow-[4px_4px_0_var(--color-accent-2)] hover:border-accent-2 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0_var(--color-accent-2)] transition-all duration-200 overflow-hidden">
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,122,0,0.05)_0%,transparent_60%)] opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
-                  <h4 className="text-ink text-[1.15rem] font-medium tracking-[-0.01em] relative z-10">{item.title}</h4>
-                  <p className="text-ink-2 mt-3 text-[0.95rem] leading-[1.7] relative z-10">{item.body}</p>
+                <div className="group/card relative bg-surface/30 p-8 md:p-10 rounded-3xl border border-line-soft shadow-[inset_0_1px_10px_rgba(255,255,255,0.02)] hover:border-[var(--accent-2)] hover:-translate-y-2 hover:shadow-[0_20px_60px_-15px_var(--color-accent-2)] transition-all duration-500 overflow-hidden backdrop-blur-md">
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,122,0,0.1)_0%,transparent_60%)] opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                  <h4 className="text-ink text-[1.3rem] font-heading font-bold tracking-tight relative z-10">{item.title}</h4>
+                  <div className="h-px w-12 bg-line mt-4 mb-4" />
+                  <p className="text-ink-2 text-[1.05rem] leading-[1.8] relative z-10">{item.body}</p>
                 </div>
               </li>
             );
