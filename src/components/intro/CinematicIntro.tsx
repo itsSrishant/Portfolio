@@ -143,19 +143,51 @@ export default function CinematicIntro() {
       },
     });
 
-    // 3D Parallax Mouse Tracking
+    // 3D Parallax Mouse Tracking & Velocity Glitch
+    let lastX = 0;
+    let lastTime = 0;
     const handleMouseMove = (e: MouseEvent) => {
       if (stageRef.current) {
-        const x = (e.clientX / window.innerWidth - 0.5) * 40; // -20px to 20px
+        // Position for radial gradient & parallax
+        const x = (e.clientX / window.innerWidth - 0.5) * 40; 
         const y = (e.clientY / window.innerHeight - 0.5) * 40; 
         stageRef.current.style.setProperty('--mx', `${x}px`);
         stageRef.current.style.setProperty('--my', `${y}px`);
+
+        // 3D Tilt
+        const rotateY = (e.clientX / window.innerWidth - 0.5) * 12; 
+        const rotateX = -(e.clientY / window.innerHeight - 0.5) * 12;
+        stageRef.current.style.setProperty('--rx', `${rotateX}deg`);
+        stageRef.current.style.setProperty('--ry', `${rotateY}deg`);
+
+        // Velocity Glitch
+        const now = Date.now();
+        const dt = now - lastTime;
+        if (dt > 0 && dt < 100) {
+          const velocity = Math.abs(e.clientX - lastX) / dt;
+          if (velocity > 3) {
+            stageRef.current.classList.add('velocity-glitch');
+            setTimeout(() => {
+              stageRef.current?.classList.remove('velocity-glitch');
+            }, 80);
+          }
+        }
+        lastX = e.clientX;
+        lastTime = now;
       }
     };
     window.addEventListener('mousemove', handleMouseMove);
 
     if (cueRef.current) {
-      tl.to(cueRef.current, { opacity: 0, ease: 'power1.out', duration: at(0.04) }, 0);
+      tl.to(cueRef.current, { opacity: 0, scale: 1.5, filter: 'blur(10px)', ease: 'power2.in', duration: at(0.08) }, 0);
+    }
+    
+    // Action Sequence: Blast through the HUD and Grid on scroll
+    if (stageRef.current) {
+      const hudEls = stageRef.current.querySelectorAll('.cyberpunk-hud');
+      const gridEl = stageRef.current.querySelector('.cyberpunk-grid');
+      tl.to(hudEls, { scale: 3, opacity: 0, filter: 'blur(15px)', ease: 'power2.in', duration: at(0.12) }, 0);
+      tl.to(gridEl, { scale: 5, opacity: 0, ease: 'power3.in', duration: at(0.15) }, 0);
     }
 
     FRAME_ORDER.forEach((key, i) => {
@@ -302,12 +334,19 @@ export default function CinematicIntro() {
           <div
             ref={stageRef}
             data-theme="dark"
-            className="relative flex h-full w-full items-center justify-center overflow-hidden bg-[#050507]"
+            className="relative flex h-full w-full items-center justify-center overflow-hidden bg-[#050507] transition-[filter,transform] duration-75"
           >
+            <style>{`
+              .velocity-glitch {
+                filter: hue-rotate(90deg) saturate(2.5) brightness(1.2);
+                transform: scale(1.02) skewX(2deg);
+              }
+            `}</style>
+            
             <IntroEmbers intensityRef={emberIntensityRef} />
 
             {/* Subtle Tech Grid Background */}
-            <div className="absolute inset-0 pointer-events-none opacity-10" style={{ backgroundImage: 'linear-gradient(rgba(255,122,0,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,122,0,1) 1px, transparent 1px)', backgroundSize: '50px 50px', maskImage: 'radial-gradient(circle at 50% 50%, black 20%, transparent 70%)', WebkitMaskImage: 'radial-gradient(circle at 50% 50%, black 20%, transparent 70%)' }}></div>
+            <div className="cyberpunk-grid absolute inset-0 pointer-events-none opacity-10 origin-center" style={{ backgroundImage: 'linear-gradient(rgba(255,122,0,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,122,0,1) 1px, transparent 1px)', backgroundSize: '50px 50px', maskImage: 'radial-gradient(circle at 50% 50%, black 20%, transparent 70%)', WebkitMaskImage: 'radial-gradient(circle at 50% 50%, black 20%, transparent 70%)' }}></div>
 
             {/* Dynamic Wakandan Spotlight (follows mouse) */}
             <div 
@@ -318,7 +357,7 @@ export default function CinematicIntro() {
             />
 
             {/* Cyberpunk HUD Overlays */}
-            <div className="absolute inset-0 pointer-events-none z-10 flex justify-between p-6 sm:p-10 mix-blend-screen opacity-70">
+            <div className="cyberpunk-hud absolute inset-0 pointer-events-none z-10 flex justify-between p-6 sm:p-10 mix-blend-screen opacity-70 origin-center">
               {/* Left HUD */}
               <div className="flex flex-col gap-4 font-mono text-[0.65rem] text-accent-2/80 tracking-widest uppercase">
                 <div className="flex items-center gap-2 font-bold text-accent-2">
@@ -357,8 +396,8 @@ export default function CinematicIntro() {
 
             {/* Parallax Container for the Hologram frames */}
             <div 
-              className="absolute inset-0 transition-transform duration-100 ease-out"
-              style={{ transform: 'translate3d(calc(var(--mx, 0px) * -1), calc(var(--my, 0px) * -1), 0)' }}
+              className="absolute inset-0 transition-[transform] duration-75 ease-out will-change-transform"
+              style={{ transform: 'perspective(1000px) translate3d(calc(var(--mx, 0px) * -1), calc(var(--my, 0px) * -1), 0) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg))' }}
             >
               {FRAME_ORDER.map((key) => (
                 <img
