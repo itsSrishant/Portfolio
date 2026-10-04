@@ -79,15 +79,15 @@ The project involved working across **frontend, backend, AI integration, retriev
 
 ---
 
-## 🚀 Featured Project
+## 🚀 Featured Projects
 
-### AI Voice Assistant Platform
+### 1. AI Voice Assistant Platform
 
 The primary project showcased in this portfolio is the **AI Voice Assistant Platform** I worked on during my internship.
 
 It was designed to turn a conventional conversational AI system into a **real-time spoken interaction**, allowing a user to talk naturally while the system listens, retrieves relevant information, reasons over the conversation, and responds through speech.
 
-### Core Capabilities
+#### Core Capabilities
 
 - Real-time voice conversations
 - Speech recognition
@@ -104,6 +104,20 @@ It was designed to turn a conventional conversational AI system into a **real-ti
 The interesting engineering challenge wasn't simply making an AI model answer questions.
 
 It was connecting **voice, retrieval, reasoning, and response generation** quickly enough that the interaction feels like a conversation rather than a sequence of API calls.
+
+### 2. Full-Stack SEO & Performance Optimization
+
+I recently architected a comprehensive SEO and Performance Optimization overhaul for a production web application, maximizing its discoverability, accessibility, and loading speeds.
+
+#### Core Capabilities
+
+- Dynamic sitemap generation (`sitemap.xml`) and `robots.txt` configuration
+- Structured Data (JSON-LD) implementation for rich search results
+- Dynamic meta tags and Open Graph (OG) tags for social sharing
+- Semantic HTML and ARIA accessibility improvements
+- Performance optimizations leading to near-perfect Lighthouse scores
+
+The challenge involved ensuring every single page was instantly crawlable by search engines without compromising the client-side interactivity of a React-based Single Page Application (SPA).
 
 ---
 

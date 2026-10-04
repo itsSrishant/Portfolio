@@ -306,6 +306,9 @@ export default function CinematicIntro() {
           >
             <IntroEmbers intensityRef={emberIntensityRef} />
 
+            {/* Subtle Tech Grid Background */}
+            <div className="absolute inset-0 pointer-events-none opacity-10" style={{ backgroundImage: 'linear-gradient(rgba(255,122,0,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,122,0,1) 1px, transparent 1px)', backgroundSize: '50px 50px', maskImage: 'radial-gradient(circle at 50% 50%, black 20%, transparent 70%)', WebkitMaskImage: 'radial-gradient(circle at 50% 50%, black 20%, transparent 70%)' }}></div>
+
             {/* Dynamic Wakandan Spotlight (follows mouse) */}
             <div 
               className="absolute inset-0 pointer-events-none opacity-40 mix-blend-screen transition-opacity duration-300"
@@ -313,6 +316,44 @@ export default function CinematicIntro() {
                 background: `radial-gradient(circle 600px at calc(50% + var(--mx, 0px) * 10) calc(50% + var(--my, 0px) * 10), rgba(255,122,0,0.15), transparent 60%)`,
               }}
             />
+
+            {/* Cyberpunk HUD Overlays */}
+            <div className="absolute inset-0 pointer-events-none z-10 flex justify-between p-6 sm:p-10 mix-blend-screen opacity-70">
+              {/* Left HUD */}
+              <div className="flex flex-col gap-4 font-mono text-[0.65rem] text-accent-2/80 tracking-widest uppercase">
+                <div className="flex items-center gap-2 font-bold text-accent-2">
+                  <div className="w-2 h-2 bg-danger shadow-[0_0_8px_var(--color-danger)] animate-pulse"></div>
+                  SYS.ONLINE
+                </div>
+                <div className="flex flex-col gap-1.5 opacity-80">
+                  <span>NEURAL NET: [ACTIVE]</span>
+                  <span>CORE TEMP: 34.2°C</span>
+                  <span>WAKANDAN_OS v2.4</span>
+                </div>
+                <div className="mt-auto mb-10 flex flex-col gap-1 opacity-40">
+                  <span>0x000F43A</span>
+                  <span>0x000F43B</span>
+                  <span>0x000F43C</span>
+                  <span>0x000F43D</span>
+                  <span>0x000F43E</span>
+                </div>
+              </div>
+
+              {/* Right HUD */}
+              <div className="flex flex-col gap-4 font-mono text-[0.65rem] text-accent-2/80 tracking-widest uppercase text-right items-end hidden sm:flex">
+                <div className="w-32 h-[2px] bg-accent-2/20 relative overflow-hidden">
+                  <div className="absolute left-0 top-0 h-full bg-accent-2 w-1/3 animate-[pulse_2s_ease-in-out_infinite]"></div>
+                </div>
+                <span className="opacity-80">MEM: 64TB / 128TB</span>
+                <span className="opacity-80">UPLINK: SECURE</span>
+                
+                <div className="mt-auto mb-10 w-20 h-20 border border-accent-2/20 rounded-full flex items-center justify-center relative">
+                  <div className="absolute inset-2 border border-accent-2/50 rounded-full animate-spin-slow" style={{ borderTopColor: 'transparent', animationDuration: '4s' }}></div>
+                  <div className="absolute inset-4 border border-danger/30 rounded-full animate-spin-slow" style={{ borderBottomColor: 'transparent', animationDuration: '6s', animationDirection: 'reverse' }}></div>
+                  <div className="w-1.5 h-1.5 bg-accent-2 shadow-[0_0_8px_var(--color-accent-2)] rounded-full"></div>
+                </div>
+              </div>
+            </div>
 
             {/* Parallax Container for the Hologram frames */}
             <div 
@@ -356,16 +397,23 @@ export default function CinematicIntro() {
 
             <div
               ref={flashRef}
-              className="pointer-events-none absolute inset-0"
+              className="pointer-events-none absolute inset-0 z-20"
               style={{
                 opacity: 0,
                 background: 'radial-gradient(60% 60% at 50% 45%, var(--accent-2), transparent 70%)',
               }}
             />
 
-            <p ref={cueRef} className="mono absolute inset-x-0 bottom-10 text-center" style={{ color: 'var(--accent-2)' }}>
-              Scroll to enter
-            </p>
+            {/* CRT Scanline Overlay */}
+            <div className="absolute inset-0 pointer-events-none z-30 mix-blend-overlay opacity-30" style={{ background: 'linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06))', backgroundSize: '100% 4px, 3px 100%' }}></div>
+
+            <div ref={cueRef} className="absolute inset-x-0 bottom-10 flex justify-center z-40">
+              <p className="mono flex items-center gap-2 px-6 py-2 rounded-full border border-accent-2/20 bg-surface/40 backdrop-blur-md text-xs sm:text-sm font-bold tracking-widest shadow-[0_0_15px_rgba(255,122,0,0.2)]" style={{ color: 'var(--accent-2)' }}>
+                <span className="opacity-70">&gt; SYS_READY...</span> 
+                <span className="text-danger drop-shadow-[0_0_5px_var(--color-danger)]">[ SCROLL TO ENTER ]</span> 
+                <span className="animate-pulse w-2 h-4 bg-accent-2 inline-block -mb-0.5"></span>
+              </p>
+            </div>
           </div>
         </div>
       )}
