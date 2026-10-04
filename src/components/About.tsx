@@ -79,6 +79,7 @@ export default function About() {
             <div className="text-ink-2 prose-col leading-[1.8] text-[1.05rem]">
               <p dangerouslySetInnerHTML={{ 
                 __html: about.paragraphs[2]
+                  .replace(/internship/g, '<span class="text-white font-bold drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]">internship</span>')
                   .replace(/AI Voice Bot/g, '<span class="text-accent-2 font-bold group-hover:text-accent transition-colors">AI Voice Bot</span>')
                   .replace(/RAG/g, '<span class="text-accent-2 font-bold group-hover:text-accent transition-colors">RAG</span>')
                   .replace(/LLMs/g, '<span class="text-accent-2 font-bold group-hover:text-accent transition-colors">LLMs</span>') 
