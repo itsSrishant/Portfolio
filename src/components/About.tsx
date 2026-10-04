@@ -33,18 +33,21 @@ export default function About() {
       
       const asideItems = asideRef.current?.querySelectorAll('dl > div');
       if (asideItems && asideItems.length > 0) {
-        gsap.from(asideItems, {
-          scrollTrigger: {
-            trigger: asideRef.current,
-            start: 'top 85%',
-          },
-          opacity: 0,
-          x: 40,
-          filter: 'blur(8px)',
-          duration: 1.2,
-          stagger: 0.2,
-          ease: 'power3.out',
-        });
+        gsap.fromTo(asideItems, 
+          { opacity: 0, x: 40, filter: 'blur(8px)' },
+          {
+            scrollTrigger: {
+              trigger: asideRef.current,
+              start: 'top 85%',
+            },
+            opacity: 1,
+            x: 0,
+            filter: 'blur(0px)',
+            duration: 1.2,
+            stagger: 0.2,
+            ease: 'power3.out',
+          }
+        );
       }
     }, sectionRef);
 
