@@ -187,24 +187,24 @@ export const projects = [
     context: 'Independent project',
     year: '2026',
     status: 'Live',
-    lede: 'A deterministic website analysis engine — paste a URL, and it scores the site across six dimensions using 60+ measurable signals instead of an LLM guessing whether the site is "good."',
-    body: "Most audit tools are one of two extremes: hundreds of metrics with no way to tell what matters, or a single score with no way to see why. SEOOptimiz connects the two — every pillar score traces back to the concrete signals that produced it, and none of those signals come from a model deciding what looks right.",
+    lede: 'A deterministic website analysis engine that scores URLs across six dimensions using 60+ hardcoded, measurable signals.',
+    body: "Most audit tools offer hundreds of metrics with no clarity, or a single score with no transparency. SEOOptimiz bridges the gap: a transparent, rule-based engine that evaluates 60+ concrete signals without relying on an LLM's judgment.",
     features: [
       {
         label: 'Six weighted pillars',
-        text: 'SEO (25%), Responsiveness (20%), Accessibility (15%), Structure (15%), Trust (15%) and Conversion (10%) combine into one weighted overall score.',
+        text: 'SEO (25%), Responsiveness (20%), Accessibility (15%), Structure (15%), Trust (15%), and Conversion (10%).',
       },
       {
         label: '60+ deterministic signals',
-        text: 'Title metadata, heading hierarchy, alt text coverage, HTTPS and security headers, canonical configuration, ARIA usage, CTA clarity and more — each one a rule-based check, not a model judgment.',
+        text: 'Evaluates metadata, headings, ARIA, security headers, and layout using strict, rule-based heuristics.',
       },
       {
-        label: 'No LLM in the scoring path',
-        text: 'The analysis engine evaluates concrete, measurable signals with deterministic rules, so the same URL produces the same score every time.',
+        label: 'Zero LLM guesswork',
+        text: 'Every score traces back to a measurable DOM or network signal, guaranteeing identical scores for identical pages.',
       },
       {
-        label: 'Exportable report',
-        text: 'Results export to a structured PDF, so a scorecard is something a client or teammate can actually keep and act on.',
+        label: 'PDF Export',
+        text: 'Generates a clean, structured PDF scorecard for clients or engineering teams to act on.',
       },
     ],
     stack: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'cheerio', 'GSAP', 'Lenis', 'Vercel'],

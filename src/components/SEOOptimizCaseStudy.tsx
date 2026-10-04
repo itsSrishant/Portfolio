@@ -145,54 +145,83 @@ export default function SEOOptimizCaseStudy({ project }: { project: Project }) {
   const [highlightedNode, setHighlightedNode] = useState<string | null>(null);
 
   return (
-    <div className="mt-10">
-      {/* 00 — Interactive Video Frame (Hardware Style) */}
-      <div className="mb-16 group/frame relative rounded-sm border-2 border-line-soft bg-bg-deep p-2 shadow-[8px_8px_0_var(--color-accent-2)] transition-all duration-300 hover:shadow-[4px_4px_0_var(--color-accent-2)] hover:translate-x-[4px] hover:translate-y-[4px] hover:border-accent-2 z-10">
-        <div className="flex items-center gap-2 border-b-2 border-line-soft bg-surface/30 px-4 py-2 mb-2">
-          <div className="h-3 w-3 rounded-full bg-danger"></div>
-          <div className="h-3 w-3 rounded-full bg-accent-2 hover:animate-pulse"></div>
-          <div className="h-3 w-3 rounded-full bg-accent"></div>
-          <span className="mono ml-3 text-[10px] tracking-[0.2em] text-ink-3">SYS_PROCESS: DEMO_RENDER.MP4</span>
+    <div 
+      className="mt-10"
+      style={{
+        '--color-line': 'color-mix(in oklch, var(--accent) 30%, #050505)',
+        '--color-line-soft': 'color-mix(in oklch, var(--accent) 15%, #050505)'
+      } as React.CSSProperties}
+    >
+      {/* 00 — Bento Grid Gallery */}
+      <div className="mb-16 grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-[250px] z-10">
+        
+        {/* Main Dashboard - Spans 2 cols, 2 rows */}
+        <div className="md:col-span-2 md:row-span-2 group relative rounded-sm border-2 border-line-soft bg-bg-deep overflow-hidden transition-all duration-300 hover:border-accent shadow-[4px_4px_0_var(--color-line-soft)] hover:shadow-[8px_8px_0_var(--color-accent)] hover:-translate-y-1 hover:-translate-x-1">
+           <img src="/seo-main.png" alt="SEOOptimiz Dashboard" className="absolute inset-0 w-full h-full object-cover object-top opacity-80 group-hover:opacity-100 transition-transform duration-700 group-hover:scale-105" onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextElementSibling?.classList.remove('hidden') }} />
+           <div className="hidden absolute inset-0 flex flex-col items-center justify-center border border-dashed border-accent/30 bg-[linear-gradient(45deg,rgba(158,59,255,0.03)_25%,transparent_25%,transparent_50%,rgba(158,59,255,0.03)_50%,rgba(158,59,255,0.03)_75%,transparent_75%,transparent)] bg-[length:24px_24px] p-6 text-center">
+             <span className="mono text-accent mb-2 text-sm animate-pulse">[ MAIN DASHBOARD ]</span>
+             <p className="text-ink-3 text-xs">Add <code className="text-accent bg-surface px-1 py-0.5 rounded">public/seo-main.png</code></p>
+           </div>
+           {/* Overlay Gradient */}
+           <div className="absolute inset-0 bg-gradient-to-t from-bg-deep via-transparent to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-300 pointer-events-none"></div>
+           <div className="absolute bottom-6 left-6 flex flex-col gap-1 pointer-events-none">
+             <span className="mono text-[10px] tracking-[0.1em] text-accent font-medium">01 // OVERVIEW</span>
+             <span className="text-ink text-sm font-medium drop-shadow-md">Unified Analysis Dashboard</span>
+           </div>
         </div>
-        <div className="relative aspect-video w-full overflow-hidden bg-[#050505] flex items-center justify-center">
-          <video 
-            src="/seooptimiz-demo.mp4" 
-            autoPlay 
-            loop 
-            muted 
-            playsInline 
-            className="h-full w-full object-cover opacity-80 group-hover/frame:opacity-100 transition-opacity duration-500"
-            onError={(e) => {
-               e.currentTarget.style.display = 'none';
-               document.getElementById('video-placeholder')?.classList.remove('hidden');
-            }}
-          />
-          <div id="video-placeholder" className="absolute inset-0 flex hidden flex-col items-center justify-center border border-dashed border-accent-2/30 bg-[linear-gradient(45deg,rgba(255,122,0,0.03)_25%,transparent_25%,transparent_50%,rgba(255,122,0,0.03)_50%,rgba(255,122,0,0.03)_75%,transparent_75%,transparent)] bg-[length:24px_24px] p-6 text-center">
-             <span className="mono text-accent-2 mb-3 text-lg animate-pulse">[ FEED NOT FOUND ]</span>
-             <p className="text-ink-2 text-sm max-w-sm leading-relaxed">
-                Add your screen recording. Place the file in the <code className="bg-surface px-1 py-0.5 rounded text-accent">public/</code> folder and name it <code className="bg-surface px-1 py-0.5 rounded text-accent">seooptimiz-demo.mp4</code>. It will instantly stream into this hardware display.
-             </p>
-          </div>
+
+        {/* Feature Close-up 1 - 1 col, 1 row */}
+        <div className="relative group rounded-sm border-2 border-line-soft bg-bg-deep overflow-hidden transition-all duration-300 hover:border-accent-2 shadow-[4px_4px_0_var(--color-line-soft)] hover:shadow-[8px_8px_0_var(--color-accent-2)] hover:-translate-y-1 hover:-translate-x-1">
+           <img src="/seo-score.png" alt="SEOOptimiz Scoring Dial" className="absolute inset-0 w-full h-full object-cover object-center opacity-80 group-hover:opacity-100 transition-transform duration-700 group-hover:scale-110" onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextElementSibling?.classList.remove('hidden') }} />
+           <div className="hidden absolute inset-0 flex flex-col items-center justify-center border border-dashed border-accent-2/30 bg-[linear-gradient(45deg,rgba(255,122,0,0.03)_25%,transparent_25%,transparent_50%,rgba(255,122,0,0.03)_50%,rgba(255,122,0,0.03)_75%,transparent_75%,transparent)] bg-[length:24px_24px] p-4 text-center">
+             <span className="mono text-accent-2 mb-1 text-xs">[ SCORING DIAL ]</span>
+             <p className="text-ink-3 text-[10px]">Add <code className="text-accent-2 bg-surface px-1 py-0.5 rounded">public/seo-score.png</code></p>
+           </div>
+           <div className="absolute inset-0 bg-gradient-to-t from-bg-deep/90 via-transparent to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-300 pointer-events-none"></div>
+           <div className="absolute bottom-4 left-4 flex flex-col gap-0.5 pointer-events-none">
+             <span className="mono text-[9px] tracking-[0.1em] text-accent-2 font-medium">02 // PILLARS</span>
+             <span className="text-ink text-xs font-medium">Deterministic Scoring</span>
+           </div>
         </div>
+
+        {/* Feature Close-up 2 - 1 col, 1 row */}
+        <div className="relative group rounded-sm border-2 border-line-soft bg-bg-deep overflow-hidden transition-all duration-300 hover:border-danger shadow-[4px_4px_0_var(--color-line-soft)] hover:shadow-[8px_8px_0_var(--color-danger)] hover:-translate-y-1 hover:-translate-x-1">
+           <img src="/seo-issues.png" alt="SEOOptimiz Issue List" className="absolute inset-0 w-full h-full object-cover object-center opacity-80 group-hover:opacity-100 transition-transform duration-700 group-hover:scale-110" onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextElementSibling?.classList.remove('hidden') }} />
+           <div className="hidden absolute inset-0 flex flex-col items-center justify-center border border-dashed border-danger/30 bg-[linear-gradient(45deg,rgba(255,60,60,0.03)_25%,transparent_25%,transparent_50%,rgba(255,60,60,0.03)_50%,rgba(255,60,60,0.03)_75%,transparent_75%,transparent)] bg-[length:24px_24px] p-4 text-center">
+             <span className="mono text-danger mb-1 text-xs">[ ISSUE LIST ]</span>
+             <p className="text-ink-3 text-[10px]">Add <code className="text-danger bg-surface px-1 py-0.5 rounded">public/seo-issues.png</code></p>
+           </div>
+           <div className="absolute inset-0 bg-gradient-to-t from-bg-deep/90 via-transparent to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-300 pointer-events-none"></div>
+           <div className="absolute bottom-4 left-4 flex flex-col gap-0.5 pointer-events-none">
+             <span className="mono text-[9px] tracking-[0.1em] text-danger font-medium">03 // INSIGHTS</span>
+             <span className="text-ink text-xs font-medium">Prioritized Fixes</span>
+           </div>
+        </div>
+
       </div>
 
       {/* 01 — Overview */}
       <Beat index={1} title="Overview">
-        <p className="text-ink prose-col mt-5 text-[1.1rem] leading-[1.7]">{project.lede}</p>
-        <p className="text-ink-2 prose-col mt-4 leading-[1.75]">{project.body}</p>
+        <div className="mt-8 rounded-3xl bg-[var(--accent)] p-8 sm:p-12 text-bg-deep shadow-[0_20px_60px_-15px_var(--accent)] transform transition-all duration-700 hover:scale-[1.02] hover:shadow-[0_30px_80px_-20px_var(--accent)]">
+          <p className="font-heading text-2xl sm:text-3xl font-bold tracking-tight mb-8 leading-[1.3]">{project.lede}</p>
+          <div className="h-px w-24 bg-bg-deep/15 mb-8" />
+          <p className="text-[1.05rem] font-medium text-bg-deep/80 leading-relaxed max-w-3xl">{project.body}</p>
+        </div>
       </Beat>
 
       {/* 02 — The problem */}
       <Beat index={2} title="The problem">
-        <p className="text-ink-2 prose-col mt-5 leading-[1.75]">
-          Traditional website audits tend to land at one of two extremes — overwhelming detail with no clear
-          priority, or a single score with no explanation behind it.
-        </p>
-        <div className="mt-8 grid gap-x-10 gap-y-8 sm:grid-cols-2">
-          {PROBLEMS.map((p) => (
-            <div key={p.title}>
-              <h4 className="text-ink text-[1rem] font-medium">{p.title}</h4>
-              <p className="text-ink-2 mt-2 text-[0.9375rem] leading-[1.7]">{p.text}</p>
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {PROBLEMS.map((p, i) => (
+            <div key={p.title} className={`group relative rounded-2xl border border-line-soft bg-surface/30 p-6 transition-all duration-400 hover:-translate-y-1 hover:border-[var(--danger)] hover:bg-surface/60 overflow-hidden ${i === 0 ? 'sm:col-span-2' : ''}`}>
+              {i === 0 && (
+                <div className="absolute right-4 top-4 flex items-center gap-2 rounded-full border border-[var(--danger)]/30 bg-[var(--danger)]/10 px-3 py-1">
+                  <span className="h-2 w-2 rounded-full bg-[var(--danger)] animate-pulse" />
+                  <span className="mono text-[0.65rem] font-bold text-[var(--danger)]">ERR: SCORE UNKNOWN</span>
+                </div>
+              )}
+              <h4 className="text-ink text-[1.1rem] font-semibold tracking-tight group-hover:text-[var(--danger)] transition-colors duration-300">{p.title}</h4>
+              <p className="text-ink-2 mt-3 text-[0.9rem] leading-[1.6] max-w-sm">{p.text}</p>
             </div>
           ))}
         </div>
@@ -208,43 +237,56 @@ export default function SEOOptimizCaseStudy({ project }: { project: Project }) {
       </Beat>
 
       {/* 04 — How it works / architecture */}
-      <Beat index={4} title="How it works">
-        <p className="text-ink-2 prose-col mt-5 leading-[1.75]">
-          Data collection, signal evaluation and scoring are kept as separate stages, which is what makes it
-          possible to add new signals without rewriting the scoring system. A URL is fetched, parsed, and evaluated
-          across SEO and five other signal categories in parallel before the weighted score is produced.
-        </p>
+      <Beat index={4} title="Architecture">
         <ProcessTimeline steps={HOW_IT_WORKS_STEPS} />
-        <div className="border-line-soft bg-bg-deep mt-12 overflow-x-auto rounded-[14px] border p-6 sm:p-8">
-          <ArchitectureDiagram
-            className="m-0 min-w-155"
-            nodes={NODES}
-            edges={EDGES}
-            ariaLabel={ARIA_LABEL}
-            caption={CAPTION}
-            externalHighlight={highlightedNode}
-          />
+        
+        {/* Blueprint Terminal Wrapper */}
+        <div className="mt-12 overflow-hidden rounded-[20px] border-2 border-line-soft bg-[#0a0a0c] shadow-2xl">
+          <div className="flex items-center justify-between border-b border-line-soft bg-surface/40 px-6 py-3 backdrop-blur-md">
+            <span className="mono text-xs text-ink-3">sys_analytics_v1.0 // SEO_PIPELINE</span>
+            <div className="flex items-center gap-2">
+              <span className="live-dot" style={{ backgroundColor: 'var(--accent)' }} />
+              <span className="mono text-xs font-bold text-[var(--accent)] tracking-widest">ONLINE</span>
+            </div>
+          </div>
+          <div className="relative overflow-x-auto p-6 sm:p-12 bg-[linear-gradient(rgba(255,122,0,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,122,0,0.02)_1px,transparent_1px)] bg-[length:32px_32px]">
+            <ArchitectureDiagram
+              className="m-0 min-w-155"
+              nodes={NODES}
+              edges={EDGES}
+              ariaLabel={ARIA_LABEL}
+              caption={CAPTION}
+              externalHighlight={highlightedNode}
+            />
+          </div>
         </div>
       </Beat>
 
       {/* 05 — Engineering challenges */}
       <Beat index={5} title="Engineering challenges">
-        <div className="mt-4">
+        <div className="mt-8 grid gap-6">
           {CHALLENGES.map((c) => (
-            <div key={c.title} className="border-line-soft border-t py-6 first:border-t-0">
-              <h4 className="text-ink text-[1rem] font-medium">{c.title}</h4>
-              <div className="mt-4 grid gap-5 sm:grid-cols-3">
-                <div>
-                  <span className="mono mb-1.5 block">Challenge</span>
-                  <p className="text-ink-2 text-[0.9rem] leading-[1.7]">{c.challenge}</p>
+            <div key={c.title} className="group relative rounded-2xl border border-line-soft bg-surface/20 p-6 sm:p-8 transition-all duration-300 hover:border-[var(--accent)] hover:bg-surface/40 overflow-hidden">
+              <h4 className="text-ink text-[1.2rem] font-semibold tracking-tight mb-6 flex items-center justify-between">
+                {c.title}
+                <div className="flex gap-1 opacity-20 transition-opacity duration-300 group-hover:opacity-100">
+                  <div className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]"></div>
+                  <div className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]"></div>
+                  <div className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]"></div>
                 </div>
-                <div>
-                  <span className="mono mb-1.5 block">Approach</span>
-                  <p className="text-ink-2 text-[0.9rem] leading-[1.7]">{c.approach}</p>
+              </h4>
+              <div className="grid gap-4 sm:grid-cols-3 relative z-10">
+                <div className="rounded-xl border border-line-soft bg-bg-deep/50 p-5 shadow-sm">
+                  <span className="mono mb-2 block text-[0.65rem] uppercase text-[var(--danger)] tracking-widest font-bold">Challenge</span>
+                  <p className="text-ink-2 text-[0.85rem] leading-[1.6]">{c.challenge}</p>
                 </div>
-                <div>
-                  <span className="mono mb-1.5 block">Result</span>
-                  <p className="text-ink-2 text-[0.9rem] leading-[1.7]">{c.result}</p>
+                <div className="rounded-xl border border-line-soft bg-bg-deep/50 p-5 shadow-sm">
+                  <span className="mono mb-2 block text-[0.65rem] uppercase text-[var(--accent-2)] tracking-widest font-bold">Approach</span>
+                  <p className="text-ink-2 text-[0.85rem] leading-[1.6]">{c.approach}</p>
+                </div>
+                <div className="rounded-xl border border-transparent bg-[var(--accent)] p-5 shadow-[0_10px_30px_-10px_var(--accent)] text-bg-deep transform transition-all duration-500 group-hover:-translate-y-2 group-hover:scale-[1.02]">
+                  <span className="mono mb-2 block text-[0.65rem] uppercase text-bg-deep/60 tracking-widest font-bold">Result</span>
+                  <p className="text-bg-deep text-[0.85rem] leading-[1.6] font-bold">{c.result}</p>
                 </div>
               </div>
             </div>
@@ -257,37 +299,31 @@ export default function SEOOptimizCaseStudy({ project }: { project: Project }) {
         <p className="text-ink-2 prose-col mt-5 leading-[1.75]">
           Hovering a piece of the stack that maps onto the architecture above lights that node up.
         </p>
-        <div className="mt-6 grid gap-x-12 gap-y-8 sm:grid-cols-2">
+        <div className="mt-8 flex flex-col gap-6">
           {TECH_GROUPS.map((g) => (
-            <div key={g.group} className="border-line-soft border-t pt-5">
-              <h4 className="text-ink text-[0.95rem] font-medium">{g.group}</h4>
-              <p className="text-ink-3 mt-1 text-[0.8125rem]">{g.note}</p>
-              <ul className="mt-4 flex flex-wrap gap-2">
+            <div key={g.group} className="border-line-soft border-t pt-6">
+              <h4 className="text-ink text-[0.95rem] font-medium mb-1">{g.group}</h4>
+              <p className="text-ink-3 text-[0.8125rem] mb-4">{g.note}</p>
+              <div className="flex flex-wrap gap-3">
                 {g.items.map((t) => (
-                  <li key={t.name}>
-                    <button
-                      type="button"
-                      onMouseEnter={() => setHighlightedNode(t.node)}
-                      onMouseLeave={() => setHighlightedNode(null)}
-                      onFocus={() => setHighlightedNode(t.node)}
-                      onBlur={() => setHighlightedNode(null)}
-                      className="tag cursor-pointer transition-all duration-300 ease-out hover:scale-[1.06]"
-                      style={
-                        t.node && t.node === highlightedNode
-                          ? {
-                              borderColor: 'var(--accent)',
-                              color: 'var(--accent-2)',
-                              backgroundColor: 'color-mix(in oklch, var(--accent) 16%, var(--surface))',
-                              boxShadow: '0 0 0 1px color-mix(in oklch, var(--accent) 35%, transparent), 0 0 18px 2px color-mix(in oklch, var(--accent) 35%, transparent)',
-                            }
-                          : undefined
-                      }
+                  <button
+                    key={t.name}
+                    type="button"
+                    onMouseEnter={() => setHighlightedNode(t.node)}
+                    onMouseLeave={() => setHighlightedNode(null)}
+                    onFocus={() => setHighlightedNode(t.node)}
+                    onBlur={() => setHighlightedNode(null)}
+                    className="group relative flex items-center gap-2 rounded-full border border-line-soft bg-surface/30 px-4 py-2 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--accent)] hover:bg-surface/80 hover:shadow-[0_10px_20px_-10px_var(--accent)]"
+                  >
+                    <span
+                      className="font-semibold text-sm transition-colors duration-200"
+                      style={{ color: t.node && t.node === highlightedNode ? 'var(--accent)' : 'var(--ink)' }}
                     >
                       {t.name}
-                    </button>
-                  </li>
+                    </span>
+                  </button>
                 ))}
-              </ul>
+              </div>
             </div>
           ))}
         </div>

@@ -182,7 +182,7 @@ export default function CinematicIntro() {
       if (i > 0) {
         tl.fromTo(
           el,
-          { opacity: 0, filter: 'blur(6px)' },
+          { opacity: 0, filter: 'blur(2px)' },
           { opacity: 1, filter: 'blur(0px)', ease: 'power2.out', duration: at(CROSSFADE) },
           at(fadeInStart),
         );
@@ -203,13 +203,13 @@ export default function CinematicIntro() {
         tl.to(
           el,
           { 
-            x: () => Math.random() * 8 - 4,
-            y: () => Math.random() * 8 - 4,
-            filter: 'hue-rotate(90deg) saturate(3) brightness(1.5)',
+            x: () => Math.random() * 2 - 1,
+            y: () => Math.random() * 2 - 1,
+            filter: 'brightness(1.1)',
             duration: 0.05,
-            repeat: 20, // Rapid violent shaking
+            repeat: 10, // Subtle shaking
             yoyo: true,
-            ease: "rough({ template: none.out, strength: 2, points: 20, taper: none, randomize: true, clamp: false })"
+            ease: "rough({ template: none.out, strength: 1, points: 10, taper: none, randomize: true, clamp: false })"
           },
           at(fadeInStart + CROSSFADE)
         );

@@ -129,76 +129,12 @@ const TECH: Array<{ name: string; reason: string; node: string | null }> = [
   { name: 'Docker', reason: 'A reproducible application environment.', node: null },
 ];
 
-function FlowArrow({ className = '' }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="var(--accent)"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-      className={className}
-    >
-      <path d="M12 4v14M6 12l6 6 6-6" />
-    </svg>
-  );
-}
-
-function FlowBox({ steps, activeIndex, offset }: { steps: string[]; activeIndex: number; offset: number }) {
-  return (
-    <div className="border-line-soft bg-bg-deep rounded-2xl border p-6 sm:p-8">
-      <ol className="flex flex-col items-center gap-3">
-        {steps.map((step, i) => {
-          const active = activeIndex === offset + i;
-          return (
-            <li key={step} className="flex w-full flex-col items-center gap-3">
-              <span
-                className="w-full rounded-full border px-5 py-3 text-center text-[0.9rem] font-medium transition-all duration-500"
-                style={
-                  active
-                    ? {
-                        borderColor: 'var(--accent)',
-                        color: 'var(--ink)',
-                        backgroundColor: 'color-mix(in oklch, var(--accent) 18%, var(--surface))',
-                        boxShadow: '0 0 16px 2px color-mix(in oklch, var(--accent) 45%, transparent)',
-                      }
-                    : { borderColor: 'var(--line-soft)', color: 'var(--ink-2)', backgroundColor: 'var(--surface)' }
-                }
-              >
-                {step}
-              </span>
-              {i < steps.length - 1 && (
-                <FlowArrow
-                  className={`h-5 w-5 flex-none transition-opacity duration-500 ${active ? 'opacity-100' : 'opacity-40'}`}
-                />
-              )}
-            </li>
-          );
-        })}
-      </ol>
-    </div>
-  );
-}
-
-/** The overview's system-flow visual: two large boxes spanning the full
- *  width with a big, clearly visible connecting arrow between them. A
- *  highlight steps through all eight stages in sequence — box one, across
- *  the arrow, box two, on a loop — so the "data is moving through this"
- *  read comes from real motion, not a static row of pills. Gated to run
- *  only while on screen, and skipped entirely under reduced motion (the
- *  fully legible static diagram is shown instead). */
-function FlowDiagram() {
+/** A sophisticated, elegant audio waveform visualization that reacts to scroll
+ *  and simulates active voice processing, fitting the premium aesthetic. */
+function AudioWaveform() {
   const ref = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const reduceMotionRef = useRef(false);
-
-  useEffect(() => {
-    reduceMotionRef.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  }, []);
-
+  
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
@@ -207,31 +143,31 @@ function FlowDiagram() {
     return () => observer.disconnect();
   }, []);
 
-  useEffect(() => {
-    if (!inView || reduceMotionRef.current) return;
-    const id = setInterval(() => {
-      setActiveIndex((i) => (i + 1) % FLOW_STEPS.length);
-    }, 900);
-    return () => clearInterval(id);
-  }, [inView]);
-
-  const arrowActive = !reduceMotionRef.current && (activeIndex === 3 || activeIndex === 4);
-
   return (
     <div
       ref={ref}
-      data-in-view={inView ? 'true' : 'false'}
-      className="mt-8 grid items-center gap-6 sm:grid-cols-[1fr_auto_1fr] sm:gap-8"
+      className="mt-12 flex h-32 w-full items-center justify-center gap-1.5 rounded-2xl border border-line-soft bg-bg-deep p-8 shadow-inner"
     >
-      <FlowBox steps={FLOW_STEPS.slice(0, 4)} activeIndex={activeIndex} offset={0} />
-      <div
-        className={`flow-strip-arrow mx-auto flex h-14 w-14 flex-none items-center justify-center rounded-full transition-transform duration-500 ${
-          arrowActive ? 'scale-110' : ''
-        }`}
-      >
-        <FlowArrow className="h-7 w-7 sm:-rotate-90" />
-      </div>
-      <FlowBox steps={FLOW_STEPS.slice(4)} activeIndex={activeIndex} offset={4} />
+      {Array.from({ length: 48 }).map((_, i) => {
+        // Create a realistic-looking waveform shape using a sine wave envelope
+        const normalized = i / 47;
+        const envelope = Math.sin(normalized * Math.PI);
+        // Randomize the height slightly, but bounded by the envelope
+        const height = inView ? Math.max(10, Math.random() * 80 * envelope + 10) : 4;
+        
+        return (
+          <div
+            key={i}
+            className="w-1.5 rounded-full bg-accent transition-all duration-300 ease-out"
+            style={{
+              height: `${height}%`,
+              opacity: inView ? Math.random() * 0.5 + 0.5 : 0.2,
+              transitionDelay: `${i * 15}ms`,
+              boxShadow: inView ? '0 0 10px var(--accent)' : 'none'
+            }}
+          />
+        );
+      })}
     </div>
   );
 }
@@ -240,26 +176,48 @@ export default function CaseStudy({ project }: { project: Project }) {
   const [highlightedNode, setHighlightedNode] = useState<string | null>(null);
 
   return (
-    <div className="mt-10">
+    <div 
+      className="mt-10" 
+      style={{ 
+        '--accent': 'oklch(0.95 0 0)', // Elegant Silver/White
+        '--accent-2': 'oklch(0.85 0.05 100)', // Subtle Warm Gold/Sand
+        '--danger': 'oklch(0.7 0.1 20)', // Muted brick red
+        
+        // Re-aliasing for Tailwind classes
+        '--color-accent': 'var(--accent)',
+        '--color-accent-2': 'var(--accent-2)',
+        '--color-danger': 'var(--danger)',
+        
+        // Tinting the lines to match the silver theme
+        '--color-line': 'color-mix(in oklch, var(--accent) 25%, #050505)',
+        '--color-line-soft': 'color-mix(in oklch, var(--accent) 12%, #050505)'
+      } as React.CSSProperties}
+    >
       {/* 01 — Overview */}
       <Beat index={1} title="Overview">
-        <p className="text-ink prose-col mt-5 text-[1.1rem] leading-[1.7]">{project.lede}</p>
-        <p className="text-ink-2 prose-col mt-4 leading-[1.75]">{project.body}</p>
-        <FlowDiagram />
+        <div className="mt-8 rounded-3xl bg-[var(--accent)] p-8 sm:p-12 text-bg-deep shadow-[0_20px_60px_-15px_var(--accent)] transform transition-all duration-700 hover:scale-[1.02] hover:shadow-[0_30px_80px_-20px_var(--accent)]">
+          <p className="font-heading text-2xl sm:text-3xl font-bold tracking-tight mb-8 leading-[1.3]">{project.lede}</p>
+          <div className="h-px w-24 bg-bg-deep/15 mb-8" />
+          <p className="text-[1.05rem] font-medium text-bg-deep/80 leading-relaxed max-w-3xl">{project.body}</p>
+        </div>
+        <div className="mt-12 rounded-2xl overflow-hidden border border-line-soft bg-surface/20 p-8 flex items-center justify-center shadow-inner">
+          <AudioWaveform />
+        </div>
       </Beat>
 
       {/* 02 — The problem */}
       <Beat index={2} title="The problem">
-        <p className="text-ink-2 prose-col mt-5 leading-[1.75]">
-          A voice AI system can't just generate a good answer. It has to understand spoken language, respond quickly
-          enough that a call doesn't feel broken, retrieve facts instead of inventing them, stay inside its intended
-          scope, and do all of this across business use cases it wasn't specifically built for.
-        </p>
-        <div className="mt-8 grid gap-x-10 gap-y-8 sm:grid-cols-2">
-          {PROBLEMS.map((p) => (
-            <div key={p.title}>
-              <h4 className="text-ink text-[1rem] font-medium">{p.title}</h4>
-              <p className="text-ink-2 mt-2 text-[0.9375rem] leading-[1.7]">{p.text}</p>
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {PROBLEMS.map((p, i) => (
+            <div key={p.title} className={`group relative rounded-2xl border border-line-soft bg-surface/30 p-6 transition-all duration-400 hover:-translate-y-1 hover:border-[var(--danger)] hover:bg-surface/60 overflow-hidden ${i === 0 ? 'sm:col-span-2' : ''}`}>
+              {i === 0 && (
+                <div className="absolute right-4 top-4 flex items-center gap-2 rounded-full border border-[var(--danger)]/30 bg-[var(--danger)]/10 px-3 py-1">
+                  <span className="h-2 w-2 rounded-full bg-[var(--danger)] animate-pulse" />
+                  <span className="mono text-[0.65rem] font-bold text-[var(--danger)]">ERR: TIMEOUT &gt; 2000ms</span>
+                </div>
+              )}
+              <h4 className="text-ink text-[1.1rem] font-semibold tracking-tight group-hover:text-[var(--danger)] transition-colors duration-300">{p.title}</h4>
+              <p className="text-ink-2 mt-3 text-[0.9rem] leading-[1.6] max-w-sm">{p.text}</p>
             </div>
           ))}
         </div>
@@ -274,36 +232,49 @@ export default function CaseStudy({ project }: { project: Project }) {
       </Beat>
 
       {/* 04 — How it works / architecture */}
-      <Beat index={4} title="How it works">
-        <p className="text-ink-2 prose-col mt-5 leading-[1.75]">
-          The system is a pipeline, not a single model call. Caller audio moves through speech-to-text, a
-          conversation manager, retrieval, the language model, a guardrail layer, and text-to-speech — with a
-          knowledge-base pipeline feeding retrieval, and a transcript branching off into post-call analysis.
-        </p>
+      <Beat index={4} title="Architecture">
         <ProcessTimeline steps={HOW_IT_WORKS_STEPS} />
-        <div className="border-line-soft bg-bg-deep mt-12 overflow-x-auto rounded-[14px] border p-6 sm:p-8">
-          <ArchitectureDiagram className="m-0 min-w-155" externalHighlight={highlightedNode} />
+        
+        {/* Blueprint Terminal Wrapper */}
+        <div className="mt-12 overflow-hidden rounded-[20px] border-2 border-line-soft bg-[#0a0a0c] shadow-2xl">
+          <div className="flex items-center justify-between border-b border-line-soft bg-surface/40 px-6 py-3 backdrop-blur-md">
+            <span className="mono text-xs text-ink-3">sys_arch_v2.0 // VOICE_PIPELINE</span>
+            <div className="flex items-center gap-2">
+              <span className="live-dot" style={{ backgroundColor: 'var(--accent-2)' }} />
+              <span className="mono text-xs font-bold text-[var(--accent-2)] tracking-widest">ONLINE</span>
+            </div>
+          </div>
+          <div className="relative overflow-x-auto p-6 sm:p-12 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[length:32px_32px]">
+            <ArchitectureDiagram className="m-0 min-w-155" externalHighlight={highlightedNode} />
+          </div>
         </div>
       </Beat>
 
       {/* 05 — Engineering challenges */}
       <Beat index={5} title="Engineering challenges">
-        <div className="mt-4">
+        <div className="mt-8 grid gap-6">
           {CHALLENGES.map((c) => (
-            <div key={c.title} className="border-line-soft border-t py-6 first:border-t-0">
-              <h4 className="text-ink text-[1rem] font-medium">{c.title}</h4>
-              <div className="mt-4 grid gap-5 sm:grid-cols-3">
-                <div>
-                  <span className="mono mb-1.5 block">Challenge</span>
-                  <p className="text-ink-2 text-[0.9rem] leading-[1.7]">{c.challenge}</p>
+            <div key={c.title} className="group relative rounded-2xl border border-line-soft bg-surface/20 p-6 sm:p-8 transition-all duration-300 hover:border-[var(--accent)] hover:bg-surface/40 overflow-hidden">
+              <h4 className="text-ink text-[1.2rem] font-semibold tracking-tight mb-6 flex items-center justify-between">
+                {c.title}
+                <div className="flex gap-1 opacity-20 transition-opacity duration-300 group-hover:opacity-100">
+                  <div className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]"></div>
+                  <div className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]"></div>
+                  <div className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]"></div>
                 </div>
-                <div>
-                  <span className="mono mb-1.5 block">Approach</span>
-                  <p className="text-ink-2 text-[0.9rem] leading-[1.7]">{c.approach}</p>
+              </h4>
+              <div className="grid gap-4 sm:grid-cols-3 relative z-10">
+                <div className="rounded-xl border border-line-soft bg-bg-deep/50 p-5 shadow-sm">
+                  <span className="mono mb-2 block text-[0.65rem] uppercase text-[var(--danger)] tracking-widest font-bold">Challenge</span>
+                  <p className="text-ink-2 text-[0.85rem] leading-[1.6]">{c.challenge}</p>
                 </div>
-                <div>
-                  <span className="mono mb-1.5 block">Result</span>
-                  <p className="text-ink-2 text-[0.9rem] leading-[1.7]">{c.result}</p>
+                <div className="rounded-xl border border-line-soft bg-bg-deep/50 p-5 shadow-sm">
+                  <span className="mono mb-2 block text-[0.65rem] uppercase text-[var(--accent-2)] tracking-widest font-bold">Approach</span>
+                  <p className="text-ink-2 text-[0.85rem] leading-[1.6]">{c.approach}</p>
+                </div>
+                <div className="rounded-xl border border-transparent bg-[var(--accent)] p-5 shadow-[0_10px_30px_-10px_rgba(255,255,255,0.2)] text-bg-deep transform transition-all duration-500 group-hover:-translate-y-2 group-hover:scale-[1.02]">
+                  <span className="mono mb-2 block text-[0.65rem] uppercase text-bg-deep/60 tracking-widest font-bold">Result</span>
+                  <p className="text-bg-deep text-[0.85rem] leading-[1.6] font-bold">{c.result}</p>
                 </div>
               </div>
             </div>
@@ -314,10 +285,9 @@ export default function CaseStudy({ project }: { project: Project }) {
       {/* 06 — Technology */}
       <Beat index={6} title="Technology used">
         <p className="text-ink-2 prose-col mt-5 leading-[1.75]">
-          Hover or focus a piece of the stack — where it has a place in the architecture above, that node lights up
-          there (scroll up to see it if it's out of view).
+          Hover or focus a piece of the stack to see where it sits in the architecture above.
         </p>
-        <div className="mt-4">
+        <div className="mt-8 flex flex-wrap gap-3">
           {TECH.map((t) => (
             <button
               key={t.name}
@@ -326,15 +296,16 @@ export default function CaseStudy({ project }: { project: Project }) {
               onMouseLeave={() => setHighlightedNode(null)}
               onFocus={() => setHighlightedNode(t.node)}
               onBlur={() => setHighlightedNode(null)}
-              className="border-line-soft hover:border-accent/60 hover:bg-surface flex w-full cursor-pointer flex-col gap-1 border-t px-3 py-4 text-left transition-all duration-200 first:border-t-0 sm:flex-row sm:items-center sm:justify-between sm:gap-4"
+              className="group relative flex items-center gap-3 rounded-full border border-line-soft bg-surface/30 px-5 py-3 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--accent)] hover:bg-surface/80 hover:shadow-[0_10px_20px_-10px_var(--accent)]"
             >
               <span
-                className="font-medium transition-colors duration-200"
-                style={{ color: t.node && t.node === highlightedNode ? 'var(--accent-2)' : 'var(--ink)' }}
+                className="font-semibold transition-colors duration-200"
+                style={{ color: t.node && t.node === highlightedNode ? 'var(--accent)' : 'var(--ink)' }}
               >
                 {t.name}
               </span>
-              <span className="text-ink-3 text-[0.875rem]">{t.reason}</span>
+              <span className="h-4 w-[1px] bg-line-soft group-hover:bg-[var(--accent)]/30 transition-colors duration-300" />
+              <span className="text-ink-3 text-[0.8rem] max-w-[140px] truncate sm:max-w-none text-left leading-tight group-hover:text-ink-2 transition-colors duration-300">{t.reason}</span>
             </button>
           ))}
         </div>
