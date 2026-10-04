@@ -44,10 +44,10 @@ export default function Projects() {
                  {isVoice ? (
                    <img src="/images/ai-voice.png" alt="AI Voice Assistant Interface" className="w-full h-full object-cover opacity-80 group-hover/project:scale-105 group-hover/project:opacity-100 transition-all duration-700 ease-out" />
                  ) : (
-                   <img src="/images/seo-optimiz.png" alt="SEOOptimiz Dashboard" className="w-full h-full object-cover opacity-80 group-hover/project:scale-105 group-hover/project:opacity-100 transition-all duration-700 ease-out" />
+                   <img src="/images/seo-optimiz.png" alt="SEOOptimiz Dashboard" className="w-full h-full object-cover object-top opacity-100 group-hover/project:scale-105 transition-all duration-700 ease-out" />
                  )}
                  {/* Subtle vignette over the visual */}
-                 <div className="absolute inset-0 shadow-[inset_0_0_40px_var(--color-bg-deep)]" />
+                 <div className={`absolute inset-0 pointer-events-none ${isVoice ? 'shadow-[inset_0_0_40px_var(--color-bg-deep)]' : 'shadow-[inset_0_0_20px_rgba(0,0,0,0.15)]'}`} />
               </div>
 
               {/* Project Content Area */}
