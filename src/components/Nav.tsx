@@ -19,7 +19,7 @@ function GlitchText({ text }: { text: string }) {
     const maxIterations = 8;
     const interval = setInterval(() => {
       setDisplayText(
-        text.split('').map((char, index) => {
+        text.split('').map((_, index) => {
           if (index < iterations) return text[index];
           return chars[Math.floor(Math.random() * chars.length)];
         }).join('')

@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef } from 'react';
-import { profile } from '../data/profile';
 import { getLenisInstance } from '../lib/smoothScroll';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';

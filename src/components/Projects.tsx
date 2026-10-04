@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 import Section from './Section';
 import { ArrowIcon } from './Icons';
