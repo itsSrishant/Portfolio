@@ -51,26 +51,26 @@ const SpotlightGallery = ({ images }: { images: string[] }) => {
   const renderGrid = (isMasked: boolean) => (
     <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 w-full ${isMasked ? '' : 'opacity-20 grayscale brightness-50 contrast-125'}`}>
       {/* 1 - Top Left (50% Width) */}
-      <div className="aspect-[4/3] md:aspect-[16/10] relative rounded-[2rem] border border-white/5 bg-[#050505] flex items-center justify-center p-6 md:p-12 overflow-hidden shadow-2xl">
-        {isMasked && <div className="absolute inset-0 bg-accent/10"></div>}
+      <div className="aspect-[4/3] md:aspect-[16/10] relative rounded-[2rem] border border-white/5 bg-[#050505] flex items-center justify-center p-0 overflow-hidden shadow-2xl">
+        {isMasked && <div className="absolute inset-0 bg-accent/10 z-0"></div>}
         <img src={images[0]} className="relative z-10 w-full h-full object-contain" alt="" />
       </div>
 
       {/* 2 - Top Right (50% Width) */}
-      <div className="aspect-[4/3] md:aspect-[16/10] relative rounded-[2rem] border border-white/5 bg-[#050505] flex items-center justify-center p-6 md:p-12 overflow-hidden shadow-xl">
-        {isMasked && <div className="absolute inset-0 bg-accent/10"></div>}
+      <div className="aspect-[4/3] md:aspect-[16/10] relative rounded-[2rem] border border-white/5 bg-[#050505] flex items-center justify-center p-0 overflow-hidden shadow-xl">
+        {isMasked && <div className="absolute inset-0 bg-accent/10 z-0"></div>}
         <img src={images[1]} className="relative z-10 w-full h-full object-contain" alt="" />
       </div>
 
       {/* 3 - Bottom Left (50% Width) */}
-      <div className="aspect-[4/3] md:aspect-[16/10] relative rounded-[2rem] border border-white/5 bg-[#050505] flex items-center justify-center p-6 md:p-12 overflow-hidden shadow-xl">
-        {isMasked && <div className="absolute inset-0 bg-accent/10"></div>}
+      <div className="aspect-[4/3] md:aspect-[16/10] relative rounded-[2rem] border border-white/5 bg-[#050505] flex items-center justify-center p-0 overflow-hidden shadow-xl">
+        {isMasked && <div className="absolute inset-0 bg-accent/10 z-0"></div>}
         <img src={images[2]} className="relative z-10 w-full h-full object-contain" alt="" />
       </div>
 
       {/* 4 - Bottom Right (50% Width) */}
-      <div className="aspect-[4/3] md:aspect-[16/10] relative rounded-[2rem] border border-white/5 bg-[#050505] flex items-center justify-center p-6 md:p-12 overflow-hidden shadow-2xl">
-        {isMasked && <div className="absolute inset-0 bg-accent/10"></div>}
+      <div className="aspect-[4/3] md:aspect-[16/10] relative rounded-[2rem] border border-white/5 bg-[#050505] flex items-center justify-center p-0 overflow-hidden shadow-2xl">
+        {isMasked && <div className="absolute inset-0 bg-accent/10 z-0"></div>}
         <img src={images[3]} className="relative z-10 w-full h-full object-contain" alt="" />
       </div>
     </div>
