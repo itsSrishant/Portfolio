@@ -1,8 +1,10 @@
 import { useExploration } from '../contexts/ExplorationContext';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function ExplorationPanel() {
   const { milestones, isPanelOpen, setPanelOpen, percentage, discoveredCount, totalCount } = useExploration();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (isPanelOpen) {
@@ -25,7 +27,7 @@ export default function ExplorationPanel() {
       />
 
       {/* Side Panel */}
-      <div className="fixed top-0 right-0 h-[100dvh] w-full max-w-md bg-bg-deep/95 border-l border-white/10 shadow-2xl z-[101] flex flex-col p-6 md:p-10 overflow-y-auto transform transition-transform duration-500 shadow-[0_0_80px_rgba(255,122,0,0.1)]">
+      <div className="fixed top-0 right-0 h-[100dvh] w-full max-w-md bg-bg-deep/95 border-l border-white/10 shadow-2xl z-[101] flex flex-col p-6 md:p-10 overflow-y-auto transform transition-transform duration-500 shadow-[0_0_80px_rgba(255,122,0,0.1)] custom-scrollbar">
         
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
@@ -76,12 +78,26 @@ export default function ExplorationPanel() {
             const isDiscovered = milestone.discoveredAt !== null;
             
             return (
-              <a 
+              <div 
                 key={milestone.id}
-                href={milestone.targetPath || '#'}
-                onClick={(e) => {
-                  if (!milestone.targetPath) e.preventDefault();
-                  else setPanelOpen(false); // Close panel when navigating
+                onClick={() => {
+                  if (milestone.targetPath) {
+                    setPanelOpen(false);
+                    // Slight delay to allow panel to close before routing
+                    setTimeout(() => {
+                      if (milestone.targetPath?.startsWith('/#')) {
+                        const hash = milestone.targetPath.replace('/#', '#');
+                        navigate('/');
+                        setTimeout(() => {
+                          const el = document.querySelector(hash);
+                          if (el) el.scrollIntoView({ behavior: 'smooth' });
+                        }, 100);
+                      } else {
+                        navigate(milestone.targetPath!);
+                        window.scrollTo(0, 0);
+                      }
+                    }, 300);
+                  }
                 }}
                 className={`relative p-5 rounded-2xl border transition-all duration-500 block ${
                   isDiscovered 
@@ -110,7 +126,7 @@ export default function ExplorationPanel() {
                     </p>
                   </div>
                 </div>
-              </a>
+              </div>
             );
           })}
         </div>
