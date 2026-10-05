@@ -63,6 +63,18 @@ const FloatingAsh = ({ color }: { color: string }) => {
   );
 };
 
+const SEOOptimizGallery = () => {
+  return (
+    <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 gap-6 relative z-10">
+      <img src="/images/seo-optimiz/1.png" alt="SEOOptimiz Screenshot 1" className="rounded-2xl border border-[var(--accent)] shadow-[0_10px_30px_-10px_var(--accent)] hover:scale-[1.03] hover:shadow-[0_20px_50px_-10px_var(--accent)] transition-all duration-500 w-full object-cover" />
+      <img src="/images/seo-optimiz/2.png" alt="SEOOptimiz Screenshot 2" className="rounded-2xl border border-[var(--accent)] shadow-[0_10px_30px_-10px_var(--accent)] hover:scale-[1.03] hover:shadow-[0_20px_50px_-10px_var(--accent)] transition-all duration-500 w-full object-cover" />
+      <img src="/images/seo-optimiz/3.png" alt="SEOOptimiz Screenshot 3" className="sm:col-span-2 rounded-2xl border border-[var(--accent)] shadow-[0_10px_30px_-10px_var(--accent)] hover:scale-[1.02] hover:shadow-[0_20px_50px_-10px_var(--accent)] transition-all duration-500 w-full object-cover" />
+      <img src="/images/seo-optimiz/4.png" alt="SEOOptimiz Screenshot 4" className="rounded-2xl border border-[var(--accent)] shadow-[0_10px_30px_-10px_var(--accent)] hover:scale-[1.03] hover:shadow-[0_20px_50px_-10px_var(--accent)] transition-all duration-500 w-full object-cover" />
+      <img src="/images/seo-optimiz/5.png" alt="SEOOptimiz Screenshot 5" className="rounded-2xl border border-[var(--accent)] shadow-[0_10px_30px_-10px_var(--accent)] hover:scale-[1.03] hover:shadow-[0_20px_50px_-10px_var(--accent)] transition-all duration-500 w-full object-cover" />
+    </div>
+  );
+};
+
 const HOW_IT_WORKS_STEPS = [
   {
     number: '01',
@@ -255,9 +267,13 @@ export default function CaseStudy({ project }: { project: Project }) {
           <div className="h-px w-24 bg-bg-deep/15 mb-8" />
           <p className="text-[1.05rem] font-medium text-bg-deep/80 leading-relaxed max-w-3xl">{project.body}</p>
         </div>
-        <div className="mt-12 rounded-2xl overflow-hidden border border-line-soft bg-surface/20 p-8 flex items-center justify-center shadow-inner">
-          <AudioWaveform />
-        </div>
+        {isVoice ? (
+          <div className="mt-12 rounded-2xl overflow-hidden border border-line-soft bg-surface/20 p-8 flex items-center justify-center shadow-inner">
+            <AudioWaveform />
+          </div>
+        ) : (
+          <SEOOptimizGallery />
+        )}
       </Beat>
 
       {/* 02 — The problem */}
