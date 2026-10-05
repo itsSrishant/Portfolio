@@ -49,112 +49,140 @@ const HallwayGallery = ({ images }: { images: string[] }) => {
     if (!containerRef.current || !sceneRef.current) return;
     
     const ctx = gsap.context(() => {
-      // Total travel distance: we want to pass the last card
-      const totalZ = images.length * 2000 + 1000;
-      
+      // Initialize card positions on the wall
+      images.forEach((_, index) => {
+        const isLeft = index % 2 === 0;
+        const zPos = -(index * 2000) - 1000;
+        const xPos = isLeft ? -700 : 700;
+        const rotY = isLeft ? 35 : -35;
+        
+        gsap.set(cardsRef.current[index], {
+          z: zPos,
+          x: xPos,
+          rotationY: rotY,
+          opacity: 0.2
+        });
+      });
+
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
           start: 'top top',
-          end: `+=${totalZ}`, // Much slower scrolling
+          end: `+=${images.length * 3000}`, // Extremely long scroll for a true "game-like" pace
           pin: true,
-          scrub: 1, // Smooth scrub
+          scrub: 1,
         }
       });
 
-      // Move the entire scene forward
-      tl.to(sceneRef.current, {
-        z: totalZ,
-        ease: 'none',
-        duration: totalZ
-      }, 0);
-
-      // Auto-illuminate each card as we pass it
-      cardsRef.current.forEach((card, index) => {
+      images.forEach((_, i) => {
+        const targetSceneZ = (i * 2000) + 1000;
+        const card = cardsRef.current[i];
         if (!card) return;
-        const cardZ = index * 2000 + 1000;
         
+        // 1. Move camera down the hallway towards the card
+        tl.to(sceneRef.current, {
+          z: targetSceneZ,
+          duration: 1500,
+          ease: 'power1.inOut'
+        });
+
+        // 2. As we arrive, pull the card off the wall to face the camera
+        tl.to(card, {
+          x: 0,          // Center horizontally
+          rotationY: 0,  // Face the user perfectly flat
+          opacity: 1,
+          duration: 1000,
+          ease: 'back.out(1.2)'
+        }, '-=500'); // Start this slightly before the scene stops moving
+
+        // 3. Illuminate the card with the golden spotlight
         const spotlight = card.querySelector('.spotlight-layer');
         if (spotlight) {
           tl.to(spotlight, {
             opacity: 1,
-            duration: 800, // Takes 800 scroll units to fully illuminate
-            ease: 'power2.inOut',
-            yoyo: true,
-            repeat: 1
-          }, cardZ - 800); // Start illuminating 800 units before we reach it
+            duration: 600,
+          }, '<'); // Concurrent with card pull
         }
-      });
 
+        // 4. Hold it on screen for the user to read perfectly (adds scroll distance where nothing moves)
+        tl.to({}, { duration: 1000 });
+
+        // 5. Push it up and fade it out as we prepare to move to the next frame
+        tl.to(card, {
+          y: -800,
+          opacity: 0,
+          scale: 0.8,
+          duration: 800,
+          ease: 'power2.in'
+        });
+      });
     }, containerRef);
 
     return () => ctx.revert();
   }, [images.length]);
 
   return (
-    <div ref={containerRef} className="w-full h-screen bg-[#050505] overflow-hidden relative z-10 -mx-4 md:-mx-12 px-4 md:px-12">
+    <div ref={containerRef} className="w-full h-screen bg-[#020202] overflow-hidden relative z-10 -mx-4 md:-mx-12 px-4 md:px-12">
       
       {/* 3D Scene */}
-      <div 
-        className="w-full h-full relative flex items-center justify-center"
-        style={{ perspective: '1200px' }}
-      >
-        <div 
-          ref={sceneRef}
-          className="absolute inset-0"
-          style={{ transformStyle: 'preserve-3d', transform: 'translateZ(0px)' }}
-        >
-          {/* Hallway Floor Grid - Orange tinted */}
+      <div className="w-full h-full relative flex items-center justify-center" style={{ perspective: '1000px' }}>
+        
+        <div ref={sceneRef} className="absolute inset-0" style={{ transformStyle: 'preserve-3d', transform: 'translateZ(0px)' }}>
+          
+          {/* Hallway Floor and Atmosphere (Golden/Orange Candlelight theme) */}
           <div 
-            className="absolute top-1/2 left-1/2 w-[200vw] h-[16000px] -mt-[0px] -ml-[100vw] bg-[linear-gradient(rgba(255,85,0,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,85,0,0.05)_1px,transparent_1px)] bg-[length:60px_60px] pointer-events-none"
-            style={{ transform: 'rotateX(90deg) translateZ(400px) translateY(-8000px)' }}
+            className="absolute top-1/2 left-1/2 w-[300vw] h-[20000px] -mt-[0px] -ml-[150vw] pointer-events-none"
+            style={{ 
+              transform: 'rotateX(90deg) translateZ(500px) translateY(-10000px)',
+              background: 'linear-gradient(90deg, rgba(255,160,50,0.03) 1px, transparent 1px), linear-gradient(0deg, rgba(255,160,50,0.03) 1px, transparent 1px)',
+              backgroundSize: '80px 80px'
+            }}
           ></div>
 
           {/* Cards along the hallway */}
           {images.map((src, index) => {
             const isLeft = index % 2 === 0;
-            // Space cards 2000px apart, starting at -1000px
-            const zPos = -(index * 2000) - 1000;
-            
             return (
               <div 
                 key={src}
-                className="absolute top-1/2 left-1/2 w-full max-w-[1000px] aspect-[16/9] -mt-[25%] md:-mt-[281px] -ml-[50%] md:-ml-[500px]"
-                style={{
-                  transform: `translateZ(${zPos}px) translateX(${isLeft ? '-70%' : '70%'}) rotateY(${isLeft ? '15deg' : '-15deg'})`,
-                  transformStyle: 'preserve-3d'
-                }}
+                ref={el => cardsRef.current[index] = el}
+                className="absolute top-1/2 left-1/2 w-full max-w-[900px] aspect-[16/10] -mt-[25%] md:-mt-[281px] -ml-[50%] md:-ml-[450px]"
+                style={{ transformStyle: 'preserve-3d' }}
               >
-                <div 
-                  ref={el => cardsRef.current[index] = el}
-                  className="card-container relative w-full h-full rounded-2xl border border-white/5 bg-[#0a0a0c] shadow-[0_30px_100px_-20px_#FF5500] overflow-hidden"
-                >
-                  {/* Dimmed Background */}
-                  <div className="absolute inset-0 opacity-10 grayscale brightness-50">
+                <div className="card-container relative w-full h-full rounded-xl border border-[#FFA032]/20 bg-[#0a0a0c] shadow-[0_0_80px_-20px_rgba(255,160,50,0.3)] overflow-hidden">
+                  
+                  {/* Dimmed Background (On the wall) */}
+                  <div className="absolute inset-0 grayscale-[0.8] brightness-50 sepia-[0.3]">
                      <img src={src} className="w-full h-full object-contain p-4 md:p-8" alt="" />
                   </div>
                   
-                  {/* Auto-Spotlight Layer (Animated by GSAP) */}
+                  {/* Spotlight Layer (Revealed when card is centered) */}
                   <div className="spotlight-layer absolute inset-0 z-20 opacity-0 pointer-events-none">
-                    {/* Intense Orange Glow */}
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#FF5500_0%,transparent_60%)] opacity-30 mix-blend-screen"></div>
-                    <div className="absolute inset-0 shadow-[inset_0_0_80px_rgba(255,85,0,0.2)]"></div>
+                    {/* Golden Candlelight Glow */}
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,160,50,0.15)_0%,transparent_70%)] mix-blend-screen"></div>
+                    <div className="absolute inset-0 shadow-[inset_0_0_100px_rgba(255,160,50,0.15)]"></div>
                     
-                    {/* The actual image */}
-                    <img src={src} className="w-full h-full object-contain p-4 md:p-8 drop-shadow-[0_0_30px_rgba(255,85,0,0.4)]" alt="" />
+                    <img src={src} className="w-full h-full object-contain p-4 md:p-8 drop-shadow-[0_0_30px_rgba(255,160,50,0.4)]" alt="" />
                   </div>
+
                 </div>
+
+                {/* Fake Wall Sconce / Candle Glow (Stays on the wall next to the frame) */}
+                <div 
+                  className="absolute top-1/2 w-32 h-32 bg-[#FFA032] rounded-full blur-[100px] opacity-20 -z-10"
+                  style={{ [isLeft ? 'left' : 'right']: '-150px', transform: 'translateY(-50%)' }}
+                ></div>
               </div>
             );
           })}
         </div>
       </div>
 
-      {/* UI Overlay - Orange Theme */}
+      {/* UI Overlay */}
       <div className="absolute bottom-12 left-1/2 -translate-x-1/2 text-center pointer-events-none z-40">
-        <span className="text-[#FF5500] text-[0.65rem] md:text-sm mono tracking-[0.2em] uppercase font-bold animate-pulse">Enter the Hallway</span>
-        <p className="text-ink-3 text-xs mt-2 max-w-[200px] md:max-w-none mx-auto">Scroll to walk forward and illuminate.</p>
-        <div className="w-[1px] h-12 bg-gradient-to-b from-[#FF5500] to-transparent mx-auto mt-4"></div>
+        <span className="text-[#FFA032] text-[0.65rem] md:text-sm mono tracking-[0.2em] uppercase font-bold animate-pulse">Walk the Hallway</span>
+        <p className="text-[#FFA032]/60 text-xs mt-2 max-w-[200px] md:max-w-none mx-auto">Scroll to step forward and examine each frame.</p>
+        <div className="w-[1px] h-12 bg-gradient-to-b from-[#FFA032] to-transparent mx-auto mt-4"></div>
       </div>
     </div>
   );
