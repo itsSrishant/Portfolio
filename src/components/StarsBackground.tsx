@@ -41,7 +41,7 @@ export default function StarsBackground() {
       });
     }
 
-    const shootingStars: { x: number; y: number; vx: number; vy: number; length: number; opacity: number }[] = [];
+    const shootingStars: { x: number; y: number; vx: number; vy: number; length: number; opacity: number; colorRGB: string }[] = [];
 
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
@@ -74,6 +74,14 @@ export default function StarsBackground() {
         const vx = -(baseSpeed * (0.8 + Math.random() * 0.4)); // Moves left
         const vy = (baseSpeed * (0.8 + Math.random() * 0.4));  // Moves down
 
+        const randColor = Math.random();
+        let colorRGB = '255, 122, 0'; // Orange (most common)
+        if (randColor > 0.7 && randColor < 0.85) {
+          colorRGB = '255, 255, 255'; // White (rare)
+        } else if (randColor >= 0.85) {
+          colorRGB = '180, 100, 255'; // Purple (rare)
+        }
+
         shootingStars.push({
           x: startX,
           y: startY,
@@ -81,6 +89,7 @@ export default function StarsBackground() {
           vy: vy,
           length: Math.random() * 200 + 100, 
           opacity: Math.random() * 0.5 + 0.5, 
+          colorRGB: colorRGB
         });
       }
 
@@ -103,8 +112,8 @@ export default function StarsBackground() {
         ctx.lineTo(endX, endY);
         const gradient = ctx.createLinearGradient(ss.x, ss.y, endX, endY);
         gradient.addColorStop(0, `rgba(255, 255, 255, ${ss.opacity})`); 
-        gradient.addColorStop(0.1, `rgba(255, 122, 0, ${ss.opacity * 0.8})`); 
-        gradient.addColorStop(1, 'rgba(255, 255, 255, 0)'); 
+        gradient.addColorStop(0.1, `rgba(${ss.colorRGB}, ${ss.opacity * 0.8})`); 
+        gradient.addColorStop(1, `rgba(${ss.colorRGB}, 0)`); 
         
         ctx.strokeStyle = gradient;
         ctx.lineWidth = 2.5; 
@@ -116,7 +125,7 @@ export default function StarsBackground() {
         ctx.arc(ss.x, ss.y, 1.5, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(255, 255, 255, ${ss.opacity})`;
         ctx.shadowBlur = 12;
-        ctx.shadowColor = 'rgba(255, 122, 0, 1)';
+        ctx.shadowColor = `rgba(${ss.colorRGB}, 1)`;
         ctx.fill();
         ctx.shadowBlur = 0; // reset
 
