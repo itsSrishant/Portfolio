@@ -25,8 +25,8 @@ export default function About() {
           opacity: 0,
           y: 40,
           filter: 'blur(8px)',
-          duration: 1.2,
-          stagger: 0.2,
+          duration: 0.8,
+          stagger: 0.1,
           ease: 'power3.out',
         });
       }
@@ -43,8 +43,8 @@ export default function About() {
             opacity: 1,
             x: 0,
             filter: 'blur(0px)',
-            duration: 1.2,
-            stagger: 0.2,
+            duration: 0.8,
+            stagger: 0.15,
             ease: 'power3.out',
           }
         );
@@ -94,7 +94,7 @@ export default function About() {
             <dl className="text-[0.95rem] grid gap-5">
               
               {/* Solid White / Silver Box */}
-              <div className="group/card relative bg-ink text-bg-deep p-6 sm:p-7 rounded-[20px] shadow-[0_10px_40px_-10px_rgba(255,255,255,0.15)] overflow-hidden transform transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_0_80px_-15px_rgba(255,255,255,0.5),inset_0_0_20px_rgba(255,255,255,0.2)] hover:scale-[1.02]">
+              <div className="group/card relative bg-ink text-bg-deep p-6 sm:p-7 rounded-[20px] shadow-[0_0_80px_-15px_rgba(255,255,255,0.5),inset_0_0_20px_rgba(255,255,255,0.2)] overflow-hidden transform transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_0_120px_-10px_rgba(255,255,255,0.8),inset_0_0_30px_rgba(255,255,255,0.4)] hover:scale-[1.02]">
                 <dt className="mono mb-2 text-bg-deep/70 text-[0.7rem] uppercase tracking-widest font-bold">Education</dt>
                 <dd className="relative z-10">
                   <p className="font-heading text-xl font-bold tracking-tight mb-1">{education.degree}</p>
@@ -107,14 +107,14 @@ export default function About() {
               </div>
               
               {/* Solid Purple Box */}
-              <div className="group/card relative bg-[var(--accent)] text-white p-6 sm:p-7 rounded-[20px] shadow-[0_10px_40px_-10px_var(--color-accent)] overflow-hidden transform transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-[0_0_80px_-15px_var(--color-accent),inset_0_0_20px_var(--color-accent)]">
+              <div className="group/card relative bg-[var(--accent)] text-white p-6 sm:p-7 rounded-[20px] shadow-[0_0_80px_-15px_var(--color-accent),inset_0_0_20px_var(--color-accent)] overflow-hidden transform transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-[0_0_120px_-10px_var(--color-accent),inset_0_0_30px_var(--color-accent)]">
                 <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.1)_50%,transparent_75%)] bg-[length:250%_250%] animate-[shimmer_3s_infinite_linear] opacity-0 group-hover/card:opacity-100 transition-opacity pointer-events-none"></div>
                 <dt className="mono mb-2 text-white/70 text-[0.7rem] uppercase tracking-widest font-bold">Based in</dt>
                 <dd className="font-heading text-2xl font-bold tracking-tight relative z-10">{profile.location}</dd>
               </div>
 
               {/* Solid Orange Box */}
-              <div className="group/card relative bg-[var(--accent-2)] text-bg-deep p-6 sm:p-7 rounded-[20px] shadow-[0_10px_40px_-10px_var(--color-accent-2)] overflow-hidden transform transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-[0_0_80px_-15px_var(--color-accent-2),inset_0_0_20px_var(--color-accent-2)]">
+              <div className="group/card relative bg-[var(--accent-2)] text-bg-deep p-6 sm:p-7 rounded-[20px] shadow-[0_0_80px_-15px_var(--color-accent-2),inset_0_0_20px_var(--color-accent-2)] overflow-hidden transform transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-[0_0_120px_-10px_var(--color-accent-2),inset_0_0_30px_var(--color-accent-2)]">
                 <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.2)_50%,transparent_75%)] bg-[length:250%_250%] animate-[shimmer_3s_infinite_linear] opacity-0 group-hover/card:opacity-100 transition-opacity pointer-events-none"></div>
                 <dt className="mono mb-3 text-bg-deep/70 text-[0.7rem] uppercase tracking-widest font-bold">Focus</dt>
                 <dd className="font-semibold relative z-10 leading-relaxed text-[0.95rem]">
