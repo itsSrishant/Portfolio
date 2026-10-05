@@ -20,13 +20,13 @@ export default function About() {
         gsap.from(paragraphs, {
           scrollTrigger: {
             trigger: textRef.current,
-            start: 'top 85%',
+            start: 'top 95%', // Triggers earlier as soon as it enters the screen
           },
           opacity: 0,
           y: 40,
           filter: 'blur(8px)',
-          duration: 0.8,
-          stagger: 0.1,
+          duration: 1.2,
+          stagger: 0.2,
           ease: 'power3.out',
         });
       }
@@ -38,13 +38,13 @@ export default function About() {
           {
             scrollTrigger: {
               trigger: asideRef.current,
-              start: 'top 85%',
+              start: 'top 95%', // Triggers earlier as soon as it enters the screen
             },
             opacity: 1,
             x: 0,
             filter: 'blur(0px)',
-            duration: 0.8,
-            stagger: 0.15,
+            duration: 1.2,
+            stagger: 0.2,
             ease: 'power3.out',
           }
         );
