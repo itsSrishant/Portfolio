@@ -49,39 +49,35 @@ const SpotlightGallery = ({ images }: { images: string[] }) => {
   };
 
   const renderGrid = (isMasked: boolean) => (
-    <div className={`grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-[180px] md:auto-rows-[250px] w-full ${isMasked ? '' : 'opacity-20 grayscale brightness-50 contrast-125'}`}>
-      {/* 1 - Main Dashboard (Spans 2 cols, 2 rows) */}
-      <div className="md:col-span-2 md:row-span-2 relative rounded-xl border border-white/5 bg-[#050505] flex items-center justify-center p-6 overflow-hidden shadow-2xl">
+    <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 w-full ${isMasked ? '' : 'opacity-20 grayscale brightness-50 contrast-125'}`}>
+      {/* 1 - Main Dashboard (Full Width) */}
+      <div className="md:col-span-2 aspect-[16/10] md:aspect-[21/9] relative rounded-2xl border border-white/5 bg-[#050505] flex items-center justify-center p-6 md:p-12 overflow-hidden shadow-2xl">
         {isMasked && <div className="absolute inset-0 bg-accent/10"></div>}
         <img src={images[0]} className="relative z-10 w-full h-full object-contain" alt="" />
       </div>
 
-      {/* 2 - Feature 1 */}
-      <div className="relative rounded-xl border border-white/5 bg-[#050505] flex items-center justify-center p-4 overflow-hidden shadow-xl">
+      {/* 2 & 3 - Side by Side (50% Width) */}
+      <div className="aspect-[4/3] relative rounded-2xl border border-white/5 bg-[#050505] flex items-center justify-center p-6 md:p-10 overflow-hidden shadow-xl">
         {isMasked && <div className="absolute inset-0 bg-accent/10"></div>}
         <img src={images[1]} className="relative z-10 w-full h-full object-contain" alt="" />
       </div>
-
-      {/* 3 - Feature 2 */}
-      <div className="relative rounded-xl border border-white/5 bg-[#050505] flex items-center justify-center p-4 overflow-hidden shadow-xl">
+      <div className="aspect-[4/3] relative rounded-2xl border border-white/5 bg-[#050505] flex items-center justify-center p-6 md:p-10 overflow-hidden shadow-xl">
         {isMasked && <div className="absolute inset-0 bg-accent/10"></div>}
         <img src={images[2]} className="relative z-10 w-full h-full object-contain" alt="" />
       </div>
 
-      {/* 4 - Feature 3 */}
-      <div className="relative rounded-xl border border-white/5 bg-[#050505] flex items-center justify-center p-4 overflow-hidden shadow-xl">
+      {/* 4 - Full Width */}
+      <div className="md:col-span-2 aspect-[16/10] md:aspect-[21/9] relative rounded-2xl border border-white/5 bg-[#050505] flex items-center justify-center p-6 md:p-12 overflow-hidden shadow-2xl">
         {isMasked && <div className="absolute inset-0 bg-accent/10"></div>}
         <img src={images[3]} className="relative z-10 w-full h-full object-contain" alt="" />
       </div>
 
-      {/* 5 - Feature 4 */}
-      <div className="relative rounded-xl border border-white/5 bg-[#050505] flex items-center justify-center p-4 overflow-hidden shadow-xl">
+      {/* 5 & 6 - Side by Side (50% Width) */}
+      <div className="aspect-[4/3] relative rounded-2xl border border-white/5 bg-[#050505] flex items-center justify-center p-6 md:p-10 overflow-hidden shadow-xl">
         {isMasked && <div className="absolute inset-0 bg-accent/10"></div>}
         <img src={images[4]} className="relative z-10 w-full h-full object-contain" alt="" />
       </div>
-
-      {/* 6 - Feature 5 */}
-      <div className="relative rounded-xl border border-white/5 bg-[#050505] flex items-center justify-center p-4 overflow-hidden shadow-xl">
+      <div className="aspect-[4/3] relative rounded-2xl border border-white/5 bg-[#050505] flex items-center justify-center p-6 md:p-10 overflow-hidden shadow-xl">
         {isMasked && <div className="absolute inset-0 bg-accent/10"></div>}
         <img src={images[5]} className="relative z-10 w-full h-full object-contain" alt="" />
       </div>
@@ -102,8 +98,8 @@ const SpotlightGallery = ({ images }: { images: string[] }) => {
       <div 
         className="absolute inset-0 z-20 pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100"
         style={{
-          WebkitMaskImage: 'radial-gradient(500px circle at var(--mouse-x) var(--mouse-y), black 10%, transparent 100%)',
-          maskImage: 'radial-gradient(500px circle at var(--mouse-x) var(--mouse-y), black 10%, transparent 100%)'
+          WebkitMaskImage: 'radial-gradient(700px circle at var(--mouse-x) var(--mouse-y), black 10%, transparent 100%)',
+          maskImage: 'radial-gradient(700px circle at var(--mouse-x) var(--mouse-y), black 10%, transparent 100%)'
         }}
       >
         {renderGrid(true)}
