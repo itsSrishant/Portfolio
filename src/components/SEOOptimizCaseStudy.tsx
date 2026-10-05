@@ -6,7 +6,6 @@ gsap.registerPlugin(ScrollTrigger);
 import ArchitectureDiagram, { type NodeDef, type EdgeDef } from './ArchitectureDiagram';
 import ProcessTimeline from './ProcessTimeline';
 import Beat from './casestudy/Beat';
-import ThreeHallwayGallery from './ThreeHallwayGallery';
 import type { Project } from '../data/profile';
 
 /* 
@@ -193,41 +192,21 @@ export default function SEOOptimizCaseStudy({ project }: { project: Project }) {
         '--color-line-soft': 'color-mix(in oklch, var(--accent) 15%, #050505)'
       } as React.CSSProperties}
     >
-      {/* 00 — True 3D Three.js Hallway Gallery */}
-      <ThreeHallwayGallery 
-        images={[
+      {/* Image Grid */}
+      <div className="mb-16 grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
+        {[
           '/images/seo-optimiz/6.png', 
           '/images/seo-optimiz/1.png', 
           '/images/seo-optimiz/2.png',
           '/images/seo-optimiz/3.png',
           '/images/seo-optimiz/4.png',
           '/images/seo-optimiz/5.png'
-        ]} 
-      />
-
-      {/* Legacy Scroll Deck Gallery (Commented out for fallback) */}
-      {/* 
-      <ScrollDeckGallery 
-        images={[
-          '/images/seo-optimiz/6.png', 
-          '/images/seo-optimiz/1.png', 
-          '/images/seo-optimiz/2.png',
-          '/images/seo-optimiz/3.png',
-          '/images/seo-optimiz/4.png',
-          '/images/seo-optimiz/5.png'
-        ]} 
-      />
-      */}
-
-      {/* Legacy 3D Mockup (Commented out for fallback) */}
-      {/* 
-      <div className="mb-24 mt-16 relative w-full aspect-[4/3] sm:aspect-[16/10] md:aspect-[16/9] [perspective:2000px] group flex items-center justify-center z-10">
-        <div className="absolute inset-0 bg-accent/5 blur-[100px] rounded-full group-hover:bg-accent/10 transition-colors duration-1000"></div>
-        <div className="relative w-[95%] h-[95%] rounded-xl border border-white/10 bg-black/40 backdrop-blur-2xl shadow-[0_20px_60px_-15px_var(--color-accent)] transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] transform group-hover:[transform:rotateX(4deg)_rotateY(-6deg)_scale(1.02)] group-hover:shadow-[30px_50px_100px_-20px_var(--color-accent)] overflow-hidden flex flex-col">
-          ...
-        </div>
+        ].map((src) => (
+          <div key={src} className="rounded-2xl overflow-hidden border border-[var(--color-line-soft)] bg-surface/20 shadow-[0_10px_40px_-10px_rgba(255,122,0,0.1)] transition-transform duration-500 hover:-translate-y-2 hover:shadow-[0_20px_80px_-10px_rgba(255,122,0,0.2)]">
+            <img src={src} className="w-full h-full object-contain p-4" alt="Screenshot" />
+          </div>
+        ))}
       </div>
-      */}
 
       {/* Legacy Bento Grid (Commented out for fallback) */}
       {/* 

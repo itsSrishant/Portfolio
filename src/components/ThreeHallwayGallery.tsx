@@ -1,13 +1,16 @@
 import { useRef, useEffect, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { useTexture } from '@react-three/drei';
+import { useTexture, Sparkles } from '@react-three/drei';
 import * as THREE from 'three';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import type { Project } from '../data/profile';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const Frame = ({ src, index, scrollData }: { src: string; index: number; scrollData: { progress: number } }) => {
+const Frame = ({ project, index, scrollData }: { project: Project; index: number; scrollData: { progress: number } }) => {
+  // Determine image based on slug
+  const src = project.slug === 'voice-ai-platform' ? '/images/ai-voice.png' : '/images/seo-optimiz.png';
   const texture = useTexture(src);
   const groupRef = useRef<THREE.Group>(null);
   const materialRef = useRef<THREE.MeshStandardMaterial>(null);
@@ -22,13 +25,31 @@ const Frame = ({ src, index, scrollData }: { src: string; index: number; scrollD
   // Total Z to scroll is total length + some buffer
   const maxZ = 6 * 40 + 20;
 
-  useFrame(({ camera }) => {
+  useFrame(({ camera, pointer, clock }) => {
     if (!groupRef.current || !materialRef.current || !borderMaterialRef.current) return;
     
-    // Smoothly animate camera Z based on scrollData progress
+    // 1. Smoothly animate camera Z based on scrollData progress
     const targetCameraZ = -(scrollData.progress * maxZ);
-    // Lerp camera for buttery smoothness
     camera.position.z = THREE.MathUtils.lerp(camera.position.z, targetCameraZ, 0.1);
+
+    // 2. Head Bobbing (simulate footsteps as you walk)
+    // Only bob when moving (when targetZ is different from currentZ)
+    const isMoving = Math.abs(camera.position.z - targetCameraZ) > 0.1;
+    if (isMoving) {
+      const bobY = Math.sin(clock.elapsedTime * 8) * 0.4; // Up and down
+      const bobZRot = Math.sin(clock.elapsedTime * 4) * 0.02; // Side to side sway
+      camera.position.y = THREE.MathUtils.lerp(camera.position.y, bobY, 0.1);
+      camera.rotation.z = THREE.MathUtils.lerp(camera.rotation.z, bobZRot, 0.1);
+    } else {
+      camera.position.y = THREE.MathUtils.lerp(camera.position.y, 0, 0.05);
+      camera.rotation.z = THREE.MathUtils.lerp(camera.rotation.z, 0, 0.05);
+    }
+
+    // 3. Mouse Look (Look around with the mouse)
+    const targetLookX = -(pointer.x * 0.15); // Look left/right
+    const targetLookY = (pointer.y * 0.15); // Look up/down
+    camera.rotation.y = THREE.MathUtils.lerp(camera.rotation.y, targetLookX, 0.1);
+    camera.rotation.x = THREE.MathUtils.lerp(camera.rotation.x, targetLookY, 0.1);
 
     const dist = camera.position.z - zPos;
 
@@ -71,7 +92,12 @@ const Frame = ({ src, index, scrollData }: { src: string; index: number; scrollD
   return (
     <group ref={groupRef}>
       {/* Outer Golden Border */}
-      <mesh position={[0, 0, -0.1]}>
+      <mesh 
+        position={[0, 0, -0.1]}
+        onClick={() => window.location.href = `/work/${project.slug}`}
+        onPointerOver={() => document.body.style.cursor = 'pointer'}
+        onPointerOut={() => document.body.style.cursor = 'auto'}
+      >
         <boxGeometry args={[16.5, 9.5, 0.2]} />
         <meshStandardMaterial 
           ref={borderMaterialRef}
@@ -84,7 +110,11 @@ const Frame = ({ src, index, scrollData }: { src: string; index: number; scrollD
       </mesh>
       
       {/* Image Plane */}
-      <mesh>
+      <mesh
+        onClick={() => window.location.href = `/work/${project.slug}`}
+        onPointerOver={() => document.body.style.cursor = 'pointer'}
+        onPointerOut={() => document.body.style.cursor = 'auto'}
+      >
         <planeGeometry args={[16, 9]} />
         <meshStandardMaterial 
           ref={materialRef}
@@ -96,7 +126,7 @@ const Frame = ({ src, index, scrollData }: { src: string; index: number; scrollD
         />
       </mesh>
 
-      {/* Wall Sconce PointLight - Attached to the frame so it moves with it and lights it up */}
+      {/* Wall Sconce PointLight - Steady glow instead of flickering */}
       <pointLight 
         position={[0, 0, 5]} 
         color="#FFA032" 
@@ -107,7 +137,7 @@ const Frame = ({ src, index, scrollData }: { src: string; index: number; scrollD
   );
 };
 
-export default function ThreeHallwayGallery({ images }: { images: string[] }) {
+export default function ThreeHallwayGallery({ projects }: { projects: readonly Project[] }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const bgRef = useRef<HTMLImageElement>(null);
   
@@ -125,7 +155,7 @@ export default function ThreeHallwayGallery({ images }: { images: string[] }) {
         scrollTrigger: {
           trigger: containerRef.current,
           start: 'top top',
-          end: `+=${images.length * 1500}`,
+          end: `+=${projects.length * 2000}`,
           pin: true,
           scrub: 1,
         }
@@ -138,7 +168,7 @@ export default function ThreeHallwayGallery({ images }: { images: string[] }) {
         scrollTrigger: {
           trigger: containerRef.current,
           start: 'top top',
-          end: `+=${images.length * 1500}`,
+          end: `+=${projects.length * 2000}`,
           scrub: 1,
         }
       });
@@ -146,7 +176,7 @@ export default function ThreeHallwayGallery({ images }: { images: string[] }) {
     }, containerRef);
 
     return () => ctx.revert();
-  }, [images.length]);
+  }, [projects.length]);
 
   return (
     <div ref={containerRef} className="w-full h-screen bg-[#020202] overflow-hidden relative z-10 -mx-4 md:-mx-12 px-4 md:px-12">
@@ -163,12 +193,16 @@ export default function ThreeHallwayGallery({ images }: { images: string[] }) {
       </div>
 
       {/* 3D Canvas */}
-      <div className="absolute inset-0 z-10 pointer-events-none">
+      <div className="absolute inset-0 z-10">
         <Canvas camera={{ position: [0, 0, 0], fov: 50 }}>
           <ambientLight intensity={0.5} />
+          
+          {/* Haunted Dust Particles */}
+          <Sparkles count={800} scale={100} size={4} speed={0.2} opacity={0.3} color="#FFA032" position={[0, 0, -50]} />
+
           <Suspense fallback={null}>
-            {images.map((src, idx) => (
-              <Frame key={src} src={src} index={idx} scrollData={scrollData.current} />
+            {projects.map((proj, idx) => (
+              <Frame key={proj.slug} project={proj} index={idx} scrollData={scrollData.current} />
             ))}
           </Suspense>
         </Canvas>
@@ -176,8 +210,8 @@ export default function ThreeHallwayGallery({ images }: { images: string[] }) {
 
       {/* UI Overlay */}
       <div className="absolute bottom-12 left-1/2 -translate-x-1/2 text-center pointer-events-none z-40">
-        <span className="text-[#FFA032] text-[0.65rem] md:text-sm mono tracking-[0.2em] uppercase font-bold animate-pulse">Walk the Hallway</span>
-        <p className="text-[#FFA032]/60 text-xs mt-2 max-w-[200px] md:max-w-none mx-auto">Scroll to step forward and examine each frame.</p>
+        <span className="text-[#FFA032] text-[0.65rem] md:text-sm mono tracking-[0.2em] uppercase font-bold">Walk the Hallway</span>
+        <p className="text-[#FFA032]/60 text-xs mt-2 max-w-[200px] md:max-w-none mx-auto">Scroll to walk forward. Click a frame to enter the project.</p>
         <div className="w-[1px] h-12 bg-gradient-to-b from-[#FFA032] to-transparent mx-auto mt-4"></div>
       </div>
     </div>
