@@ -1,4 +1,8 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 import ArchitectureDiagram, { type NodeDef, type EdgeDef } from './ArchitectureDiagram';
 import ProcessTimeline from './ProcessTimeline';
 import Beat from './casestudy/Beat';
@@ -36,92 +40,127 @@ const SlideshowImage = ({ images, interval = 4000 }: { images: string[], interva
 
 
 
-const SpotlightGallery = ({ images }: { images: string[] }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-
+const TorchlightCard = ({ src, index }: { src: string, index: number }) => {
+  const cardRef = useRef<HTMLDivElement>(null);
+  
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    containerRef.current.style.setProperty('--mouse-x', `${x}px`);
-    containerRef.current.style.setProperty('--mouse-y', `${y}px`);
+    cardRef.current.style.setProperty('--mouse-x', `${x}px`);
+    cardRef.current.style.setProperty('--mouse-y', `${y}px`);
   };
 
-  const renderGrid = (isMasked: boolean) => (
-    <div className={`grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-[180px] md:auto-rows-[250px] w-full ${isMasked ? '' : 'opacity-20 grayscale brightness-50 contrast-125'}`}>
-      {/* 1 - Main Dashboard (Spans 2 cols, 2 rows) */}
-      <div className="md:col-span-2 md:row-span-2 relative rounded-xl border border-white/5 bg-[#050505] flex items-center justify-center p-6 overflow-hidden shadow-2xl">
-        {isMasked && <div className="absolute inset-0 bg-accent/10"></div>}
-        <img src={images[0]} className="relative z-10 w-full h-full object-contain" alt="" />
-      </div>
+  const isLeft = index % 2 === 0;
+  // Space cards 1200px apart, starting at -1000px
+  const zPos = -(index * 1200) - 1000;
+  
+  return (
+    <div 
+      className="absolute top-1/2 left-1/2 w-full max-w-[800px] aspect-[16/10] -mt-[25%] md:-mt-[20%] -ml-[50%] md:-ml-[400px]"
+      style={{
+        transform: `translateZ(${zPos}px) translateX(${isLeft ? '-75%' : '75%'}) rotateY(${isLeft ? '30deg' : '-30deg'})`,
+        transformStyle: 'preserve-3d'
+      }}
+    >
+      <div 
+        ref={cardRef}
+        onMouseMove={handleMouseMove}
+        className="relative w-full h-full rounded-2xl border border-white/5 bg-[#050505] shadow-[0_30px_100px_-20px_var(--color-accent)] overflow-hidden group"
+        style={{ '--mouse-x': '50%', '--mouse-y': '50%' } as React.CSSProperties}
+      >
+        {/* Dimmed Background */}
+        <div className="absolute inset-0 opacity-20 grayscale brightness-75">
+           <img src={src} className="w-full h-full object-contain p-8" alt="" />
+        </div>
+        
+        {/* Spotlight Layer */}
+        <div 
+          className="absolute inset-0 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+          style={{
+            WebkitMaskImage: 'radial-gradient(350px circle at var(--mouse-x) var(--mouse-y), black 20%, transparent 100%)',
+            maskImage: 'radial-gradient(350px circle at var(--mouse-x) var(--mouse-y), black 20%, transparent 100%)'
+          }}
+        >
+          <img src={src} className="w-full h-full object-contain p-8 drop-shadow-2xl" alt="" />
+        </div>
 
-      {/* 2 - Feature 1 */}
-      <div className="relative rounded-xl border border-white/5 bg-[#050505] flex items-center justify-center p-4 overflow-hidden shadow-xl">
-        {isMasked && <div className="absolute inset-0 bg-accent/10"></div>}
-        <img src={images[1]} className="relative z-10 w-full h-full object-contain" alt="" />
-      </div>
-
-      {/* 3 - Feature 2 */}
-      <div className="relative rounded-xl border border-white/5 bg-[#050505] flex items-center justify-center p-4 overflow-hidden shadow-xl">
-        {isMasked && <div className="absolute inset-0 bg-accent/10"></div>}
-        <img src={images[2]} className="relative z-10 w-full h-full object-contain" alt="" />
-      </div>
-
-      {/* 4 - Feature 3 */}
-      <div className="relative rounded-xl border border-white/5 bg-[#050505] flex items-center justify-center p-4 overflow-hidden shadow-xl">
-        {isMasked && <div className="absolute inset-0 bg-accent/10"></div>}
-        <img src={images[3]} className="relative z-10 w-full h-full object-contain" alt="" />
-      </div>
-
-      {/* 5 - Feature 4 */}
-      <div className="relative rounded-xl border border-white/5 bg-[#050505] flex items-center justify-center p-4 overflow-hidden shadow-xl">
-        {isMasked && <div className="absolute inset-0 bg-accent/10"></div>}
-        <img src={images[4]} className="relative z-10 w-full h-full object-contain" alt="" />
-      </div>
-
-      {/* 6 - Feature 5 */}
-      <div className="relative rounded-xl border border-white/5 bg-[#050505] flex items-center justify-center p-4 overflow-hidden shadow-xl">
-        {isMasked && <div className="absolute inset-0 bg-accent/10"></div>}
-        <img src={images[5]} className="relative z-10 w-full h-full object-contain" alt="" />
+        {/* Ambient Torch Glow */}
+        <div 
+          className="absolute inset-0 z-10 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          style={{
+            background: 'radial-gradient(300px circle at var(--mouse-x) var(--mouse-y), var(--color-accent) 0%, transparent 100%)',
+            mixBlendMode: 'screen',
+            opacity: 0.15
+          }}
+        ></div>
       </div>
     </div>
   );
+};
+
+const HallwayGallery = ({ images }: { images: string[] }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const sceneRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!containerRef.current || !sceneRef.current) return;
+    
+    const ctx = gsap.context(() => {
+      // Total travel distance: we want to pass the last card
+      const totalZ = images.length * 1200 + 1000;
+      
+      gsap.to(sceneRef.current, {
+        z: totalZ,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top top',
+          end: `+=${images.length * 800}`, // The scroll duration
+          pin: true,
+          scrub: 1, // Smooth scrub
+        }
+      });
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, [images.length]);
 
   return (
-    <div 
-      ref={containerRef}
-      className="mb-32 mt-16 relative w-full z-10 group cursor-crosshair"
-      onMouseMove={handleMouseMove}
-      style={{ '--mouse-x': '50%', '--mouse-y': '50%' } as React.CSSProperties}
-    >
-      {/* Base Layer: Dimmed, grayscale */}
-      {renderGrid(false)}
-
-      {/* Spotlight Layer: Full color, masked by cursor */}
+    <div ref={containerRef} className="w-full h-screen bg-bg-deep overflow-hidden relative z-10 -mx-4 md:-mx-12 px-4 md:px-12">
+      
+      {/* 3D Scene */}
       <div 
-        className="absolute inset-0 z-20 pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100"
-        style={{
-          WebkitMaskImage: 'radial-gradient(500px circle at var(--mouse-x) var(--mouse-y), black 10%, transparent 100%)',
-          maskImage: 'radial-gradient(500px circle at var(--mouse-x) var(--mouse-y), black 10%, transparent 100%)'
-        }}
+        className="w-full h-full relative flex items-center justify-center"
+        style={{ perspective: '1200px' }}
       >
-        {renderGrid(true)}
+        {/* Vignette Overlay to hide clipping at edges */}
+        <div className="absolute inset-0 pointer-events-none z-30 bg-[radial-gradient(circle_at_center,transparent_0%,#050505_100%)] opacity-90"></div>
+        
+        <div 
+          ref={sceneRef}
+          className="absolute inset-0"
+          style={{ transformStyle: 'preserve-3d', transform: 'translateZ(0px)' }}
+        >
+          {/* Hallway Floor Grid */}
+          <div 
+            className="absolute top-1/2 left-1/2 w-[200vw] h-[8000px] -mt-[0px] -ml-[100vw] bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[length:40px_40px] pointer-events-none"
+            style={{ transform: 'rotateX(90deg) translateZ(400px) translateY(-4000px)' }}
+          ></div>
+
+          {/* Cards along the hallway */}
+          {images.map((src, idx) => (
+            <TorchlightCard key={src} src={src} index={idx} />
+          ))}
+        </div>
       </div>
 
-      {/* Decorative center glow for X-Ray */}
-      <div 
-        className="absolute inset-0 z-10 pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100"
-        style={{
-          background: 'radial-gradient(300px circle at var(--mouse-x) var(--mouse-y), var(--color-accent) 0%, transparent 100%)',
-          mixBlendMode: 'screen',
-          opacity: 0.15
-        }}
-      ></div>
-
-      {/* Interactive instruction */}
-      <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 opacity-60 group-hover:opacity-0 transition-opacity duration-500 text-center">
-        <span className="text-accent text-[0.65rem] mono tracking-[0.2em] uppercase font-bold animate-pulse">Hover to reveal X-Ray</span>
+      {/* UI Overlay */}
+      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 text-center pointer-events-none z-40">
+        <span className="text-accent text-[0.65rem] md:text-sm mono tracking-[0.2em] uppercase font-bold animate-pulse">Enter the Hallway</span>
+        <p className="text-ink-3 text-xs mt-2 max-w-[200px] md:max-w-none mx-auto">Scroll to walk forward. Hover to illuminate.</p>
+        <div className="w-[1px] h-12 bg-gradient-to-b from-accent to-transparent mx-auto mt-4"></div>
       </div>
     </div>
   );
@@ -277,8 +316,8 @@ export default function SEOOptimizCaseStudy({ project }: { project: Project }) {
         '--color-line-soft': 'color-mix(in oklch, var(--accent) 15%, #050505)'
       } as React.CSSProperties}
     >
-      {/* 00 — Spotlight X-Ray Gallery */}
-      <SpotlightGallery 
+      {/* 00 — 3D Torchlight Hallway Gallery */}
+      <HallwayGallery 
         images={[
           '/images/seo-optimiz/6.png', 
           '/images/seo-optimiz/1.png', 
