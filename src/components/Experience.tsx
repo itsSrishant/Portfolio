@@ -139,28 +139,10 @@ function ExperienceEntry({ job }: { job: (typeof experience)[number] }) {
               trigger: card,
               start: 'top 85%',
             },
-          }
-        );
-      });
-
-      const traces = gsap.utils.toArray('.trace-fill') as HTMLElement[];
-      traces.forEach((trace) => {
-        gsap.fromTo(
-          trace,
-          { scaleX: 0 },
-          {
-            scaleX: 1,
-            duration: 0.6,
-            delay: 0.2,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: trace.closest('.contribution-card'),
-              start: 'top 85%',
-            },
             onComplete: () => {
-              const card = trace.closest('.contribution-card')?.querySelector('.group\\/card');
-              if (card) {
-                card.setAttribute('data-lit', 'true');
+              const innerCard = card.querySelector('.group\\/card');
+              if (innerCard) {
+                innerCard.setAttribute('data-lit', 'true');
               }
             }
           }
@@ -214,13 +196,7 @@ function ExperienceEntry({ job }: { job: (typeof experience)[number] }) {
                   isEven ? 'md:mr-auto md:pr-0 md:text-right' : 'md:ml-auto md:pl-0 md:text-left'
                 }`}
               >
-                {/* Glowing Circuit Trace */}
-                <div className={`absolute top-1/2 -translate-y-1/2 h-[2px] bg-line-soft/40 z-0
-                  left-[1.1rem] w-[1.9rem] 
-                  md:w-[3rem] ${isEven ? 'md:left-auto md:-right-[3rem]' : 'md:left-[-3rem] md:right-auto'}
-                `}>
-                  <div className={`trace-fill h-full w-full bg-[var(--accent-2)] shadow-[0_0_10px_var(--color-accent-2)] ${isEven ? 'origin-left md:origin-right' : 'origin-left'}`} />
-                </div>
+
 
                 <div className="group/card relative bg-bg-deep p-6 md:p-8 rounded-sm border-2 border-line-soft shadow-[4px_4px_0_var(--color-accent-2)] transition-all duration-500 overflow-hidden hover:border-accent-2 hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-[0_0_40px_-5px_var(--color-accent-2)]">
                   
