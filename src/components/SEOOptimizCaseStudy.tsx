@@ -79,7 +79,7 @@ const SpotlightGallery = ({ images }: { images: string[] }) => {
   return (
     <div 
       ref={containerRef}
-      className="mb-32 mt-16 relative w-[100vw] left-1/2 -translate-x-1/2 px-4 md:px-12 z-10 group cursor-crosshair"
+      className="mb-32 mt-16 relative w-[100vw] left-1/2 -translate-x-1/2 z-10 group cursor-crosshair"
       onMouseMove={handleMouseMove}
       style={{ '--mouse-x': '50%', '--mouse-y': '50%' } as React.CSSProperties}
     >
@@ -88,7 +88,7 @@ const SpotlightGallery = ({ images }: { images: string[] }) => {
 
       {/* Spotlight Layer: Full color, masked by cursor */}
       <div 
-        className="absolute inset-0 z-20 pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100 px-4 md:px-12"
+        className="absolute inset-0 z-20 pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100"
         style={{
           WebkitMaskImage: 'radial-gradient(400px circle at var(--mouse-x) var(--mouse-y), black 10%, transparent 100%)',
           maskImage: 'radial-gradient(400px circle at var(--mouse-x) var(--mouse-y), black 10%, transparent 100%)'
