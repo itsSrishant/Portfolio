@@ -1,4 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 import ArchitectureDiagram, { type NodeDef, type EdgeDef } from './ArchitectureDiagram';
 import ProcessTimeline from './ProcessTimeline';
 import Beat from './casestudy/Beat';
@@ -34,58 +38,94 @@ const SlideshowImage = ({ images, interval = 4000 }: { images: string[], interva
 };
 */
 
-const DeckOfCardsGallery = ({ images }: { images: string[] }) => {
-  const [cards, setCards] = useState(images);
+const ScrollDeckGallery = ({ images }: { images: string[] }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const pinRef = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
-  const nextCard = () => {
-    setCards((prev) => {
-      const newCards = [...prev];
-      const first = newCards.shift();
-      if (first) newCards.push(first);
-      return newCards;
-    });
-  };
+  useEffect(() => {
+    if (!containerRef.current || !pinRef.current) return;
+    
+    const ctx = gsap.context(() => {
+      // Set initial positions
+      cardsRef.current.forEach((card, index) => {
+        if (!card) return;
+        gsap.set(card, {
+          zIndex: images.length - index,
+          y: index * 20, // Stacked downwards
+          scale: 1 - index * 0.05,
+          opacity: 1 - index * 0.15
+        });
+      });
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top 15%', // Start pinning near top of viewport
+          end: `+=${images.length * 70}%`, // Scroll duration based on deck size
+          pin: pinRef.current,
+          scrub: 1, // Smooth scrub
+        }
+      });
+
+      // Animate each card swiping away as we scroll
+      images.slice(0, -1).forEach((_, index) => {
+        const card = cardsRef.current[index];
+        const remainingCards = cardsRef.current.slice(index + 1);
+        
+        if (!card) return;
+
+        // Card swipes up and left like a reel/tinder card
+        tl.to(card, {
+          y: '-120%',
+          x: '-10%',
+          rotation: -10,
+          opacity: 0,
+          scale: 1.05,
+          duration: 1,
+          ease: 'power1.inOut'
+        }, `swipe${index}`);
+
+        // Remaining cards move up in the stack
+        remainingCards.forEach((remCard, i) => {
+          if (!remCard) return;
+          tl.to(remCard, {
+            y: i * 20,
+            scale: 1 - i * 0.05,
+            opacity: 1 - i * 0.15,
+            duration: 1,
+            ease: 'power1.inOut'
+          }, `swipe${index}`);
+        });
+      });
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, [images]);
 
   return (
-    <div className="mb-32 mt-16 relative w-full aspect-[4/3] sm:aspect-[16/10] md:aspect-[16/9] z-10 group cursor-pointer" onClick={nextCard}>
-      {cards.map((src, index) => {
-        const isTop = index === 0;
-        const isSecond = index === 1;
-        const isThird = index === 2;
-        
-        let transform = 'translateY(4rem) scale(0.85)';
-        let opacity = 0;
-        let zIndex = 0;
-
-        if (isTop) {
-          transform = 'translateY(0) scale(1)';
-          opacity = 1;
-          zIndex = 30;
-        } else if (isSecond) {
-          transform = 'translateY(1.5rem) scale(0.95)';
-          opacity = 0.6;
-          zIndex = 20;
-        } else if (isThird) {
-          transform = 'translateY(3rem) scale(0.9)';
-          opacity = 0.3;
-          zIndex = 10;
-        }
-
-        return (
+    <div ref={containerRef} className="w-full relative z-10 mb-32 mt-20">
+      <div ref={pinRef} className="relative w-full aspect-[4/3] sm:aspect-[16/10] md:aspect-[16/9] mx-auto group">
+        {images.map((src, index) => (
           <div 
             key={src}
-            className={`absolute inset-0 transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] origin-top rounded-xl border border-white/10 bg-black/40 backdrop-blur-2xl overflow-hidden flex items-center justify-center ${isTop ? 'shadow-[0_30px_60px_-15px_var(--color-accent)] group-hover:-translate-y-2 group-hover:scale-[1.02]' : 'shadow-2xl'}`}
-            style={{ transform, opacity, zIndex }}
+            ref={el => cardsRef.current[index] = el}
+            className="absolute inset-0 rounded-2xl bg-[#050505] overflow-hidden flex items-center justify-center border border-white/5 shadow-[0_30px_80px_-15px_var(--color-accent)] origin-bottom"
           >
-             <img src={src} className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-40 scale-110" alt="" />
-             <img src={src} className="absolute inset-0 w-full h-full object-contain p-4" alt="Screenshot" />
+             {/* Orange glow on the sides only, per user request */}
+             <div className="absolute inset-y-0 -left-16 w-64 bg-accent/20 blur-[60px] opacity-90 pointer-events-none"></div>
+             <div className="absolute inset-y-0 -right-16 w-64 bg-accent/20 blur-[60px] opacity-90 pointer-events-none"></div>
+             
+             {/* The actual image */}
+             <img src={src} className="relative z-10 w-full h-full object-contain p-4 sm:p-8 drop-shadow-2xl" alt={`Screenshot ${index + 1}`} />
           </div>
-        );
-      })}
-      
-      {/* Click indicator */}
-      <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50 group-hover:opacity-100 transition-opacity duration-300">
-        <span className="text-accent text-[0.65rem] mono tracking-[0.2em] uppercase font-bold animate-pulse">Click deck to cycle</span>
+        ))}
+        
+        {/* Scroll indicator overlay */}
+        <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-60">
+          <span className="text-accent text-[0.65rem] mono tracking-[0.2em] uppercase font-bold animate-pulse">Scroll to swipe</span>
+          <div className="w-[1px] h-8 bg-gradient-to-b from-accent to-transparent"></div>
+        </div>
       </div>
     </div>
   );
@@ -241,8 +281,8 @@ export default function SEOOptimizCaseStudy({ project }: { project: Project }) {
         '--color-line-soft': 'color-mix(in oklch, var(--accent) 15%, #050505)'
       } as React.CSSProperties}
     >
-      {/* 00 — Deck of Cards Gallery */}
-      <DeckOfCardsGallery 
+      {/* 00 — Scroll Deck Gallery */}
+      <ScrollDeckGallery 
         images={[
           '/images/seo-optimiz/6.png', 
           '/images/seo-optimiz/1.png', 
