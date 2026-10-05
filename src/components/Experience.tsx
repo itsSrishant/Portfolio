@@ -157,7 +157,7 @@ function ExperienceEntry({ job }: { job: (typeof experience)[number] }) {
   return (
     <article ref={articleRef} className="border-line-soft border-t pt-10 relative overflow-hidden" data-reveal>
       {/* Toned down StarsBackground specifically for this section */}
-      <div className="absolute inset-0 opacity-[0.15] mix-blend-screen pointer-events-none z-0">
+      <div className="absolute inset-0 opacity-80 pointer-events-none z-0">
         <StarsBackground intensity="low" />
       </div>
 
