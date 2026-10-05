@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import ArchitectureDiagram, { type NodeDef, type EdgeDef } from './ArchitectureDiagram';
 import ProcessTimeline from './ProcessTimeline';
 import Beat from './casestudy/Beat';
@@ -38,6 +38,14 @@ const SlideshowImage = ({ images, interval = 4000 }: { images: string[], interva
 
 const SpotlightGallery = ({ images }: { images: string[] }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % images.length);
+    }, 3500);
+    return () => clearInterval(timer);
+  }, [images.length]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!containerRef.current) return;
@@ -49,27 +57,27 @@ const SpotlightGallery = ({ images }: { images: string[] }) => {
   };
 
   const renderGrid = (isMasked: boolean) => (
-    <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 w-full ${isMasked ? 'hidden md:grid' : 'opacity-100 grayscale-0 brightness-100 contrast-100 md:opacity-20 md:grayscale md:brightness-50 md:contrast-125'}`}>
+    <div className={`grid grid-cols-2 gap-8 w-full ${isMasked ? '' : 'opacity-20 grayscale brightness-50 contrast-125'}`}>
       {/* 1 - Top Left (50% Width) */}
-      <div className="aspect-[4/3] md:aspect-[16/10] relative rounded-[2rem] border border-white/5 bg-[#050505] flex items-center justify-center p-0 overflow-hidden shadow-2xl">
+      <div className="aspect-[16/10] relative rounded-[2rem] border border-white/5 bg-[#050505] flex items-center justify-center p-0 overflow-hidden shadow-2xl">
         {isMasked && <div className="absolute inset-0 bg-accent/10 z-0"></div>}
         <img src={images[0]} className="relative z-10 w-full h-full object-contain" alt="" />
       </div>
 
       {/* 2 - Top Right (50% Width) */}
-      <div className="aspect-[4/3] md:aspect-[16/10] relative rounded-[2rem] border border-white/5 bg-[#050505] flex items-center justify-center p-0 overflow-hidden shadow-xl">
+      <div className="aspect-[16/10] relative rounded-[2rem] border border-white/5 bg-[#050505] flex items-center justify-center p-0 overflow-hidden shadow-xl">
         {isMasked && <div className="absolute inset-0 bg-accent/10 z-0"></div>}
         <img src={images[1]} className="relative z-10 w-full h-full object-contain" alt="" />
       </div>
 
       {/* 3 - Bottom Left (50% Width) */}
-      <div className="aspect-[4/3] md:aspect-[16/10] relative rounded-[2rem] border border-white/5 bg-[#050505] flex items-center justify-center p-0 overflow-hidden shadow-xl">
+      <div className="aspect-[16/10] relative rounded-[2rem] border border-white/5 bg-[#050505] flex items-center justify-center p-0 overflow-hidden shadow-xl">
         {isMasked && <div className="absolute inset-0 bg-accent/10 z-0"></div>}
         <img src={images[2]} className="relative z-10 w-full h-full object-contain" alt="" />
       </div>
 
       {/* 4 - Bottom Right (50% Width) */}
-      <div className="aspect-[4/3] md:aspect-[16/10] relative rounded-[2rem] border border-white/5 bg-[#050505] flex items-center justify-center p-0 overflow-hidden shadow-2xl">
+      <div className="aspect-[16/10] relative rounded-[2rem] border border-white/5 bg-[#050505] flex items-center justify-center p-0 overflow-hidden shadow-2xl">
         {isMasked && <div className="absolute inset-0 bg-accent/10 z-0"></div>}
         <img src={images[3]} className="relative z-10 w-full h-full object-contain" alt="" />
       </div>
@@ -83,33 +91,56 @@ const SpotlightGallery = ({ images }: { images: string[] }) => {
       onMouseMove={handleMouseMove}
       style={{ '--mouse-x': '50%', '--mouse-y': '50%' } as React.CSSProperties}
     >
-      {/* Base Layer: Dimmed on Desktop, Full color on Mobile */}
-      {renderGrid(false)}
-
-      {/* Spotlight Layer: Full color, masked by cursor (Hidden on Mobile) */}
-      <div 
-        className="hidden md:block absolute inset-0 z-20 pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100"
-        style={{
-          WebkitMaskImage: 'radial-gradient(400px circle at var(--mouse-x) var(--mouse-y), black 10%, transparent 100%)',
-          maskImage: 'radial-gradient(400px circle at var(--mouse-x) var(--mouse-y), black 10%, transparent 100%)'
-        }}
-      >
-        {renderGrid(true)}
+      {/* MOBILE SLIDESHOW: Only visible on mobile, cycles through 4 photos */}
+      <div className="md:hidden w-full px-4 flex justify-center">
+        <div className="relative w-full aspect-[4/3] rounded-[2rem] border border-white/5 bg-[#050505] shadow-2xl overflow-hidden">
+          {images.map((src, i) => (
+            <img 
+              key={i} 
+              src={src} 
+              className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-1000 ease-in-out ${i === activeIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'}`} 
+              alt={`Screenshot ${i + 1}`} 
+            />
+          ))}
+          {/* Slideshow Indicators */}
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+            {images.map((_, i) => (
+              <div key={i} className={`w-1.5 h-1.5 rounded-full transition-colors duration-500 ${i === activeIndex ? 'bg-accent' : 'bg-white/20'}`} />
+            ))}
+          </div>
+        </div>
       </div>
 
-      {/* Decorative center glow for X-Ray (Hidden on Mobile) */}
-      <div 
-        className="hidden md:block absolute inset-0 z-10 pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100"
-        style={{
-          background: 'radial-gradient(200px circle at var(--mouse-x) var(--mouse-y), var(--color-accent) 0%, transparent 100%)',
-          mixBlendMode: 'screen',
-          opacity: 0.15
-        }}
-      ></div>
+      {/* DESKTOP X-RAY GALLERY: Hidden on mobile */}
+      <div className="hidden md:block relative w-full px-4 md:px-12">
+        {/* Base Layer: Dimmed, grayscale */}
+        {renderGrid(false)}
 
-      {/* Interactive instruction (Hidden on Mobile) */}
-      <div className="hidden md:block absolute -bottom-16 left-1/2 -translate-x-1/2 opacity-60 group-hover:opacity-0 transition-opacity duration-500 text-center">
-        <span className="text-accent text-[0.65rem] mono tracking-[0.2em] uppercase font-bold animate-pulse">Hover to reveal X-Ray</span>
+        {/* Spotlight Layer: Full color, masked by cursor */}
+        <div 
+          className="absolute inset-0 z-20 pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100 px-4 md:px-12"
+          style={{
+            WebkitMaskImage: 'radial-gradient(400px circle at var(--mouse-x) var(--mouse-y), black 10%, transparent 100%)',
+            maskImage: 'radial-gradient(400px circle at var(--mouse-x) var(--mouse-y), black 10%, transparent 100%)'
+          }}
+        >
+          {renderGrid(true)}
+        </div>
+
+        {/* Decorative center glow for X-Ray */}
+        <div 
+          className="absolute inset-0 z-10 pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100 px-4 md:px-12"
+          style={{
+            background: 'radial-gradient(200px circle at var(--mouse-x) var(--mouse-y), var(--color-accent) 0%, transparent 100%)',
+            mixBlendMode: 'screen',
+            opacity: 0.15
+          }}
+        ></div>
+
+        {/* Interactive instruction */}
+        <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 opacity-60 group-hover:opacity-0 transition-opacity duration-500 text-center">
+          <span className="text-accent text-[0.65rem] mono tracking-[0.2em] uppercase font-bold animate-pulse">Hover to reveal X-Ray</span>
+        </div>
       </div>
     </div>
   );
