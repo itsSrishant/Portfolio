@@ -43,6 +43,7 @@ const SlideshowImage = ({ images, interval = 4000 }: { images: string[], interva
 const HallwayGallery = ({ images }: { images: string[] }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<HTMLDivElement>(null);
+  const bgRef = useRef<HTMLImageElement>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
@@ -60,6 +61,7 @@ const HallwayGallery = ({ images }: { images: string[] }) => {
           z: zPos,
           x: xPos,
           rotationY: rotY,
+          scale: 1,
           opacity: 0.2
         });
       });
@@ -68,7 +70,7 @@ const HallwayGallery = ({ images }: { images: string[] }) => {
         scrollTrigger: {
           trigger: containerRef.current,
           start: 'top top',
-          end: `+=${images.length * 3000}`, // Extremely long scroll for a true "game-like" pace
+          end: `+=${images.length * 1000}`, // Much shorter scroll for faster pacing
           pin: true,
           scrub: 1,
         }
@@ -86,14 +88,15 @@ const HallwayGallery = ({ images }: { images: string[] }) => {
           ease: 'power1.inOut'
         });
 
-        // 2. As we arrive, pull the card off the wall to face the camera
+        // 2. As we arrive, pull the card off the wall to face the camera and SCALE it up
         tl.to(card, {
-          x: 0,          // Center horizontally
-          rotationY: 0,  // Face the user perfectly flat
+          x: 0,          
+          rotationY: 0,  
+          scale: 1.25,   // Make it massive and easy to read
           opacity: 1,
           duration: 1000,
           ease: 'back.out(1.2)'
-        }, '-=500'); // Start this slightly before the scene stops moving
+        }, '-=500'); 
 
         // 3. Illuminate the card with the golden spotlight
         const spotlight = card.querySelector('.spotlight-layer');
@@ -101,21 +104,32 @@ const HallwayGallery = ({ images }: { images: string[] }) => {
           tl.to(spotlight, {
             opacity: 1,
             duration: 600,
-          }, '<'); // Concurrent with card pull
+          }, '<'); 
         }
 
-        // 4. Hold it on screen for the user to read perfectly (adds scroll distance where nothing moves)
+        // 4. Hold it on screen for the user to read
         tl.to({}, { duration: 1000 });
 
         // 5. Push it up and fade it out as we prepare to move to the next frame
         tl.to(card, {
           y: -800,
           opacity: 0,
-          scale: 0.8,
+          scale: 0.5,
           duration: 800,
           ease: 'power2.in'
         });
       });
+
+      // Scale up the background image slowly over the ENTIRE timeline duration
+      // to create a "walking forward" parallax illusion
+      if (bgRef.current) {
+        tl.to(bgRef.current, {
+          scale: 2.5,
+          ease: 'none',
+          duration: tl.duration() // stretches across the entire scroll
+        }, 0);
+      }
+      
     }, containerRef);
 
     return () => ctx.revert();
@@ -124,20 +138,22 @@ const HallwayGallery = ({ images }: { images: string[] }) => {
   return (
     <div ref={containerRef} className="w-full h-screen bg-[#020202] overflow-hidden relative z-10 -mx-4 md:-mx-12 px-4 md:px-12">
       
+      {/* AI Generated Haunted Hallway Background */}
+      <div className="absolute inset-0 z-0 flex items-center justify-center opacity-40 pointer-events-none">
+        <img 
+          ref={bgRef}
+          src="/images/seo-optimiz/haunted_hallway.png" 
+          alt="Haunted Hallway" 
+          className="w-full h-full object-cover origin-center"
+        />
+        {/* Dark vignette to blend edges */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_20%,#020202_100%)]"></div>
+      </div>
+
       {/* 3D Scene */}
-      <div className="w-full h-full relative flex items-center justify-center" style={{ perspective: '1000px' }}>
+      <div className="w-full h-full relative flex items-center justify-center z-10" style={{ perspective: '1000px' }}>
         
         <div ref={sceneRef} className="absolute inset-0" style={{ transformStyle: 'preserve-3d', transform: 'translateZ(0px)' }}>
-          
-          {/* Hallway Floor and Atmosphere (Golden/Orange Candlelight theme) */}
-          <div 
-            className="absolute top-1/2 left-1/2 w-[300vw] h-[20000px] -mt-[0px] -ml-[150vw] pointer-events-none"
-            style={{ 
-              transform: 'rotateX(90deg) translateZ(500px) translateY(-10000px)',
-              background: 'linear-gradient(90deg, rgba(255,160,50,0.03) 1px, transparent 1px), linear-gradient(0deg, rgba(255,160,50,0.03) 1px, transparent 1px)',
-              backgroundSize: '80px 80px'
-            }}
-          ></div>
 
           {/* Cards along the hallway */}
           {images.map((src, index) => {
