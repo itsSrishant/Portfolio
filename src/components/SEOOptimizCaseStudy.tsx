@@ -50,24 +50,26 @@ const SpotlightGallery = ({ images }: { images: string[] }) => {
 
   const renderGrid = (isMasked: boolean) => (
     <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 w-full ${isMasked ? '' : 'opacity-20 grayscale brightness-50 contrast-125'}`}>
-      {/* 1 - Main Dashboard (Full Width) */}
-      <div className="md:col-span-2 aspect-[16/10] md:aspect-[21/9] relative rounded-[2rem] border border-white/5 bg-[#050505] flex items-center justify-center p-6 md:p-12 overflow-hidden shadow-2xl">
+      {/* 1 - Top Left (50% Width) */}
+      <div className="aspect-[4/3] md:aspect-[16/10] relative rounded-[2rem] border border-white/5 bg-[#050505] flex items-center justify-center p-6 md:p-12 overflow-hidden shadow-2xl">
         {isMasked && <div className="absolute inset-0 bg-accent/10"></div>}
         <img src={images[0]} className="relative z-10 w-full h-full object-contain" alt="" />
       </div>
 
-      {/* 2 & 3 - Side by Side (50% Width) */}
-      <div className="aspect-[4/3] md:aspect-[16/10] relative rounded-[2rem] border border-white/5 bg-[#050505] flex items-center justify-center p-6 md:p-10 overflow-hidden shadow-xl">
+      {/* 2 - Top Right (50% Width) */}
+      <div className="aspect-[4/3] md:aspect-[16/10] relative rounded-[2rem] border border-white/5 bg-[#050505] flex items-center justify-center p-6 md:p-12 overflow-hidden shadow-xl">
         {isMasked && <div className="absolute inset-0 bg-accent/10"></div>}
         <img src={images[1]} className="relative z-10 w-full h-full object-contain" alt="" />
       </div>
-      <div className="aspect-[4/3] md:aspect-[16/10] relative rounded-[2rem] border border-white/5 bg-[#050505] flex items-center justify-center p-6 md:p-10 overflow-hidden shadow-xl">
+
+      {/* 3 - Bottom Left (50% Width) */}
+      <div className="aspect-[4/3] md:aspect-[16/10] relative rounded-[2rem] border border-white/5 bg-[#050505] flex items-center justify-center p-6 md:p-12 overflow-hidden shadow-xl">
         {isMasked && <div className="absolute inset-0 bg-accent/10"></div>}
         <img src={images[2]} className="relative z-10 w-full h-full object-contain" alt="" />
       </div>
 
-      {/* 4 - Deep Dive (Full Width) */}
-      <div className="md:col-span-2 aspect-[16/10] md:aspect-[21/9] relative rounded-[2rem] border border-white/5 bg-[#050505] flex items-center justify-center p-6 md:p-12 overflow-hidden shadow-2xl">
+      {/* 4 - Bottom Right (50% Width) */}
+      <div className="aspect-[4/3] md:aspect-[16/10] relative rounded-[2rem] border border-white/5 bg-[#050505] flex items-center justify-center p-6 md:p-12 overflow-hidden shadow-2xl">
         {isMasked && <div className="absolute inset-0 bg-accent/10"></div>}
         <img src={images[3]} className="relative z-10 w-full h-full object-contain" alt="" />
       </div>
@@ -77,7 +79,7 @@ const SpotlightGallery = ({ images }: { images: string[] }) => {
   return (
     <div 
       ref={containerRef}
-      className="mb-32 mt-16 relative w-full z-10 group cursor-crosshair"
+      className="mb-32 mt-16 relative w-[100vw] left-1/2 -translate-x-1/2 px-4 md:px-12 z-10 group cursor-crosshair"
       onMouseMove={handleMouseMove}
       style={{ '--mouse-x': '50%', '--mouse-y': '50%' } as React.CSSProperties}
     >
@@ -86,10 +88,10 @@ const SpotlightGallery = ({ images }: { images: string[] }) => {
 
       {/* Spotlight Layer: Full color, masked by cursor */}
       <div 
-        className="absolute inset-0 z-20 pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+        className="absolute inset-0 z-20 pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100 px-4 md:px-12"
         style={{
-          WebkitMaskImage: 'radial-gradient(700px circle at var(--mouse-x) var(--mouse-y), black 10%, transparent 100%)',
-          maskImage: 'radial-gradient(700px circle at var(--mouse-x) var(--mouse-y), black 10%, transparent 100%)'
+          WebkitMaskImage: 'radial-gradient(400px circle at var(--mouse-x) var(--mouse-y), black 10%, transparent 100%)',
+          maskImage: 'radial-gradient(400px circle at var(--mouse-x) var(--mouse-y), black 10%, transparent 100%)'
         }}
       >
         {renderGrid(true)}
@@ -99,7 +101,7 @@ const SpotlightGallery = ({ images }: { images: string[] }) => {
       <div 
         className="absolute inset-0 z-10 pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100"
         style={{
-          background: 'radial-gradient(300px circle at var(--mouse-x) var(--mouse-y), var(--color-accent) 0%, transparent 100%)',
+          background: 'radial-gradient(200px circle at var(--mouse-x) var(--mouse-y), var(--color-accent) 0%, transparent 100%)',
           mixBlendMode: 'screen',
           opacity: 0.15
         }}
