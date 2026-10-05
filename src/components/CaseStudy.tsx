@@ -1,8 +1,67 @@
 import { useEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
 import ArchitectureDiagram from './ArchitectureDiagram';
 import ProcessTimeline from './ProcessTimeline';
 import Beat from './casestudy/Beat';
 import type { Project } from '../data/profile';
+
+const FloatingAsh = ({ color }: { color: string }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    
+    const ashElements: HTMLDivElement[] = [];
+    for (let i = 0; i < 40; i++) {
+      const ash = document.createElement('div');
+      ash.style.position = 'absolute';
+      ash.style.width = `${Math.random() * 4 + 1}px`;
+      ash.style.height = ash.style.width;
+      ash.style.backgroundColor = color;
+      ash.style.boxShadow = `0 0 12px 2px ${color}`;
+      ash.style.borderRadius = '50%';
+      containerRef.current.appendChild(ash);
+      ashElements.push(ash);
+
+      gsap.fromTo(ash, 
+        {
+          top: `${100 + Math.random() * 20}%`,
+          left: `${Math.random() * 100}%`,
+          opacity: 0,
+        },
+        {
+          top: `-${Math.random() * 20 + 10}%`,
+          x: `+=${(Math.random() - 0.5) * 200}`,
+          duration: Math.random() * 15 + 15,
+          ease: 'none',
+          repeat: -1,
+          delay: -Math.random() * 20
+        }
+      );
+      
+      gsap.to(ash, {
+        opacity: Math.random() * 0.4 + 0.1,
+        duration: Math.random() * 2 + 2,
+        ease: 'sine.inOut',
+        yoyo: true,
+        repeat: -1,
+        delay: -Math.random() * 5
+      });
+    }
+
+    return () => {
+      ashElements.forEach(a => a.remove());
+    };
+  }, [color]);
+
+  return (
+    <div 
+      ref={containerRef} 
+      className="fixed inset-0 pointer-events-none z-[-1]" 
+      style={{ overflow: 'hidden' }}
+    />
+  );
+};
 
 const HOW_IT_WORKS_STEPS = [
   {
@@ -163,13 +222,18 @@ function AudioWaveform() {
 
 export default function CaseStudy({ project }: { project: Project }) {
   const [highlightedNode, setHighlightedNode] = useState<string | null>(null);
+  
+  const isVoice = project.slug === 'voice-ai-platform';
+  const themeColor = isVoice ? 'oklch(0.95 0 0)' : 'oklch(0.70 0.20 45)';
+  const secondaryColor = isVoice ? 'oklch(0.85 0.05 100)' : 'oklch(0.60 0.25 40)';
+  const hexColor = isVoice ? '#ffffff' : '#ff7a00';
 
   return (
     <div 
-      className="mt-10" 
+      className="mt-10 relative" 
       style={{ 
-        '--accent': 'oklch(0.95 0 0)', // Elegant Silver/White
-        '--accent-2': 'oklch(0.85 0.05 100)', // Subtle Warm Gold/Sand
+        '--accent': themeColor,
+        '--accent-2': secondaryColor, 
         '--danger': 'oklch(0.7 0.1 20)', // Muted brick red
         
         // Re-aliasing for Tailwind classes
@@ -177,11 +241,13 @@ export default function CaseStudy({ project }: { project: Project }) {
         '--color-accent-2': 'var(--accent-2)',
         '--color-danger': 'var(--danger)',
         
-        // Tinting the lines to match the silver theme
+        // Tinting the lines to match the theme
         '--color-line': 'color-mix(in oklch, var(--accent) 25%, #050505)',
         '--color-line-soft': 'color-mix(in oklch, var(--accent) 12%, #050505)'
       } as React.CSSProperties}
     >
+      <FloatingAsh color={hexColor} />
+      
       {/* 01 — Overview */}
       <Beat index={1} title="Overview">
         <div className="mt-8 rounded-3xl bg-[var(--accent)] p-8 sm:p-12 text-bg-deep shadow-[0_20px_60px_-15px_var(--accent)] transform transition-all duration-700 hover:scale-[1.02] hover:shadow-[0_30px_80px_-20px_var(--accent)]">

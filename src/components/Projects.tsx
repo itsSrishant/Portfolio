@@ -134,42 +134,7 @@ export default function Projects() {
               duration: 0.6,
               ease: 'expo.inOut',
               delay: 0.05,
-              onComplete: () => {
-                overlayContainer.remove();
-                
-                // Ash particles floating after doors open
-                for(let i=0; i<40; i++) {
-                  const ash = document.createElement('div');
-                  ash.style.position = 'fixed';
-                  ash.style.top = `${Math.random() * 100}vh`;
-                  ash.style.left = `${Math.random() * 100}vw`;
-                  ash.style.width = `${Math.random() * 4 + 1}px`;
-                  ash.style.height = ash.style.width;
-                  ash.style.backgroundColor = themeColor;
-                  ash.style.boxShadow = `0 0 12px 2px ${themeColor}`;
-                  ash.style.borderRadius = '50%';
-                  ash.style.opacity = '0';
-                  ash.style.pointerEvents = 'none';
-                  ash.style.zIndex = '999999';
-                  document.body.appendChild(ash);
-
-                  // Fade in and float up slowly
-                  gsap.to(ash, {
-                    y: `-=${Math.random() * 100 + 50}`,
-                    x: `+=${(Math.random() - 0.5) * 50}`,
-                    opacity: Math.random() * 0.6 + 0.2,
-                    duration: Math.random() * 2 + 2,
-                    ease: 'power1.out',
-                    onComplete: () => {
-                      gsap.to(ash, {
-                        opacity: 0,
-                        duration: Math.random() * 1 + 1,
-                        onComplete: () => ash.remove()
-                      });
-                    }
-                  });
-                }
-              }
+              onComplete: () => overlayContainer.remove()
             });
           }
         });
