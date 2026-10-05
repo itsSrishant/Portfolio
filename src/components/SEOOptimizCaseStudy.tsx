@@ -1,8 +1,4 @@
-import { useState } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
+import { useState, useRef } from 'react';
 import ArchitectureDiagram, { type NodeDef, type EdgeDef } from './ArchitectureDiagram';
 import ProcessTimeline from './ProcessTimeline';
 import Beat from './casestudy/Beat';
@@ -40,7 +36,96 @@ const SlideshowImage = ({ images, interval = 4000 }: { images: string[], interva
 
 
 
+const SpotlightGallery = ({ images }: { images: string[] }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
 
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    containerRef.current.style.setProperty('--mouse-x', `${x}px`);
+    containerRef.current.style.setProperty('--mouse-y', `${y}px`);
+  };
+
+  const renderGrid = (isMasked: boolean) => (
+    <div className={`grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-[180px] md:auto-rows-[250px] w-full ${isMasked ? '' : 'opacity-20 grayscale brightness-50 contrast-125'}`}>
+      {/* 1 - Main Dashboard (Spans 2 cols, 2 rows) */}
+      <div className="md:col-span-2 md:row-span-2 relative rounded-xl border border-white/5 bg-[#050505] flex items-center justify-center p-6 overflow-hidden shadow-2xl">
+        {isMasked && <div className="absolute inset-0 bg-accent/10"></div>}
+        <img src={images[0]} className="relative z-10 w-full h-full object-contain" alt="" />
+      </div>
+
+      {/* 2 - Feature 1 */}
+      <div className="relative rounded-xl border border-white/5 bg-[#050505] flex items-center justify-center p-4 overflow-hidden shadow-xl">
+        {isMasked && <div className="absolute inset-0 bg-accent/10"></div>}
+        <img src={images[1]} className="relative z-10 w-full h-full object-contain" alt="" />
+      </div>
+
+      {/* 3 - Feature 2 */}
+      <div className="relative rounded-xl border border-white/5 bg-[#050505] flex items-center justify-center p-4 overflow-hidden shadow-xl">
+        {isMasked && <div className="absolute inset-0 bg-accent/10"></div>}
+        <img src={images[2]} className="relative z-10 w-full h-full object-contain" alt="" />
+      </div>
+
+      {/* 4 - Feature 3 */}
+      <div className="relative rounded-xl border border-white/5 bg-[#050505] flex items-center justify-center p-4 overflow-hidden shadow-xl">
+        {isMasked && <div className="absolute inset-0 bg-accent/10"></div>}
+        <img src={images[3]} className="relative z-10 w-full h-full object-contain" alt="" />
+      </div>
+
+      {/* 5 - Feature 4 */}
+      <div className="relative rounded-xl border border-white/5 bg-[#050505] flex items-center justify-center p-4 overflow-hidden shadow-xl">
+        {isMasked && <div className="absolute inset-0 bg-accent/10"></div>}
+        <img src={images[4]} className="relative z-10 w-full h-full object-contain" alt="" />
+      </div>
+
+      {/* 6 - Feature 5 */}
+      <div className="relative rounded-xl border border-white/5 bg-[#050505] flex items-center justify-center p-4 overflow-hidden shadow-xl">
+        {isMasked && <div className="absolute inset-0 bg-accent/10"></div>}
+        <img src={images[5]} className="relative z-10 w-full h-full object-contain" alt="" />
+      </div>
+    </div>
+  );
+
+  return (
+    <div 
+      ref={containerRef}
+      className="mb-32 mt-16 relative w-full z-10 group cursor-crosshair"
+      onMouseMove={handleMouseMove}
+      style={{ '--mouse-x': '50%', '--mouse-y': '50%' } as React.CSSProperties}
+    >
+      {/* Base Layer: Dimmed, grayscale */}
+      {renderGrid(false)}
+
+      {/* Spotlight Layer: Full color, masked by cursor */}
+      <div 
+        className="absolute inset-0 z-20 pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+        style={{
+          WebkitMaskImage: 'radial-gradient(500px circle at var(--mouse-x) var(--mouse-y), black 10%, transparent 100%)',
+          maskImage: 'radial-gradient(500px circle at var(--mouse-x) var(--mouse-y), black 10%, transparent 100%)'
+        }}
+      >
+        {renderGrid(true)}
+      </div>
+
+      {/* Decorative center glow for X-Ray */}
+      <div 
+        className="absolute inset-0 z-10 pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+        style={{
+          background: 'radial-gradient(300px circle at var(--mouse-x) var(--mouse-y), var(--color-accent) 0%, transparent 100%)',
+          mixBlendMode: 'screen',
+          opacity: 0.15
+        }}
+      ></div>
+
+      {/* Interactive instruction */}
+      <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 opacity-60 group-hover:opacity-0 transition-opacity duration-500 text-center">
+        <span className="text-accent text-[0.65rem] mono tracking-[0.2em] uppercase font-bold animate-pulse">Hover to reveal X-Ray</span>
+      </div>
+    </div>
+  );
+};
 
 
 
@@ -192,21 +277,41 @@ export default function SEOOptimizCaseStudy({ project }: { project: Project }) {
         '--color-line-soft': 'color-mix(in oklch, var(--accent) 15%, #050505)'
       } as React.CSSProperties}
     >
-      {/* Image Grid */}
-      <div className="mb-16 grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
-        {[
+      {/* 00 — Spotlight X-Ray Gallery */}
+      <SpotlightGallery 
+        images={[
           '/images/seo-optimiz/6.png', 
           '/images/seo-optimiz/1.png', 
           '/images/seo-optimiz/2.png',
           '/images/seo-optimiz/3.png',
           '/images/seo-optimiz/4.png',
           '/images/seo-optimiz/5.png'
-        ].map((src) => (
-          <div key={src} className="rounded-2xl overflow-hidden border border-[var(--color-line-soft)] bg-surface/20 shadow-[0_10px_40px_-10px_rgba(255,122,0,0.1)] transition-transform duration-500 hover:-translate-y-2 hover:shadow-[0_20px_80px_-10px_rgba(255,122,0,0.2)]">
-            <img src={src} className="w-full h-full object-contain p-4" alt="Screenshot" />
-          </div>
-        ))}
+        ]} 
+      />
+
+      {/* Legacy Scroll Deck Gallery (Commented out for fallback) */}
+      {/* 
+      <ScrollDeckGallery 
+        images={[
+          '/images/seo-optimiz/6.png', 
+          '/images/seo-optimiz/1.png', 
+          '/images/seo-optimiz/2.png',
+          '/images/seo-optimiz/3.png',
+          '/images/seo-optimiz/4.png',
+          '/images/seo-optimiz/5.png'
+        ]} 
+      />
+      */}
+
+      {/* Legacy 3D Mockup (Commented out for fallback) */}
+      {/* 
+      <div className="mb-24 mt-16 relative w-full aspect-[4/3] sm:aspect-[16/10] md:aspect-[16/9] [perspective:2000px] group flex items-center justify-center z-10">
+        <div className="absolute inset-0 bg-accent/5 blur-[100px] rounded-full group-hover:bg-accent/10 transition-colors duration-1000"></div>
+        <div className="relative w-[95%] h-[95%] rounded-xl border border-white/10 bg-black/40 backdrop-blur-2xl shadow-[0_20px_60px_-15px_var(--color-accent)] transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] transform group-hover:[transform:rotateX(4deg)_rotateY(-6deg)_scale(1.02)] group-hover:shadow-[30px_50px_100px_-20px_var(--color-accent)] overflow-hidden flex flex-col">
+          ...
+        </div>
       </div>
+      */}
 
       {/* Legacy Bento Grid (Commented out for fallback) */}
       {/* 
