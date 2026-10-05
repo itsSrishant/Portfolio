@@ -153,7 +153,7 @@ export default function Projects() {
               key={project.slug}
               href={`/work/${project.slug}`}
               onClick={(e) => handleProjectClick(e, project.slug, isVoice)}
-              className="group/project relative w-full flex flex-col md:flex-row gap-8 rounded-3xl border border-[var(--card-accent)] bg-surface/20 p-6 md:p-10 transition-all duration-500 hover:-translate-y-2 shadow-[0_10px_40px_-10px_var(--card-shadow)] hover:shadow-[0_20px_80px_-5px_var(--card-shadow)] overflow-hidden z-10 hover:z-20"
+              className="group/project relative w-full flex flex-col md:flex-row gap-8 rounded-3xl border border-[var(--card-accent)] bg-surface/20 p-6 md:p-10 transition-all duration-500 md:hover:-translate-y-2 shadow-[0_10px_40px_-10px_var(--card-shadow)] hover:shadow-[0_20px_80px_-5px_var(--card-shadow)] overflow-hidden z-10 hover:z-20"
               style={{ 
                 '--reveal-delay': `${i * 100}ms`,
                 '--card-accent': isVoice ? 'oklch(0.95 0 0)' : 'oklch(0.70 0.20 45)',
@@ -171,16 +171,16 @@ export default function Projects() {
               {/* Project Visual Area */}
               <div className="relative w-full md:w-5/12 aspect-[16/10] rounded-2xl border border-line-soft bg-bg-deep overflow-hidden flex items-center justify-center">
                  {isVoice ? (
-                   <img src="/images/ai-voice.png" alt="AI Voice Assistant Interface" className="w-full h-full object-cover opacity-80 group-hover/project:scale-105 group-hover/project:opacity-100 transition-all duration-700 ease-out" />
+                   <img src="/images/ai-voice.png" alt="AI Voice Assistant Interface" className="w-full h-full object-cover opacity-80 md:group-hover/project:scale-105 group-hover/project:opacity-100 transition-all duration-700 ease-out" />
                  ) : (
-                   <img src="/images/seo-optimiz.png" alt="SEOOptimiz Dashboard" className="w-full h-full object-cover object-top opacity-100 group-hover/project:scale-105 transition-all duration-700 ease-out" />
+                   <img src="/images/seo-optimiz.png" alt="SEOOptimiz Dashboard" className="w-full h-full object-cover object-top opacity-100 md:group-hover/project:scale-105 transition-all duration-700 ease-out" />
                  )}
                  {/* Subtle vignette over the visual */}
                  <div className={`absolute inset-0 pointer-events-none ${isVoice ? 'shadow-[inset_0_0_40px_var(--color-bg-deep)]' : 'shadow-[inset_0_0_20px_rgba(0,0,0,0.15)]'}`} />
               </div>
 
               {/* Project Content Area */}
-              <div className="flex flex-col flex-1 justify-center relative z-20 transition-transform duration-500 group-hover/project:scale-[1.02] group-hover/project:-translate-y-1">
+              <div className="flex flex-col flex-1 justify-center relative z-20 transition-transform duration-500 md:group-hover/project:scale-[1.02] md:group-hover/project:-translate-y-1">
                 <div className="flex items-center gap-3 mb-4">
                   <span className="w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--card-accent)', boxShadow: '0 0 15px var(--card-accent)' }} aria-hidden />
                   <span className="mono text-[0.65rem] text-ink-3 tracking-[0.2em] uppercase">{project.context}</span>
@@ -190,7 +190,7 @@ export default function Projects() {
                   className="text-ink text-3xl font-heading font-semibold tracking-tight mb-4 group-hover/project:text-[var(--card-accent)] transition-all duration-500"
                   style={{ textShadow: '0 0 0 transparent' }}
                 >
-                  <span className="group-hover/project:drop-shadow-[0_0_25px_var(--card-accent)] transition-all duration-500 inline-block">{project.title}</span>
+                  <span className="md:group-hover/project:drop-shadow-[0_0_25px_var(--card-accent)] transition-all duration-500 inline-block">{project.title}</span>
                 </h3>
                 
                 <p className="text-ink-2 text-base leading-relaxed mb-8 max-w-xl">
@@ -207,9 +207,9 @@ export default function Projects() {
                   ))}
                 </div>
 
-                <div className="mt-auto flex items-center gap-2 text-[var(--card-accent)] text-sm font-medium tracking-wide group-hover/project:drop-shadow-[0_0_15px_var(--card-accent)] transition-all duration-500 group-hover/project:translate-x-1">
+                <div className="mt-auto flex items-center gap-2 text-[var(--card-accent)] text-sm font-medium tracking-wide md:group-hover/project:drop-shadow-[0_0_15px_var(--card-accent)] transition-all duration-500 md:group-hover/project:translate-x-1">
                   View case study
-                  <ArrowIcon className="transition-transform duration-300 group-hover/project:translate-x-2 drop-shadow-[0_0_10px_var(--card-accent)]" />
+                  <ArrowIcon className="transition-transform duration-300 md:group-hover/project:translate-x-2 drop-shadow-[0_0_10px_var(--card-accent)]" />
                 </div>
               </div>
             </a>

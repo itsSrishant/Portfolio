@@ -49,7 +49,7 @@ const SpotlightGallery = ({ images }: { images: string[] }) => {
   };
 
   const renderGrid = (isMasked: boolean) => (
-    <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 w-full ${isMasked ? '' : 'opacity-20 grayscale brightness-50 contrast-125'}`}>
+    <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 w-full ${isMasked ? 'hidden md:grid' : 'opacity-100 grayscale-0 brightness-100 contrast-100 md:opacity-20 md:grayscale md:brightness-50 md:contrast-125'}`}>
       {/* 1 - Top Left (50% Width) */}
       <div className="aspect-[4/3] md:aspect-[16/10] relative rounded-[2rem] border border-white/5 bg-[#050505] flex items-center justify-center p-0 overflow-hidden shadow-2xl">
         {isMasked && <div className="absolute inset-0 bg-accent/10 z-0"></div>}
@@ -83,12 +83,12 @@ const SpotlightGallery = ({ images }: { images: string[] }) => {
       onMouseMove={handleMouseMove}
       style={{ '--mouse-x': '50%', '--mouse-y': '50%' } as React.CSSProperties}
     >
-      {/* Base Layer: Dimmed, grayscale */}
+      {/* Base Layer: Dimmed on Desktop, Full color on Mobile */}
       {renderGrid(false)}
 
-      {/* Spotlight Layer: Full color, masked by cursor */}
+      {/* Spotlight Layer: Full color, masked by cursor (Hidden on Mobile) */}
       <div 
-        className="absolute inset-0 z-20 pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+        className="hidden md:block absolute inset-0 z-20 pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100"
         style={{
           WebkitMaskImage: 'radial-gradient(400px circle at var(--mouse-x) var(--mouse-y), black 10%, transparent 100%)',
           maskImage: 'radial-gradient(400px circle at var(--mouse-x) var(--mouse-y), black 10%, transparent 100%)'
@@ -97,9 +97,9 @@ const SpotlightGallery = ({ images }: { images: string[] }) => {
         {renderGrid(true)}
       </div>
 
-      {/* Decorative center glow for X-Ray */}
+      {/* Decorative center glow for X-Ray (Hidden on Mobile) */}
       <div 
-        className="absolute inset-0 z-10 pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+        className="hidden md:block absolute inset-0 z-10 pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100"
         style={{
           background: 'radial-gradient(200px circle at var(--mouse-x) var(--mouse-y), var(--color-accent) 0%, transparent 100%)',
           mixBlendMode: 'screen',
@@ -107,8 +107,8 @@ const SpotlightGallery = ({ images }: { images: string[] }) => {
         }}
       ></div>
 
-      {/* Interactive instruction */}
-      <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 opacity-60 group-hover:opacity-0 transition-opacity duration-500 text-center">
+      {/* Interactive instruction (Hidden on Mobile) */}
+      <div className="hidden md:block absolute -bottom-16 left-1/2 -translate-x-1/2 opacity-60 group-hover:opacity-0 transition-opacity duration-500 text-center">
         <span className="text-accent text-[0.65rem] mono tracking-[0.2em] uppercase font-bold animate-pulse">Hover to reveal X-Ray</span>
       </div>
     </div>
