@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import gsap from 'gsap';
 import Section from './Section';
 import { ArrowIcon } from './Icons';
 import { projects } from '../data/profile';
@@ -14,7 +15,128 @@ export default function Projects() {
 
   const handleProjectClick = (e: React.MouseEvent<HTMLAnchorElement>, slug: string) => {
     e.preventDefault();
-    navigate(`/work/${slug}`);
+
+    // The "Screen Tear - Overdrive" Transition
+    const overlayContainer = document.createElement('div');
+    overlayContainer.style.position = 'fixed';
+    overlayContainer.style.inset = '0';
+    overlayContainer.style.zIndex = '99999';
+    overlayContainer.style.pointerEvents = 'none';
+    overlayContainer.style.overflow = 'hidden';
+
+    // Top Door (Heavier, more brutalist)
+    const topDoor = document.createElement('div');
+    topDoor.style.position = 'absolute';
+    topDoor.style.top = '0';
+    topDoor.style.left = '-5vw';
+    topDoor.style.width = '110vw';
+    topDoor.style.height = '50vh';
+    topDoor.style.backgroundColor = '#050505';
+    topDoor.style.transform = 'translateY(-100%)';
+    topDoor.style.borderBottom = '3px solid #ff7a00';
+    topDoor.style.boxShadow = '0 10px 100px rgba(255,122,0,0.8)';
+
+    // Bottom Door
+    const bottomDoor = document.createElement('div');
+    bottomDoor.style.position = 'absolute';
+    bottomDoor.style.bottom = '0';
+    bottomDoor.style.left = '-5vw';
+    bottomDoor.style.width = '110vw';
+    bottomDoor.style.height = '50vh';
+    bottomDoor.style.backgroundColor = '#050505';
+    bottomDoor.style.transform = 'translateY(100%)';
+    bottomDoor.style.borderTop = '3px solid #ff7a00';
+    bottomDoor.style.boxShadow = '0 -10px 100px rgba(255,122,0,0.8)';
+
+    overlayContainer.appendChild(topDoor);
+    overlayContainer.appendChild(bottomDoor);
+    document.body.appendChild(overlayContainer);
+
+    // 1. Slam the doors shut
+    gsap.to([topDoor, bottomDoor], {
+      y: '0%',
+      duration: 0.4,
+      ease: 'expo.in',
+      onComplete: () => {
+        // VIOLENT SHAKE ON IMPACT (shake the doors instead of body to prevent fixed position bugs)
+        gsap.fromTo([topDoor, bottomDoor],
+          { x: -15, y: 5 },
+          { x: 0, y: 0, duration: 0.3, ease: 'elastic.out(1, 0.3)' }
+        );
+
+        // 2. Navigate while screen is completely black
+        navigate(`/work/${slug}`);
+
+        // 3. Flash a massive overloaded laser across the seam
+        const flash = document.createElement('div');
+        flash.style.position = 'absolute';
+        flash.style.top = '50%';
+        flash.style.left = '0';
+        flash.style.width = '100vw';
+        flash.style.height = '4px';
+        flash.style.backgroundColor = '#fff';
+        flash.style.boxShadow = '0 0 80px 40px #ff7a00';
+        flash.style.transform = 'translateY(-50%) scaleX(0) scaleY(5)';
+        overlayContainer.appendChild(flash);
+
+        // Generate Sparks
+        const sparks: HTMLDivElement[] = [];
+        for(let i=0; i<30; i++) {
+          const spark = document.createElement('div');
+          spark.style.position = 'absolute';
+          spark.style.top = '50%';
+          spark.style.left = `${5 + Math.random() * 90}vw`; // spread across width
+          spark.style.width = `${Math.random() * 20 + 10}px`;
+          spark.style.height = '2px';
+          spark.style.backgroundColor = '#ff7a00';
+          spark.style.boxShadow = '0 0 10px 2px #ff7a00';
+          spark.style.transform = 'translate(-50%, -50%) scaleX(0)';
+          overlayContainer.appendChild(spark);
+          sparks.push(spark);
+        }
+
+        gsap.to(flash, {
+          scaleX: 1,
+          duration: 0.15,
+          ease: 'power4.in',
+          onComplete: () => {
+            // Laser overload settling
+            gsap.to(flash, { scaleY: 1, opacity: 0, duration: 0.4 });
+
+            // Explode sparks outwards
+            sparks.forEach(spark => {
+              const vy = (Math.random() > 0.5 ? 1 : -1) * (Math.random() * 200 + 50);
+              const vx = (Math.random() - 0.5) * 100;
+              gsap.to(spark, {
+                x: `+=${vx}`,
+                y: `+=${vy}`,
+                scaleX: 1,
+                opacity: 0,
+                duration: Math.random() * 0.4 + 0.2,
+                ease: 'power2.out'
+              });
+            });
+
+            // 4. Violently tear the doors open with a skew effect
+            gsap.to(topDoor, {
+              y: '-100%',
+              skewY: 2,
+              duration: 0.6,
+              ease: 'expo.inOut',
+              delay: 0.05
+            });
+            gsap.to(bottomDoor, {
+              y: '100%',
+              skewY: -2,
+              duration: 0.6,
+              ease: 'expo.inOut',
+              delay: 0.05,
+              onComplete: () => overlayContainer.remove()
+            });
+          }
+        });
+      }
+    });
   };
 
   return (
