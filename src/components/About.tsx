@@ -72,7 +72,7 @@ export default function About() {
             </div>
 
             {/* Massive Blockquote Layout for the 2nd paragraph */}
-            <div className="relative my-4 rounded-3xl bg-surface/20 border border-line-soft p-8 sm:p-10 shadow-[inset_0_4px_20px_rgba(255,255,255,0.02)] transition-all duration-500 hover:border-white/70 hover:shadow-[0_0_60px_-10px_rgba(255,255,255,0.5),inset_0_0_20px_rgba(255,255,255,0.1)] group/quote">
+            <div className="relative my-4 rounded-3xl bg-surface/20 border border-line-soft p-8 sm:p-10 shadow-[0_0_60px_-10px_rgba(255,255,255,0.5),inset_0_0_20px_rgba(255,255,255,0.1)] transition-all duration-500 hover:border-white/70 hover:shadow-[0_0_100px_-10px_rgba(255,255,255,0.8),inset_0_0_30px_rgba(255,255,255,0.3)] group/quote">
               <span className="absolute -top-6 -left-2 text-[6rem] text-white/10 font-heading leading-none pointer-events-none select-none transition-transform duration-500 group-hover/quote:-translate-y-2 group-hover/quote:text-white/50">"</span>
               <p className="relative z-10 text-[1.4rem] sm:text-[1.7rem] font-heading font-semibold text-ink leading-[1.4] tracking-tight">
                 {about.paragraphs[1]}
@@ -94,7 +94,7 @@ export default function About() {
             <dl className="text-[0.95rem] grid gap-5">
               
               {/* Solid White / Silver Box */}
-              <div className="group/card relative bg-ink text-bg-deep p-6 sm:p-7 rounded-[20px] shadow-[0_0_80px_-15px_rgba(255,255,255,0.5),inset_0_0_20px_rgba(255,255,255,0.2)] overflow-hidden transform transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_0_120px_-10px_rgba(255,255,255,0.8),inset_0_0_30px_rgba(255,255,255,0.4)] hover:scale-[1.02]">
+              <div className="group/card relative bg-ink text-bg-deep p-6 sm:p-7 rounded-[20px] shadow-[0_10px_40px_-10px_rgba(255,255,255,0.15)] overflow-hidden transform transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_0_80px_-15px_rgba(255,255,255,0.5),inset_0_0_20px_rgba(255,255,255,0.2)] hover:scale-[1.02]">
                 <dt className="mono mb-2 text-bg-deep/70 text-[0.7rem] uppercase tracking-widest font-bold">Education</dt>
                 <dd className="relative z-10">
                   <p className="font-heading text-xl font-bold tracking-tight mb-1">{education.degree}</p>
@@ -107,14 +107,14 @@ export default function About() {
               </div>
               
               {/* Solid Purple Box */}
-              <div className="group/card relative bg-[var(--accent)] text-white p-6 sm:p-7 rounded-[20px] shadow-[0_0_80px_-15px_var(--color-accent),inset_0_0_20px_var(--color-accent)] overflow-hidden transform transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-[0_0_120px_-10px_var(--color-accent),inset_0_0_30px_var(--color-accent)]">
+              <div className="group/card relative bg-[var(--accent)] text-white p-6 sm:p-7 rounded-[20px] shadow-[0_10px_40px_-10px_var(--color-accent)] overflow-hidden transform transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-[0_0_80px_-15px_var(--color-accent),inset_0_0_20px_var(--color-accent)]">
                 <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.1)_50%,transparent_75%)] bg-[length:250%_250%] animate-[shimmer_3s_infinite_linear] opacity-0 group-hover/card:opacity-100 transition-opacity pointer-events-none"></div>
                 <dt className="mono mb-2 text-white/70 text-[0.7rem] uppercase tracking-widest font-bold">Based in</dt>
                 <dd className="font-heading text-2xl font-bold tracking-tight relative z-10">{profile.location}</dd>
               </div>
 
               {/* Solid Orange Box */}
-              <div className="group/card relative bg-[var(--accent-2)] text-bg-deep p-6 sm:p-7 rounded-[20px] shadow-[0_0_80px_-15px_var(--color-accent-2),inset_0_0_20px_var(--color-accent-2)] overflow-hidden transform transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-[0_0_120px_-10px_var(--color-accent-2),inset_0_0_30px_var(--color-accent-2)]">
+              <div className="group/card relative bg-[var(--accent-2)] text-bg-deep p-6 sm:p-7 rounded-[20px] shadow-[0_10px_40px_-10px_var(--color-accent-2)] overflow-hidden transform transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-[0_0_80px_-15px_var(--color-accent-2),inset_0_0_20px_var(--color-accent-2)]">
                 <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.2)_50%,transparent_75%)] bg-[length:250%_250%] animate-[shimmer_3s_infinite_linear] opacity-0 group-hover/card:opacity-100 transition-opacity pointer-events-none"></div>
                 <dt className="mono mb-3 text-bg-deep/70 text-[0.7rem] uppercase tracking-widest font-bold">Focus</dt>
                 <dd className="font-semibold relative z-10 leading-relaxed text-[0.95rem]">
