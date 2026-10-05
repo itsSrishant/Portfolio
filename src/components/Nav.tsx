@@ -124,8 +124,8 @@ export default function Nav() {
         }}
       >
         <nav className="shell flex h-[72px] items-center justify-between" aria-label="Primary">
-          {/* Left: Logo */}
-          <div className="flex flex-1 justify-start">
+          {/* Left: Logo & Explore */}
+          <div className="flex flex-1 items-center justify-start gap-4 md:gap-5">
             <HashLink
               hash="#top"
               className="group inline-flex items-baseline gap-2.5"
@@ -134,6 +134,15 @@ export default function Nav() {
               <span className="text-[1.05rem] font-bold tracking-[-0.02em]">{profile.initials}</span>
               <span className="text-ink-3 hidden text-[0.9rem] lg:inline">{profile.name}</span>
             </HashLink>
+
+            <button 
+              onClick={() => setPanelOpen(true)}
+              className="flex items-center gap-1.5 h-7 md:h-8 rounded-full px-2.5 md:px-3 text-[0.65rem] md:text-[0.7rem] font-medium tracking-widest uppercase border border-[var(--accent)]/15 bg-[var(--accent)]/5 hover:bg-[var(--accent)]/15 hover:border-[var(--accent)]/40 transition-all duration-300 text-ink-2 hover:text-white"
+            >
+              <span className="text-[var(--accent)] text-xs md:text-sm">✦</span>
+              <span className="hidden md:inline">EXPLORE</span>
+              <span className="mono text-[var(--accent)] font-semibold">{percentage}%</span>
+            </button>
           </div>
 
           {/* Center: Nav links */}
@@ -154,14 +163,6 @@ export default function Nav() {
 
           {/* Right: Actions */}
           <div className="flex flex-1 items-center justify-end gap-2">
-            <button 
-              onClick={() => setPanelOpen(true)}
-              className="flex items-center gap-1.5 md:gap-2 h-9 rounded-full px-3 md:px-4 text-[0.75rem] md:text-[0.8125rem] font-medium tracking-wide border border-white/5 bg-white/5 hover:bg-white/10 hover:border-[var(--accent)]/30 transition-all duration-300 text-ink hover:text-white mr-1 md:mr-3"
-            >
-              <span className="text-[var(--accent)]">✦</span>
-              <span className="hidden md:inline">EXPLORE</span>
-              <span className="mono text-[var(--accent)] ml-0.5">{percentage}%</span>
-            </button>
 
             <div className="hidden sm:flex items-center gap-2">
               <a
