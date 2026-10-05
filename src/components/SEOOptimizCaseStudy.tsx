@@ -40,127 +40,121 @@ const SlideshowImage = ({ images, interval = 4000 }: { images: string[], interva
 
 
 
-const TorchlightCard = ({ src, index }: { src: string, index: number }) => {
-  const cardRef = useRef<HTMLDivElement>(null);
-  
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    cardRef.current.style.setProperty('--mouse-x', `${x}px`);
-    cardRef.current.style.setProperty('--mouse-y', `${y}px`);
-  };
-
-  const isLeft = index % 2 === 0;
-  // Space cards 1200px apart, starting at -1000px
-  const zPos = -(index * 1200) - 1000;
-  
-  return (
-    <div 
-      className="absolute top-1/2 left-1/2 w-full max-w-[800px] aspect-[16/10] -mt-[25%] md:-mt-[20%] -ml-[50%] md:-ml-[400px]"
-      style={{
-        transform: `translateZ(${zPos}px) translateX(${isLeft ? '-75%' : '75%'}) rotateY(${isLeft ? '30deg' : '-30deg'})`,
-        transformStyle: 'preserve-3d'
-      }}
-    >
-      <div 
-        ref={cardRef}
-        onMouseMove={handleMouseMove}
-        className="relative w-full h-full rounded-2xl border border-white/5 bg-[#050505] shadow-[0_30px_100px_-20px_var(--color-accent)] overflow-hidden group"
-        style={{ '--mouse-x': '50%', '--mouse-y': '50%' } as React.CSSProperties}
-      >
-        {/* Dimmed Background */}
-        <div className="absolute inset-0 opacity-20 grayscale brightness-75">
-           <img src={src} className="w-full h-full object-contain p-8" alt="" />
-        </div>
-        
-        {/* Spotlight Layer */}
-        <div 
-          className="absolute inset-0 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-          style={{
-            WebkitMaskImage: 'radial-gradient(350px circle at var(--mouse-x) var(--mouse-y), black 20%, transparent 100%)',
-            maskImage: 'radial-gradient(350px circle at var(--mouse-x) var(--mouse-y), black 20%, transparent 100%)'
-          }}
-        >
-          <img src={src} className="w-full h-full object-contain p-8 drop-shadow-2xl" alt="" />
-        </div>
-
-        {/* Ambient Torch Glow */}
-        <div 
-          className="absolute inset-0 z-10 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-          style={{
-            background: 'radial-gradient(300px circle at var(--mouse-x) var(--mouse-y), var(--color-accent) 0%, transparent 100%)',
-            mixBlendMode: 'screen',
-            opacity: 0.15
-          }}
-        ></div>
-      </div>
-    </div>
-  );
-};
-
 const HallwayGallery = ({ images }: { images: string[] }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
     if (!containerRef.current || !sceneRef.current) return;
     
     const ctx = gsap.context(() => {
       // Total travel distance: we want to pass the last card
-      const totalZ = images.length * 1200 + 1000;
+      const totalZ = images.length * 2000 + 1000;
       
-      gsap.to(sceneRef.current, {
-        z: totalZ,
-        ease: 'none',
+      const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
           start: 'top top',
-          end: `+=${images.length * 800}`, // The scroll duration
+          end: `+=${totalZ}`, // Much slower scrolling
           pin: true,
           scrub: 1, // Smooth scrub
         }
       });
+
+      // Move the entire scene forward
+      tl.to(sceneRef.current, {
+        z: totalZ,
+        ease: 'none',
+        duration: totalZ
+      }, 0);
+
+      // Auto-illuminate each card as we pass it
+      cardsRef.current.forEach((card, index) => {
+        if (!card) return;
+        const cardZ = index * 2000 + 1000;
+        
+        const spotlight = card.querySelector('.spotlight-layer');
+        if (spotlight) {
+          tl.to(spotlight, {
+            opacity: 1,
+            duration: 800, // Takes 800 scroll units to fully illuminate
+            ease: 'power2.inOut',
+            yoyo: true,
+            repeat: 1
+          }, cardZ - 800); // Start illuminating 800 units before we reach it
+        }
+      });
+
     }, containerRef);
 
     return () => ctx.revert();
   }, [images.length]);
 
   return (
-    <div ref={containerRef} className="w-full h-screen bg-bg-deep overflow-hidden relative z-10 -mx-4 md:-mx-12 px-4 md:px-12">
+    <div ref={containerRef} className="w-full h-screen bg-[#050505] overflow-hidden relative z-10 -mx-4 md:-mx-12 px-4 md:px-12">
       
       {/* 3D Scene */}
       <div 
         className="w-full h-full relative flex items-center justify-center"
         style={{ perspective: '1200px' }}
       >
-        {/* Vignette Overlay to hide clipping at edges */}
-        <div className="absolute inset-0 pointer-events-none z-30 bg-[radial-gradient(circle_at_center,transparent_0%,#050505_100%)] opacity-90"></div>
-        
         <div 
           ref={sceneRef}
           className="absolute inset-0"
           style={{ transformStyle: 'preserve-3d', transform: 'translateZ(0px)' }}
         >
-          {/* Hallway Floor Grid */}
+          {/* Hallway Floor Grid - Orange tinted */}
           <div 
-            className="absolute top-1/2 left-1/2 w-[200vw] h-[8000px] -mt-[0px] -ml-[100vw] bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[length:40px_40px] pointer-events-none"
-            style={{ transform: 'rotateX(90deg) translateZ(400px) translateY(-4000px)' }}
+            className="absolute top-1/2 left-1/2 w-[200vw] h-[16000px] -mt-[0px] -ml-[100vw] bg-[linear-gradient(rgba(255,85,0,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,85,0,0.05)_1px,transparent_1px)] bg-[length:60px_60px] pointer-events-none"
+            style={{ transform: 'rotateX(90deg) translateZ(400px) translateY(-8000px)' }}
           ></div>
 
           {/* Cards along the hallway */}
-          {images.map((src, idx) => (
-            <TorchlightCard key={src} src={src} index={idx} />
-          ))}
+          {images.map((src, index) => {
+            const isLeft = index % 2 === 0;
+            // Space cards 2000px apart, starting at -1000px
+            const zPos = -(index * 2000) - 1000;
+            
+            return (
+              <div 
+                key={src}
+                className="absolute top-1/2 left-1/2 w-full max-w-[1000px] aspect-[16/9] -mt-[25%] md:-mt-[281px] -ml-[50%] md:-ml-[500px]"
+                style={{
+                  transform: `translateZ(${zPos}px) translateX(${isLeft ? '-70%' : '70%'}) rotateY(${isLeft ? '15deg' : '-15deg'})`,
+                  transformStyle: 'preserve-3d'
+                }}
+              >
+                <div 
+                  ref={el => cardsRef.current[index] = el}
+                  className="card-container relative w-full h-full rounded-2xl border border-white/5 bg-[#0a0a0c] shadow-[0_30px_100px_-20px_#FF5500] overflow-hidden"
+                >
+                  {/* Dimmed Background */}
+                  <div className="absolute inset-0 opacity-10 grayscale brightness-50">
+                     <img src={src} className="w-full h-full object-contain p-4 md:p-8" alt="" />
+                  </div>
+                  
+                  {/* Auto-Spotlight Layer (Animated by GSAP) */}
+                  <div className="spotlight-layer absolute inset-0 z-20 opacity-0 pointer-events-none">
+                    {/* Intense Orange Glow */}
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#FF5500_0%,transparent_60%)] opacity-30 mix-blend-screen"></div>
+                    <div className="absolute inset-0 shadow-[inset_0_0_80px_rgba(255,85,0,0.2)]"></div>
+                    
+                    {/* The actual image */}
+                    <img src={src} className="w-full h-full object-contain p-4 md:p-8 drop-shadow-[0_0_30px_rgba(255,85,0,0.4)]" alt="" />
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
-      {/* UI Overlay */}
+      {/* UI Overlay - Orange Theme */}
       <div className="absolute bottom-12 left-1/2 -translate-x-1/2 text-center pointer-events-none z-40">
-        <span className="text-accent text-[0.65rem] md:text-sm mono tracking-[0.2em] uppercase font-bold animate-pulse">Enter the Hallway</span>
-        <p className="text-ink-3 text-xs mt-2 max-w-[200px] md:max-w-none mx-auto">Scroll to walk forward. Hover to illuminate.</p>
-        <div className="w-[1px] h-12 bg-gradient-to-b from-accent to-transparent mx-auto mt-4"></div>
+        <span className="text-[#FF5500] text-[0.65rem] md:text-sm mono tracking-[0.2em] uppercase font-bold animate-pulse">Enter the Hallway</span>
+        <p className="text-ink-3 text-xs mt-2 max-w-[200px] md:max-w-none mx-auto">Scroll to walk forward and illuminate.</p>
+        <div className="w-[1px] h-12 bg-gradient-to-b from-[#FF5500] to-transparent mx-auto mt-4"></div>
       </div>
     </div>
   );
