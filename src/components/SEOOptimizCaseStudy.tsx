@@ -194,50 +194,54 @@ export default function SEOOptimizCaseStudy({ project }: { project: Project }) {
         '--color-line-soft': 'color-mix(in oklch, var(--accent) 15%, #050505)'
       } as React.CSSProperties}
     >
-      {/* 00 — Bento Grid Gallery */}
-      <div className="mb-16 grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-[250px] z-10">
+      {/* 00 — 3D Browser Mockup Gallery */}
+      <div className="mb-24 mt-16 relative w-full aspect-[4/3] sm:aspect-[16/10] md:aspect-[16/9] [perspective:2000px] group flex items-center justify-center z-10">
         
-        {/* Main Dashboard - Spans 2 cols, 2 rows */}
-        <div className="md:col-span-2 md:row-span-2 group relative rounded-sm border-2 border-line-soft bg-bg-deep overflow-hidden transition-all duration-300 hover:border-accent shadow-[4px_4px_0_var(--color-line-soft)] hover:shadow-[8px_8px_0_var(--color-accent)] hover:-translate-y-1 hover:-translate-x-1">
-           <SlideshowImage images={['/images/seo-optimiz/6.png', '/images/seo-optimiz/1.png']} interval={5000} />
-           <div className="hidden absolute inset-0 flex flex-col items-center justify-center border border-dashed border-accent/30 bg-[linear-gradient(45deg,rgba(158,59,255,0.03)_25%,transparent_25%,transparent_50%,rgba(158,59,255,0.03)_50%,rgba(158,59,255,0.03)_75%,transparent_75%,transparent)] bg-[length:24px_24px] p-6 text-center">
-             <span className="mono text-accent mb-2 text-sm animate-pulse">[ MAIN DASHBOARD ]</span>
-           </div>
-           {/* Overlay Gradient */}
-           <div className="absolute inset-0 bg-gradient-to-t from-bg-deep via-transparent to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-300 pointer-events-none"></div>
-           <div className="absolute bottom-6 left-6 flex flex-col gap-1 pointer-events-none">
-             <span className="mono text-[10px] tracking-[0.1em] text-accent font-medium">01 // OVERVIEW</span>
-             <span className="text-ink text-sm font-medium drop-shadow-md">Unified Analysis Dashboard</span>
-           </div>
-        </div>
+        {/* Ambient background glow */}
+        <div className="absolute inset-0 bg-accent/5 blur-[100px] rounded-full group-hover:bg-accent/10 transition-colors duration-1000"></div>
 
-        {/* Feature Close-up 1 - 1 col, 1 row */}
-        <div className="relative group rounded-sm border-2 border-line-soft bg-bg-deep overflow-hidden transition-all duration-300 hover:border-accent-2 shadow-[4px_4px_0_var(--color-line-soft)] hover:shadow-[8px_8px_0_var(--color-accent-2)] hover:-translate-y-1 hover:-translate-x-1">
-           <SlideshowImage images={['/images/seo-optimiz/2.png', '/images/seo-optimiz/4.png']} interval={4000} />
-           <div className="hidden absolute inset-0 flex flex-col items-center justify-center border border-dashed border-accent-2/30 bg-[linear-gradient(45deg,rgba(255,122,0,0.03)_25%,transparent_25%,transparent_50%,rgba(255,122,0,0.03)_50%,rgba(255,122,0,0.03)_75%,transparent_75%,transparent)] bg-[length:24px_24px] p-4 text-center">
-             <span className="mono text-accent-2 mb-1 text-xs">[ SCORING DIAL ]</span>
-           </div>
-           <div className="absolute inset-0 bg-gradient-to-t from-bg-deep/90 via-transparent to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-300 pointer-events-none"></div>
-           <div className="absolute bottom-4 left-4 flex flex-col gap-0.5 pointer-events-none">
-             <span className="mono text-[9px] tracking-[0.1em] text-accent-2 font-medium">02 // PILLARS</span>
-             <span className="text-ink text-xs font-medium">Deterministic Scoring</span>
-           </div>
-        </div>
+        {/* The Browser Window Container */}
+        <div className="relative w-[95%] h-[95%] rounded-xl border border-white/10 bg-black/40 backdrop-blur-2xl shadow-[0_20px_60px_-15px_var(--color-accent)] transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] transform group-hover:[transform:rotateX(4deg)_rotateY(-6deg)_scale(1.02)] group-hover:shadow-[30px_50px_100px_-20px_var(--color-accent)] overflow-hidden flex flex-col">
+          
+          {/* Browser Top Bar */}
+          <div className="flex items-center gap-2 px-4 py-3 bg-white/5 border-b border-white/10 shrink-0 backdrop-blur-md">
+            <div className="flex gap-1.5">
+              <div className="w-3 h-3 rounded-full bg-red-500/80 shadow-[0_0_10px_rgba(239,68,68,0.5)]"></div>
+              <div className="w-3 h-3 rounded-full bg-yellow-500/80 shadow-[0_0_10px_rgba(234,179,8,0.5)]"></div>
+              <div className="w-3 h-3 rounded-full bg-green-500/80 shadow-[0_0_10px_rgba(34,197,94,0.5)]"></div>
+            </div>
+            <div className="mx-auto px-6 py-1 rounded-md bg-black/40 border border-white/5 text-[0.65rem] mono text-white/50 flex items-center gap-2 shadow-inner">
+              <span className="text-accent opacity-70">🔒</span> seooptimiz.com
+            </div>
+            <div className="w-12"></div> {/* Spacer for centering */}
+          </div>
 
-        {/* Feature Close-up 2 - 1 col, 1 row */}
-        <div className="relative group rounded-sm border-2 border-line-soft bg-bg-deep overflow-hidden transition-all duration-300 hover:border-danger shadow-[4px_4px_0_var(--color-line-soft)] hover:shadow-[8px_8px_0_var(--color-danger)] hover:-translate-y-1 hover:-translate-x-1">
-           <SlideshowImage images={['/images/seo-optimiz/3.png', '/images/seo-optimiz/5.png']} interval={4500} />
-           <div className="hidden absolute inset-0 flex flex-col items-center justify-center border border-dashed border-danger/30 bg-[linear-gradient(45deg,rgba(255,60,60,0.03)_25%,transparent_25%,transparent_50%,rgba(255,60,60,0.03)_50%,rgba(255,60,60,0.03)_75%,transparent_75%,transparent)] bg-[length:24px_24px] p-4 text-center">
-             <span className="mono text-danger mb-1 text-xs">[ ISSUE LIST ]</span>
-           </div>
-           <div className="absolute inset-0 bg-gradient-to-t from-bg-deep/90 via-transparent to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-300 pointer-events-none"></div>
-           <div className="absolute bottom-4 left-4 flex flex-col gap-0.5 pointer-events-none">
-             <span className="mono text-[9px] tracking-[0.1em] text-danger font-medium">03 // INSIGHTS</span>
-             <span className="text-ink text-xs font-medium">Prioritized Fixes</span>
-           </div>
+          {/* Browser Content (The Slideshow) */}
+          <div className="relative flex-1 bg-bg-deep overflow-hidden">
+             <SlideshowImage 
+               images={[
+                 '/images/seo-optimiz/6.png', 
+                 '/images/seo-optimiz/1.png', 
+                 '/images/seo-optimiz/2.png',
+                 '/images/seo-optimiz/3.png',
+                 '/images/seo-optimiz/4.png',
+                 '/images/seo-optimiz/5.png'
+               ]} 
+               interval={3500} 
+             />
+          </div>
         </div>
-
+        
+        {/* Ambient floor shadow */}
+        <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-[70%] h-8 bg-accent/30 blur-[40px] transition-all duration-1000 group-hover:w-[85%] group-hover:opacity-80 opacity-40 rounded-[100%] pointer-events-none"></div>
       </div>
+
+      {/* Legacy Bento Grid (Commented out for fallback) */}
+      {/* 
+      <div className="mb-16 grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-[250px] z-10">
+      ... (Legacy code retained in git history)
+      </div> 
+      */}
 
       {/* 01 — Overview */}
       <Beat index={1} title="Overview">
