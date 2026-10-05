@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { useExploration } from '../contexts/ExplorationContext';
 import gsap from 'gsap';
 import Section from './Section';
 import { ArrowIcon } from './Icons';
@@ -142,6 +143,8 @@ export default function Projects() {
     });
   };
 
+  const { unlockMilestone } = useExploration();
+
   return (
     <Section id="projects" title="Featured work">
       <div className="flex flex-col gap-10">
@@ -153,6 +156,7 @@ export default function Projects() {
               key={project.slug}
               href={`/work/${project.slug}`}
               onClick={(e) => handleProjectClick(e, project.slug, isVoice)}
+              onMouseEnter={() => unlockMilestone('thermal_overload')}
               className="group/project relative w-full flex flex-col md:flex-row gap-8 rounded-3xl border border-[var(--card-accent)] bg-surface/20 p-6 md:p-10 transition-all duration-500 md:hover:-translate-y-2 shadow-[0_10px_40px_-10px_var(--card-shadow)] hover:shadow-[0_20px_80px_-5px_var(--card-shadow)] overflow-hidden z-10 hover:z-20"
               style={{ 
                 '--reveal-delay': `${i * 100}ms`,

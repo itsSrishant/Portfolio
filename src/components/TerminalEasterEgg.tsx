@@ -1,10 +1,12 @@
 import { useEffect, useState, useRef } from 'react';
+import { useExploration } from '../contexts/ExplorationContext';
 
 export default function TerminalEasterEgg() {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
   const [history, setHistory] = useState<{type: 'cmd' | 'out', text: string}[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
+  const { unlockMilestone } = useExploration();
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -14,6 +16,7 @@ export default function TerminalEasterEgg() {
         setIsOpen((prev) => {
            if (!prev) {
              setTimeout(() => inputRef.current?.focus(), 100);
+             unlockMilestone('terminal_hacker');
            }
            return !prev;
         });

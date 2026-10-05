@@ -1,7 +1,21 @@
 import { useEffect, useRef } from 'react';
+import { useExploration } from '../contexts/ExplorationContext';
 
 export default function StarsBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { unlockMilestone, percentage } = useExploration();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      unlockMilestone('stargazer');
+    }, 15000);
+    return () => clearTimeout(timer);
+  }, [unlockMilestone]);
+
+  const percentageRef = useRef(percentage);
+  useEffect(() => {
+    percentageRef.current = percentage;
+  }, [percentage]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -64,8 +78,11 @@ export default function StarsBackground() {
         ctx.fill();
       }
 
-      // Maintain up to 4 active shooting stars to ensure it never feels empty
-      if (shootingStars.length < 4 && Math.random() < 0.08) { 
+      // Maintain up to 4 active shooting stars (or 40 for Mastery Meteor Shower!)
+      const currentPercentage = percentageRef.current;
+      const maxShootingStars = currentPercentage === 100 ? 40 : 4;
+      const spawnChance = currentPercentage === 100 ? 0.3 : 0.08;
+      if (shootingStars.length < maxShootingStars && Math.random() < spawnChance) { 
         // Spawn them just slightly off-screen or on the top/right edges so they are visible immediately
         const startX = Math.random() * (width * 1.2); 
         const startY = -Math.random() * 100 - 20; 

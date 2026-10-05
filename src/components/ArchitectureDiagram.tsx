@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useExploration } from '../contexts/ExplorationContext';
 
 /**
  * The voice assistant, drawn at the level it can honestly be shown.
@@ -99,6 +100,7 @@ export default function ArchitectureDiagram({
   const [hoveredLocal, setHoveredLocal] = useState<string | null>(null);
   const hovered = hoveredLocal ?? externalHighlight;
   const [inView, setInView] = useState(false);
+  const { unlockMilestone } = useExploration();
 
   useEffect(() => {
     const el = figureRef.current;
@@ -182,7 +184,10 @@ export default function ArchitectureDiagram({
           return (
             <g
               key={node.id}
-              onMouseEnter={() => setHoveredLocal(node.id)}
+              onMouseEnter={() => {
+                setHoveredLocal(node.id);
+                unlockMilestone('architectural_analysis');
+              }}
               onMouseLeave={() => setHoveredLocal(null)}
               style={{ opacity: state === 'dim' ? 0.4 : 1, transition: 'opacity 0.3s ease' }}
             >

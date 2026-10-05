@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { GitHubIcon, LinkedInIcon, DocumentIcon } from './Icons';
 import HashLink from './HashLink';
 import { navItems, profile, linksReady } from '../data/profile';
+import { useExploration } from '../contexts/ExplorationContext';
 
 const chars = '█▓▒░<>-_\\\\/[]{}—=+*^?#_01';
 function GlitchText({ text }: { text: string }) {
@@ -62,6 +63,7 @@ export default function Nav() {
   const onHome = pathname === '/';
   const [scrolled, setScrolled] = useState(!onHome);
   const [open, setOpen] = useState(false);
+  const { percentage, setPanelOpen } = useExploration();
 
   useEffect(() => {
     if (!onHome) {
@@ -152,6 +154,15 @@ export default function Nav() {
 
           {/* Right: Actions */}
           <div className="flex flex-1 items-center justify-end gap-2">
+            <button 
+              onClick={() => setPanelOpen(true)}
+              className="flex items-center gap-1.5 md:gap-2 h-9 rounded-full px-3 md:px-4 text-[0.75rem] md:text-[0.8125rem] font-medium tracking-wide border border-white/5 bg-white/5 hover:bg-white/10 hover:border-[var(--accent)]/30 transition-all duration-300 text-ink hover:text-white mr-1 md:mr-3"
+            >
+              <span className="text-[var(--accent)]">✦</span>
+              <span className="hidden md:inline">EXPLORE</span>
+              <span className="mono text-[var(--accent)] ml-0.5">{percentage}%</span>
+            </button>
+
             <div className="hidden sm:flex items-center gap-2">
               <a
                 href={profile.resumeUrl}
