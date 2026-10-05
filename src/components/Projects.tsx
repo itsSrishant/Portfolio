@@ -13,8 +13,11 @@ import { projects } from '../data/profile';
 export default function Projects() {
   const navigate = useNavigate();
 
-  const handleProjectClick = (e: React.MouseEvent<HTMLAnchorElement>, slug: string) => {
+  const handleProjectClick = (e: React.MouseEvent<HTMLAnchorElement>, slug: string, isVoice: boolean) => {
     e.preventDefault();
+
+    const themeColor = isVoice ? '#ffffff' : '#ff7a00';
+    const shadowColor = isVoice ? 'rgba(255,255,255,0.8)' : 'rgba(255,122,0,0.8)';
 
     // The "Screen Tear - Overdrive" Transition
     const overlayContainer = document.createElement('div');
@@ -33,8 +36,8 @@ export default function Projects() {
     topDoor.style.height = '50vh';
     topDoor.style.backgroundColor = '#050505';
     topDoor.style.transform = 'translateY(-100%)';
-    topDoor.style.borderBottom = '3px solid #ff7a00';
-    topDoor.style.boxShadow = '0 10px 100px rgba(255,122,0,0.8)';
+    topDoor.style.borderBottom = `3px solid ${themeColor}`;
+    topDoor.style.boxShadow = `0 10px 100px ${shadowColor}`;
 
     // Bottom Door
     const bottomDoor = document.createElement('div');
@@ -45,8 +48,8 @@ export default function Projects() {
     bottomDoor.style.height = '50vh';
     bottomDoor.style.backgroundColor = '#050505';
     bottomDoor.style.transform = 'translateY(100%)';
-    bottomDoor.style.borderTop = '3px solid #ff7a00';
-    bottomDoor.style.boxShadow = '0 -10px 100px rgba(255,122,0,0.8)';
+    bottomDoor.style.borderTop = `3px solid ${themeColor}`;
+    bottomDoor.style.boxShadow = `0 -10px 100px ${shadowColor}`;
 
     overlayContainer.appendChild(topDoor);
     overlayContainer.appendChild(bottomDoor);
@@ -75,7 +78,7 @@ export default function Projects() {
         flash.style.width = '100vw';
         flash.style.height = '4px';
         flash.style.backgroundColor = '#fff';
-        flash.style.boxShadow = '0 0 80px 40px #ff7a00';
+        flash.style.boxShadow = `0 0 100px 50px ${themeColor}`;
         flash.style.transform = 'translateY(-50%) scaleX(0) scaleY(5)';
         overlayContainer.appendChild(flash);
 
@@ -88,8 +91,8 @@ export default function Projects() {
           spark.style.left = `${5 + Math.random() * 90}vw`; // spread across width
           spark.style.width = `${Math.random() * 20 + 10}px`;
           spark.style.height = '2px';
-          spark.style.backgroundColor = '#ff7a00';
-          spark.style.boxShadow = '0 0 10px 2px #ff7a00';
+          spark.style.backgroundColor = themeColor;
+          spark.style.boxShadow = `0 0 15px 3px ${themeColor}`;
           spark.style.transform = 'translate(-50%, -50%) scaleX(0)';
           overlayContainer.appendChild(spark);
           sparks.push(spark);
@@ -131,7 +134,42 @@ export default function Projects() {
               duration: 0.6,
               ease: 'expo.inOut',
               delay: 0.05,
-              onComplete: () => overlayContainer.remove()
+              onComplete: () => {
+                overlayContainer.remove();
+                
+                // Ash particles floating after doors open
+                for(let i=0; i<40; i++) {
+                  const ash = document.createElement('div');
+                  ash.style.position = 'fixed';
+                  ash.style.top = `${Math.random() * 100}vh`;
+                  ash.style.left = `${Math.random() * 100}vw`;
+                  ash.style.width = `${Math.random() * 4 + 1}px`;
+                  ash.style.height = ash.style.width;
+                  ash.style.backgroundColor = themeColor;
+                  ash.style.boxShadow = `0 0 12px 2px ${themeColor}`;
+                  ash.style.borderRadius = '50%';
+                  ash.style.opacity = '0';
+                  ash.style.pointerEvents = 'none';
+                  ash.style.zIndex = '999999';
+                  document.body.appendChild(ash);
+
+                  // Fade in and float up slowly
+                  gsap.to(ash, {
+                    y: `-=${Math.random() * 100 + 50}`,
+                    x: `+=${(Math.random() - 0.5) * 50}`,
+                    opacity: Math.random() * 0.6 + 0.2,
+                    duration: Math.random() * 2 + 2,
+                    ease: 'power1.out',
+                    onComplete: () => {
+                      gsap.to(ash, {
+                        opacity: 0,
+                        duration: Math.random() * 1 + 1,
+                        onComplete: () => ash.remove()
+                      });
+                    }
+                  });
+                }
+              }
             });
           }
         });
@@ -149,7 +187,7 @@ export default function Projects() {
             <a
               key={project.slug}
               href={`/work/${project.slug}`}
-              onClick={(e) => handleProjectClick(e, project.slug)}
+              onClick={(e) => handleProjectClick(e, project.slug, isVoice)}
               className="group/project relative w-full flex flex-col md:flex-row gap-8 rounded-3xl border border-[var(--card-accent)] bg-surface/20 p-6 md:p-10 transition-all duration-500 hover:-translate-y-2 shadow-[0_10px_40px_-10px_var(--card-shadow)] hover:shadow-[0_20px_80px_-5px_var(--card-shadow)] overflow-hidden z-10 hover:z-20"
               style={{ 
                 '--reveal-delay': `${i * 100}ms`,
