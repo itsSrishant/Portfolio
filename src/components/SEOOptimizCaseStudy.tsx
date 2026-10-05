@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import ArchitectureDiagram, { type NodeDef, type EdgeDef } from './ArchitectureDiagram';
 import ProcessTimeline from './ProcessTimeline';
 import Beat from './casestudy/Beat';
 import type { Project } from '../data/profile';
 
+/* 
 const SlideshowImage = ({ images, interval = 4000 }: { images: string[], interval?: number }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -23,27 +24,73 @@ const SlideshowImage = ({ images, interval = 4000 }: { images: string[], interva
             key={src} 
             className={`absolute inset-0 transition-opacity duration-1000 ${isActive ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
           >
-            {/* Blurred background filler to prevent empty letterboxes */}
-            <img 
-              src={src} 
-              alt="" 
-              className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-40 scale-110" 
-              aria-hidden="true"
-            />
-            {/* Actual crisp foreground image */}
-            <img 
-              src={src} 
-              alt={`Screenshot ${idx + 1}`} 
-              className={`absolute inset-0 w-full h-full object-contain p-4 transition-transform duration-1000 ${
-                isActive ? 'group-hover:scale-[1.03]' : 'scale-[0.97]'
-              }`} 
-            />
+            <img src={src} alt="" className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-40 scale-110" aria-hidden="true" />
+            <img src={src} alt={`Screenshot ${idx + 1}`} className={`absolute inset-0 w-full h-full object-contain p-4 transition-transform duration-1000 ${isActive ? 'group-hover:scale-[1.03]' : 'scale-[0.97]'}`} />
           </div>
         );
       })}
     </>
   );
 };
+*/
+
+const DeckOfCardsGallery = ({ images }: { images: string[] }) => {
+  const [cards, setCards] = useState(images);
+
+  const nextCard = () => {
+    setCards((prev) => {
+      const newCards = [...prev];
+      const first = newCards.shift();
+      if (first) newCards.push(first);
+      return newCards;
+    });
+  };
+
+  return (
+    <div className="mb-32 mt-16 relative w-full aspect-[4/3] sm:aspect-[16/10] md:aspect-[16/9] z-10 group cursor-pointer" onClick={nextCard}>
+      {cards.map((src, index) => {
+        const isTop = index === 0;
+        const isSecond = index === 1;
+        const isThird = index === 2;
+        
+        let transform = 'translateY(4rem) scale(0.85)';
+        let opacity = 0;
+        let zIndex = 0;
+
+        if (isTop) {
+          transform = 'translateY(0) scale(1)';
+          opacity = 1;
+          zIndex = 30;
+        } else if (isSecond) {
+          transform = 'translateY(1.5rem) scale(0.95)';
+          opacity = 0.6;
+          zIndex = 20;
+        } else if (isThird) {
+          transform = 'translateY(3rem) scale(0.9)';
+          opacity = 0.3;
+          zIndex = 10;
+        }
+
+        return (
+          <div 
+            key={src}
+            className={`absolute inset-0 transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] origin-top rounded-xl border border-white/10 bg-black/40 backdrop-blur-2xl overflow-hidden flex items-center justify-center ${isTop ? 'shadow-[0_30px_60px_-15px_var(--color-accent)] group-hover:-translate-y-2 group-hover:scale-[1.02]' : 'shadow-2xl'}`}
+            style={{ transform, opacity, zIndex }}
+          >
+             <img src={src} className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-40 scale-110" alt="" />
+             <img src={src} className="absolute inset-0 w-full h-full object-contain p-4" alt="Screenshot" />
+          </div>
+        );
+      })}
+      
+      {/* Click indicator */}
+      <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50 group-hover:opacity-100 transition-opacity duration-300">
+        <span className="text-accent text-[0.65rem] mono tracking-[0.2em] uppercase font-bold animate-pulse">Click deck to cycle</span>
+      </div>
+    </div>
+  );
+};
+
 
 
 /**
@@ -194,47 +241,27 @@ export default function SEOOptimizCaseStudy({ project }: { project: Project }) {
         '--color-line-soft': 'color-mix(in oklch, var(--accent) 15%, #050505)'
       } as React.CSSProperties}
     >
-      {/* 00 — 3D Browser Mockup Gallery */}
+      {/* 00 — Deck of Cards Gallery */}
+      <DeckOfCardsGallery 
+        images={[
+          '/images/seo-optimiz/6.png', 
+          '/images/seo-optimiz/1.png', 
+          '/images/seo-optimiz/2.png',
+          '/images/seo-optimiz/3.png',
+          '/images/seo-optimiz/4.png',
+          '/images/seo-optimiz/5.png'
+        ]} 
+      />
+
+      {/* Legacy 3D Mockup (Commented out for fallback) */}
+      {/* 
       <div className="mb-24 mt-16 relative w-full aspect-[4/3] sm:aspect-[16/10] md:aspect-[16/9] [perspective:2000px] group flex items-center justify-center z-10">
-        
-        {/* Ambient background glow */}
         <div className="absolute inset-0 bg-accent/5 blur-[100px] rounded-full group-hover:bg-accent/10 transition-colors duration-1000"></div>
-
-        {/* The Browser Window Container */}
         <div className="relative w-[95%] h-[95%] rounded-xl border border-white/10 bg-black/40 backdrop-blur-2xl shadow-[0_20px_60px_-15px_var(--color-accent)] transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] transform group-hover:[transform:rotateX(4deg)_rotateY(-6deg)_scale(1.02)] group-hover:shadow-[30px_50px_100px_-20px_var(--color-accent)] overflow-hidden flex flex-col">
-          
-          {/* Browser Top Bar */}
-          <div className="flex items-center gap-2 px-4 py-3 bg-white/5 border-b border-white/10 shrink-0 backdrop-blur-md">
-            <div className="flex gap-1.5">
-              <div className="w-3 h-3 rounded-full bg-red-500/80 shadow-[0_0_10px_rgba(239,68,68,0.5)]"></div>
-              <div className="w-3 h-3 rounded-full bg-yellow-500/80 shadow-[0_0_10px_rgba(234,179,8,0.5)]"></div>
-              <div className="w-3 h-3 rounded-full bg-green-500/80 shadow-[0_0_10px_rgba(34,197,94,0.5)]"></div>
-            </div>
-            <div className="mx-auto px-6 py-1 rounded-md bg-black/40 border border-white/5 text-[0.65rem] mono text-white/50 flex items-center gap-2 shadow-inner">
-              <span className="text-accent opacity-70">🔒</span> seooptimiz.com
-            </div>
-            <div className="w-12"></div> {/* Spacer for centering */}
-          </div>
-
-          {/* Browser Content (The Slideshow) */}
-          <div className="relative flex-1 bg-bg-deep overflow-hidden">
-             <SlideshowImage 
-               images={[
-                 '/images/seo-optimiz/6.png', 
-                 '/images/seo-optimiz/1.png', 
-                 '/images/seo-optimiz/2.png',
-                 '/images/seo-optimiz/3.png',
-                 '/images/seo-optimiz/4.png',
-                 '/images/seo-optimiz/5.png'
-               ]} 
-               interval={3500} 
-             />
-          </div>
+          ...
         </div>
-        
-        {/* Ambient floor shadow */}
-        <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-[70%] h-8 bg-accent/30 blur-[40px] transition-all duration-1000 group-hover:w-[85%] group-hover:opacity-80 opacity-40 rounded-[100%] pointer-events-none"></div>
       </div>
+      */}
 
       {/* Legacy Bento Grid (Commented out for fallback) */}
       {/* 
