@@ -160,13 +160,13 @@ export default function Projects() {
                 '--card-shadow': isVoice ? 'rgba(255,255,255,0.2)' : 'rgba(255,122,0,0.3)'
               } as React.CSSProperties}
             >
-              {/* Background Ambient Glow */}
-              <div className="absolute inset-0 opacity-[0.15] group-hover/project:opacity-[0.4] transition-opacity duration-700 pointer-events-none" 
+              {/* Background Ambient Glow (Intensified) */}
+              <div className="absolute inset-0 opacity-[0.25] group-hover/project:opacity-[0.7] transition-opacity duration-700 pointer-events-none mix-blend-screen" 
                    style={{ background: `radial-gradient(circle at 80% 50%, var(--card-accent), transparent 70%)` }} />
                    
-              {/* Extra intense hover glow from top left */}
-              <div className="absolute inset-0 opacity-0 group-hover/project:opacity-[0.15] transition-opacity duration-700 pointer-events-none mix-blend-screen" 
-                   style={{ background: `radial-gradient(circle at 0% 0%, var(--card-accent), transparent 50%)` }} />
+              {/* Extra intense hovering fiery glow from top left */}
+              <div className="absolute inset-0 opacity-0 group-hover/project:opacity-[0.5] transition-opacity duration-700 pointer-events-none mix-blend-screen animate-pulse" 
+                   style={{ background: `radial-gradient(circle at 10% 20%, var(--card-accent), transparent 50%)` }} />
                    
               {/* Project Visual Area */}
               <div className="relative w-full md:w-5/12 aspect-[16/10] rounded-2xl border border-line-soft bg-bg-deep overflow-hidden flex items-center justify-center">
@@ -180,14 +180,17 @@ export default function Projects() {
               </div>
 
               {/* Project Content Area */}
-              <div className="flex flex-col flex-1 justify-center relative z-10">
+              <div className="flex flex-col flex-1 justify-center relative z-20 transition-transform duration-500 group-hover/project:scale-[1.02] group-hover/project:-translate-y-1">
                 <div className="flex items-center gap-3 mb-4">
-                  <span className="w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--card-accent)', boxShadow: '0 0 10px var(--card-accent)' }} aria-hidden />
+                  <span className="w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--card-accent)', boxShadow: '0 0 15px var(--card-accent)' }} aria-hidden />
                   <span className="mono text-[0.65rem] text-ink-3 tracking-[0.2em] uppercase">{project.context}</span>
                 </div>
                 
-                <h3 className="text-ink text-3xl font-heading font-semibold tracking-tight mb-4 group-hover/project:text-[var(--card-accent)] transition-colors duration-300">
-                  {project.title}
+                <h3 
+                  className="text-ink text-3xl font-heading font-semibold tracking-tight mb-4 group-hover/project:text-[var(--card-accent)] transition-all duration-500"
+                  style={{ textShadow: '0 0 0 transparent' }}
+                >
+                  <span className="group-hover/project:drop-shadow-[0_0_25px_var(--card-accent)] transition-all duration-500 inline-block">{project.title}</span>
                 </h3>
                 
                 <p className="text-ink-2 text-base leading-relaxed mb-8 max-w-xl">
@@ -204,9 +207,9 @@ export default function Projects() {
                   ))}
                 </div>
 
-                <div className="mt-auto flex items-center gap-2 text-[var(--card-accent)] text-sm font-medium tracking-wide">
+                <div className="mt-auto flex items-center gap-2 text-[var(--card-accent)] text-sm font-medium tracking-wide group-hover/project:drop-shadow-[0_0_15px_var(--card-accent)] transition-all duration-500 group-hover/project:translate-x-1">
                   View case study
-                  <ArrowIcon className="transition-transform duration-300 group-hover/project:translate-x-2" />
+                  <ArrowIcon className="transition-transform duration-300 group-hover/project:translate-x-2 drop-shadow-[0_0_10px_var(--card-accent)]" />
                 </div>
               </div>
             </a>
