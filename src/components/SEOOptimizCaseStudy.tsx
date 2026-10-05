@@ -1,8 +1,37 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ArchitectureDiagram, { type NodeDef, type EdgeDef } from './ArchitectureDiagram';
 import ProcessTimeline from './ProcessTimeline';
 import Beat from './casestudy/Beat';
 import type { Project } from '../data/profile';
+
+const SlideshowImage = ({ images, interval = 4000 }: { images: string[], interval?: number }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % images.length);
+    }, interval);
+    return () => clearInterval(timer);
+  }, [images.length, interval]);
+
+  return (
+    <>
+      {images.map((src, idx) => (
+        <img 
+          key={src}
+          src={src} 
+          alt={`Screenshot ${idx + 1}`} 
+          className={`absolute inset-0 w-full h-full object-contain p-4 transition-all duration-1000 ${
+            idx === currentIndex 
+              ? 'opacity-80 group-hover:opacity-100 z-10 group-hover:scale-[1.03]' 
+              : 'opacity-0 z-0 scale-[0.97]'
+          }`} 
+        />
+      ))}
+    </>
+  );
+};
+
 
 /**
  * SEOOptimiz's case study — same shape and quality bar as the Voice AI
@@ -157,10 +186,9 @@ export default function SEOOptimizCaseStudy({ project }: { project: Project }) {
         
         {/* Main Dashboard - Spans 2 cols, 2 rows */}
         <div className="md:col-span-2 md:row-span-2 group relative rounded-sm border-2 border-line-soft bg-bg-deep overflow-hidden transition-all duration-300 hover:border-accent shadow-[4px_4px_0_var(--color-line-soft)] hover:shadow-[8px_8px_0_var(--color-accent)] hover:-translate-y-1 hover:-translate-x-1">
-           <img src="/images/seo-optimiz/1.png" alt="SEOOptimiz Dashboard" className="absolute inset-0 w-full h-full object-cover object-top opacity-80 group-hover:opacity-100 transition-transform duration-700 group-hover:scale-105" onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextElementSibling?.classList.remove('hidden') }} />
+           <SlideshowImage images={['/images/seo-optimiz/6.png', '/images/seo-optimiz/1.png']} interval={5000} />
            <div className="hidden absolute inset-0 flex flex-col items-center justify-center border border-dashed border-accent/30 bg-[linear-gradient(45deg,rgba(158,59,255,0.03)_25%,transparent_25%,transparent_50%,rgba(158,59,255,0.03)_50%,rgba(158,59,255,0.03)_75%,transparent_75%,transparent)] bg-[length:24px_24px] p-6 text-center">
              <span className="mono text-accent mb-2 text-sm animate-pulse">[ MAIN DASHBOARD ]</span>
-             <p className="text-ink-3 text-xs">Add <code className="text-accent bg-surface px-1 py-0.5 rounded">public/images/seo-optimiz/1.png</code></p>
            </div>
            {/* Overlay Gradient */}
            <div className="absolute inset-0 bg-gradient-to-t from-bg-deep via-transparent to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-300 pointer-events-none"></div>
@@ -172,10 +200,9 @@ export default function SEOOptimizCaseStudy({ project }: { project: Project }) {
 
         {/* Feature Close-up 1 - 1 col, 1 row */}
         <div className="relative group rounded-sm border-2 border-line-soft bg-bg-deep overflow-hidden transition-all duration-300 hover:border-accent-2 shadow-[4px_4px_0_var(--color-line-soft)] hover:shadow-[8px_8px_0_var(--color-accent-2)] hover:-translate-y-1 hover:-translate-x-1">
-           <img src="/images/seo-optimiz/2.png" alt="SEOOptimiz Scoring Dial" className="absolute inset-0 w-full h-full object-cover object-center opacity-80 group-hover:opacity-100 transition-transform duration-700 group-hover:scale-110" onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextElementSibling?.classList.remove('hidden') }} />
+           <SlideshowImage images={['/images/seo-optimiz/2.png', '/images/seo-optimiz/4.png']} interval={4000} />
            <div className="hidden absolute inset-0 flex flex-col items-center justify-center border border-dashed border-accent-2/30 bg-[linear-gradient(45deg,rgba(255,122,0,0.03)_25%,transparent_25%,transparent_50%,rgba(255,122,0,0.03)_50%,rgba(255,122,0,0.03)_75%,transparent_75%,transparent)] bg-[length:24px_24px] p-4 text-center">
              <span className="mono text-accent-2 mb-1 text-xs">[ SCORING DIAL ]</span>
-             <p className="text-ink-3 text-[10px]">Add <code className="text-accent-2 bg-surface px-1 py-0.5 rounded">public/images/seo-optimiz/2.png</code></p>
            </div>
            <div className="absolute inset-0 bg-gradient-to-t from-bg-deep/90 via-transparent to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-300 pointer-events-none"></div>
            <div className="absolute bottom-4 left-4 flex flex-col gap-0.5 pointer-events-none">
@@ -186,10 +213,9 @@ export default function SEOOptimizCaseStudy({ project }: { project: Project }) {
 
         {/* Feature Close-up 2 - 1 col, 1 row */}
         <div className="relative group rounded-sm border-2 border-line-soft bg-bg-deep overflow-hidden transition-all duration-300 hover:border-danger shadow-[4px_4px_0_var(--color-line-soft)] hover:shadow-[8px_8px_0_var(--color-danger)] hover:-translate-y-1 hover:-translate-x-1">
-           <img src="/images/seo-optimiz/3.png" alt="SEOOptimiz Issue List" className="absolute inset-0 w-full h-full object-cover object-center opacity-80 group-hover:opacity-100 transition-transform duration-700 group-hover:scale-110" onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextElementSibling?.classList.remove('hidden') }} />
+           <SlideshowImage images={['/images/seo-optimiz/3.png', '/images/seo-optimiz/5.png']} interval={4500} />
            <div className="hidden absolute inset-0 flex flex-col items-center justify-center border border-dashed border-danger/30 bg-[linear-gradient(45deg,rgba(255,60,60,0.03)_25%,transparent_25%,transparent_50%,rgba(255,60,60,0.03)_50%,rgba(255,60,60,0.03)_75%,transparent_75%,transparent)] bg-[length:24px_24px] p-4 text-center">
              <span className="mono text-danger mb-1 text-xs">[ ISSUE LIST ]</span>
-             <p className="text-ink-3 text-[10px]">Add <code className="text-danger bg-surface px-1 py-0.5 rounded">public/images/seo-optimiz/3.png</code></p>
            </div>
            <div className="absolute inset-0 bg-gradient-to-t from-bg-deep/90 via-transparent to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-300 pointer-events-none"></div>
            <div className="absolute bottom-4 left-4 flex flex-col gap-0.5 pointer-events-none">
