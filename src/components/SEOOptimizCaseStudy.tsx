@@ -1,8 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
+import { useState, useRef } from 'react';
 import ArchitectureDiagram, { type NodeDef, type EdgeDef } from './ArchitectureDiagram';
 import ProcessTimeline from './ProcessTimeline';
 import Beat from './casestudy/Beat';
@@ -38,94 +34,94 @@ const SlideshowImage = ({ images, interval = 4000 }: { images: string[], interva
 };
 */
 
-const ScrollDeckGallery = ({ images }: { images: string[] }) => {
+
+
+const SpotlightGallery = ({ images }: { images: string[] }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const pinRef = useRef<HTMLDivElement>(null);
-  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
-  useEffect(() => {
-    if (!containerRef.current || !pinRef.current) return;
-    
-    const ctx = gsap.context(() => {
-      // Set initial positions
-      cardsRef.current.forEach((card, index) => {
-        if (!card) return;
-        gsap.set(card, {
-          zIndex: images.length - index,
-          y: index * 20, // Stacked downwards
-          scale: 1 - index * 0.05,
-          opacity: 1 - index * 0.15
-        });
-      });
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    containerRef.current.style.setProperty('--mouse-x', `${x}px`);
+    containerRef.current.style.setProperty('--mouse-y', `${y}px`);
+  };
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: 'top 15%', // Start pinning near top of viewport
-          end: `+=${images.length * 70}%`, // Scroll duration based on deck size
-          pin: pinRef.current,
-          scrub: 1, // Smooth scrub
-        }
-      });
+  const renderGrid = (isMasked: boolean) => (
+    <div className={`grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-[180px] md:auto-rows-[250px] w-full ${isMasked ? '' : 'opacity-20 grayscale brightness-50 contrast-125'}`}>
+      {/* 1 - Main Dashboard (Spans 2 cols, 2 rows) */}
+      <div className="md:col-span-2 md:row-span-2 relative rounded-xl border border-white/5 bg-[#050505] flex items-center justify-center p-6 overflow-hidden shadow-2xl">
+        {isMasked && <div className="absolute inset-0 bg-accent/10"></div>}
+        <img src={images[0]} className="relative z-10 w-full h-full object-contain" alt="" />
+      </div>
 
-      // Animate each card swiping away as we scroll
-      images.slice(0, -1).forEach((_, index) => {
-        const card = cardsRef.current[index];
-        const remainingCards = cardsRef.current.slice(index + 1);
-        
-        if (!card) return;
+      {/* 2 - Feature 1 */}
+      <div className="relative rounded-xl border border-white/5 bg-[#050505] flex items-center justify-center p-4 overflow-hidden shadow-xl">
+        {isMasked && <div className="absolute inset-0 bg-accent/10"></div>}
+        <img src={images[1]} className="relative z-10 w-full h-full object-contain" alt="" />
+      </div>
 
-        // Card swipes up and left like a reel/tinder card
-        tl.to(card, {
-          y: '-120%',
-          x: '-10%',
-          rotation: -10,
-          opacity: 0,
-          scale: 1.05,
-          duration: 1,
-          ease: 'power1.inOut'
-        }, `swipe${index}`);
+      {/* 3 - Feature 2 */}
+      <div className="relative rounded-xl border border-white/5 bg-[#050505] flex items-center justify-center p-4 overflow-hidden shadow-xl">
+        {isMasked && <div className="absolute inset-0 bg-accent/10"></div>}
+        <img src={images[2]} className="relative z-10 w-full h-full object-contain" alt="" />
+      </div>
 
-        // Remaining cards move up in the stack
-        remainingCards.forEach((remCard, i) => {
-          if (!remCard) return;
-          tl.to(remCard, {
-            y: i * 20,
-            scale: 1 - i * 0.05,
-            opacity: 1 - i * 0.15,
-            duration: 1,
-            ease: 'power1.inOut'
-          }, `swipe${index}`);
-        });
-      });
-    }, containerRef);
+      {/* 4 - Feature 3 */}
+      <div className="relative rounded-xl border border-white/5 bg-[#050505] flex items-center justify-center p-4 overflow-hidden shadow-xl">
+        {isMasked && <div className="absolute inset-0 bg-accent/10"></div>}
+        <img src={images[3]} className="relative z-10 w-full h-full object-contain" alt="" />
+      </div>
 
-    return () => ctx.revert();
-  }, [images]);
+      {/* 5 - Feature 4 */}
+      <div className="relative rounded-xl border border-white/5 bg-[#050505] flex items-center justify-center p-4 overflow-hidden shadow-xl">
+        {isMasked && <div className="absolute inset-0 bg-accent/10"></div>}
+        <img src={images[4]} className="relative z-10 w-full h-full object-contain" alt="" />
+      </div>
+
+      {/* 6 - Feature 5 */}
+      <div className="relative rounded-xl border border-white/5 bg-[#050505] flex items-center justify-center p-4 overflow-hidden shadow-xl">
+        {isMasked && <div className="absolute inset-0 bg-accent/10"></div>}
+        <img src={images[5]} className="relative z-10 w-full h-full object-contain" alt="" />
+      </div>
+    </div>
+  );
 
   return (
-    <div ref={containerRef} className="w-full relative z-10 mb-32 mt-20">
-      <div ref={pinRef} className="relative w-full aspect-[4/3] sm:aspect-[16/10] md:aspect-[16/9] mx-auto group">
-        {images.map((src, index) => (
-          <div 
-            key={src}
-            ref={el => cardsRef.current[index] = el}
-            className="absolute inset-0 rounded-2xl bg-[#050505] overflow-hidden flex items-center justify-center border border-white/5 shadow-[0_30px_80px_-15px_var(--color-accent)] origin-bottom"
-          >
-             {/* Orange glow on the sides only, per user request */}
-             <div className="absolute inset-y-0 -left-16 w-64 bg-accent/20 blur-[60px] opacity-90 pointer-events-none"></div>
-             <div className="absolute inset-y-0 -right-16 w-64 bg-accent/20 blur-[60px] opacity-90 pointer-events-none"></div>
-             
-             {/* The actual image */}
-             <img src={src} className="relative z-10 w-full h-full object-contain p-4 sm:p-8 drop-shadow-2xl" alt={`Screenshot ${index + 1}`} />
-          </div>
-        ))}
-        
-        {/* Scroll indicator overlay */}
-        <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-60">
-          <span className="text-accent text-[0.65rem] mono tracking-[0.2em] uppercase font-bold animate-pulse">Scroll to swipe</span>
-          <div className="w-[1px] h-8 bg-gradient-to-b from-accent to-transparent"></div>
-        </div>
+    <div 
+      ref={containerRef}
+      className="mb-32 mt-16 relative w-full z-10 group cursor-crosshair"
+      onMouseMove={handleMouseMove}
+      style={{ '--mouse-x': '50%', '--mouse-y': '50%' } as React.CSSProperties}
+    >
+      {/* Base Layer: Dimmed, grayscale */}
+      {renderGrid(false)}
+
+      {/* Spotlight Layer: Full color, masked by cursor */}
+      <div 
+        className="absolute inset-0 z-20 pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+        style={{
+          WebkitMaskImage: 'radial-gradient(500px circle at var(--mouse-x) var(--mouse-y), black 10%, transparent 100%)',
+          maskImage: 'radial-gradient(500px circle at var(--mouse-x) var(--mouse-y), black 10%, transparent 100%)'
+        }}
+      >
+        {renderGrid(true)}
+      </div>
+
+      {/* Decorative center glow for X-Ray */}
+      <div 
+        className="absolute inset-0 z-10 pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+        style={{
+          background: 'radial-gradient(300px circle at var(--mouse-x) var(--mouse-y), var(--color-accent) 0%, transparent 100%)',
+          mixBlendMode: 'screen',
+          opacity: 0.15
+        }}
+      ></div>
+
+      {/* Interactive instruction */}
+      <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 opacity-60 group-hover:opacity-0 transition-opacity duration-500 text-center">
+        <span className="text-accent text-[0.65rem] mono tracking-[0.2em] uppercase font-bold animate-pulse">Hover to reveal X-Ray</span>
       </div>
     </div>
   );
@@ -281,7 +277,20 @@ export default function SEOOptimizCaseStudy({ project }: { project: Project }) {
         '--color-line-soft': 'color-mix(in oklch, var(--accent) 15%, #050505)'
       } as React.CSSProperties}
     >
-      {/* 00 — Scroll Deck Gallery */}
+      {/* 00 — Spotlight X-Ray Gallery */}
+      <SpotlightGallery 
+        images={[
+          '/images/seo-optimiz/6.png', 
+          '/images/seo-optimiz/1.png', 
+          '/images/seo-optimiz/2.png',
+          '/images/seo-optimiz/3.png',
+          '/images/seo-optimiz/4.png',
+          '/images/seo-optimiz/5.png'
+        ]} 
+      />
+
+      {/* Legacy Scroll Deck Gallery (Commented out for fallback) */}
+      {/* 
       <ScrollDeckGallery 
         images={[
           '/images/seo-optimiz/6.png', 
@@ -292,6 +301,7 @@ export default function SEOOptimizCaseStudy({ project }: { project: Project }) {
           '/images/seo-optimiz/5.png'
         ]} 
       />
+      */}
 
       {/* Legacy 3D Mockup (Commented out for fallback) */}
       {/* 
