@@ -28,16 +28,20 @@ export default function Projects() {
               key={project.slug}
               href={`/work/${project.slug}`}
               onClick={(e) => handleProjectClick(e, project.slug)}
-              className="group/project relative w-full flex flex-col md:flex-row gap-8 rounded-3xl border border-line-soft bg-surface/20 p-6 md:p-10 transition-all duration-500 hover:-translate-y-2 hover:border-[var(--card-accent)] shadow-[0_10px_40px_-10px_var(--card-shadow)] hover:shadow-[0_20px_80px_-10px_var(--card-shadow)] overflow-hidden z-10 hover:z-20"
+              className="group/project relative w-full flex flex-col md:flex-row gap-8 rounded-3xl border border-[var(--card-accent)] bg-surface/20 p-6 md:p-10 transition-all duration-500 hover:-translate-y-2 shadow-[0_10px_40px_-10px_var(--card-shadow)] hover:shadow-[0_20px_80px_-5px_var(--card-shadow)] overflow-hidden z-10 hover:z-20"
               style={{ 
                 '--reveal-delay': `${i * 100}ms`,
                 '--card-accent': isVoice ? 'oklch(0.95 0 0)' : 'oklch(0.70 0.20 45)',
-                '--card-shadow': isVoice ? 'rgba(255,255,255,0.15)' : 'rgba(255,122,0,0.25)'
+                '--card-shadow': isVoice ? 'rgba(255,255,255,0.2)' : 'rgba(255,122,0,0.3)'
               } as React.CSSProperties}
             >
               {/* Background Ambient Glow */}
-              <div className="absolute inset-0 opacity-[0.05] group-hover/project:opacity-30 transition-opacity duration-700 pointer-events-none" 
-                   style={{ background: `radial-gradient(circle at 80% 50%, var(--card-accent), transparent 60%)` }} />
+              <div className="absolute inset-0 opacity-[0.15] group-hover/project:opacity-[0.4] transition-opacity duration-700 pointer-events-none" 
+                   style={{ background: `radial-gradient(circle at 80% 50%, var(--card-accent), transparent 70%)` }} />
+                   
+              {/* Extra intense hover glow from top left */}
+              <div className="absolute inset-0 opacity-0 group-hover/project:opacity-[0.15] transition-opacity duration-700 pointer-events-none mix-blend-screen" 
+                   style={{ background: `radial-gradient(circle at 0% 0%, var(--card-accent), transparent 50%)` }} />
                    
               {/* Project Visual Area */}
               <div className="relative w-full md:w-5/12 aspect-[16/10] rounded-2xl border border-line-soft bg-bg-deep overflow-hidden flex items-center justify-center">
