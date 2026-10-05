@@ -3,6 +3,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Section from './Section';
 import { experience } from '../data/profile';
+import StarsBackground from './StarsBackground';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -154,8 +155,13 @@ function ExperienceEntry({ job }: { job: (typeof experience)[number] }) {
   }, []);
 
   return (
-    <article ref={articleRef} className="border-line-soft border-t pt-10" data-reveal>
-      <header className="group/dashboard bg-bg-deep rounded-sm border-2 border-line-soft shadow-[8px_8px_0_var(--color-accent-2)] overflow-hidden relative transition-all duration-300 hover:border-accent-2 hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-[4px_4px_0_var(--color-accent-2)]">
+    <article ref={articleRef} className="border-line-soft border-t pt-10 relative overflow-hidden" data-reveal>
+      {/* Toned down StarsBackground specifically for this section */}
+      <div className="absolute inset-0 opacity-[0.15] mix-blend-screen pointer-events-none z-0">
+        <StarsBackground intensity="low" />
+      </div>
+
+      <header className="group/dashboard bg-bg-deep rounded-sm border-2 border-line-soft shadow-[8px_8px_0_var(--color-accent-2)] overflow-hidden relative transition-all duration-300 hover:border-accent-2 hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-[4px_4px_0_var(--color-accent-2)] z-10">
         {/* Dashboard Top Bar */}
         <div className="bg-surface/50 border-b border-line-soft px-6 py-3 flex items-center gap-2 relative z-20">
           <div className="w-2.5 h-2.5 rounded-full bg-danger"></div>

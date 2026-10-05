@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useExploration } from '../contexts/ExplorationContext';
 
-export default function StarsBackground() {
+export default function StarsBackground({ intensity = 'normal' }: { intensity?: 'normal' | 'low' }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { unlockMilestone, percentage } = useExploration();
 
@@ -39,7 +39,7 @@ export default function StarsBackground() {
 
     // Initial stars setup
     const stars: { x: number; y: number; size: number; alpha: number; delta: number; color: string; baseY: number; phase: number }[] = [];
-    const numStars = 400; // Balanced density (between 200 and 800)
+    const numStars = intensity === 'low' ? 150 : 400; // Tone down for sections like Experience
 
     for (let i = 0; i < numStars; i++) {
       const isPurple = Math.random() > 0.8;
@@ -78,10 +78,17 @@ export default function StarsBackground() {
         ctx.fill();
       }
 
-      // Maintain up to 4 active shooting stars (or 40 for Mastery Meteor Shower!)
+      // Maintain active shooting stars
       const currentPercentage = percentageRef.current;
-      const maxShootingStars = currentPercentage === 100 ? 40 : 4;
-      const spawnChance = currentPercentage === 100 ? 0.3 : 0.08;
+      
+      const maxShootingStars = currentPercentage === 100 
+        ? (intensity === 'low' ? 15 : 40) 
+        : (intensity === 'low' ? 1 : 4);
+        
+      const spawnChance = currentPercentage === 100 
+        ? (intensity === 'low' ? 0.1 : 0.3) 
+        : (intensity === 'low' ? 0.02 : 0.08);
+        
       if (shootingStars.length < maxShootingStars && Math.random() < spawnChance) { 
         // Spawn them just slightly off-screen or on the top/right edges so they are visible immediately
         const startX = Math.random() * (width * 1.2); 
