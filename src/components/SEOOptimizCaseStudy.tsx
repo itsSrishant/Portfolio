@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -6,6 +6,7 @@ gsap.registerPlugin(ScrollTrigger);
 import ArchitectureDiagram, { type NodeDef, type EdgeDef } from './ArchitectureDiagram';
 import ProcessTimeline from './ProcessTimeline';
 import Beat from './casestudy/Beat';
+import ThreeHallwayGallery from './ThreeHallwayGallery';
 import type { Project } from '../data/profile';
 
 /* 
@@ -40,169 +41,7 @@ const SlideshowImage = ({ images, interval = 4000 }: { images: string[], interva
 
 
 
-const HallwayGallery = ({ images }: { images: string[] }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const sceneRef = useRef<HTMLDivElement>(null);
-  const bgRef = useRef<HTMLImageElement>(null);
-  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
-  useEffect(() => {
-    if (!containerRef.current || !sceneRef.current) return;
-    
-    const ctx = gsap.context(() => {
-      // Initialize card positions on the wall
-      images.forEach((_, index) => {
-        const isLeft = index % 2 === 0;
-        const zPos = -(index * 2000) - 1000;
-        const xPos = isLeft ? -700 : 700;
-        const rotY = isLeft ? 35 : -35;
-        
-        gsap.set(cardsRef.current[index], {
-          z: zPos,
-          x: xPos,
-          rotationY: rotY,
-          scale: 1,
-          opacity: 0.2
-        });
-      });
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: 'top top',
-          end: `+=${images.length * 1000}`, // Much shorter scroll for faster pacing
-          pin: true,
-          scrub: 1,
-        }
-      });
-
-      images.forEach((_, i) => {
-        const targetSceneZ = (i * 2000) + 1000;
-        const card = cardsRef.current[i];
-        if (!card) return;
-        
-        // 1. Move camera down the hallway towards the card
-        tl.to(sceneRef.current, {
-          z: targetSceneZ,
-          duration: 1500,
-          ease: 'power1.inOut'
-        });
-
-        // 2. As we arrive, pull the card off the wall to face the camera and SCALE it up
-        tl.to(card, {
-          x: 0,          
-          rotationY: 0,  
-          scale: 1.25,   // Make it massive and easy to read
-          opacity: 1,
-          duration: 1000,
-          ease: 'back.out(1.2)'
-        }, '-=500'); 
-
-        // 3. Illuminate the card with the golden spotlight
-        const spotlight = card.querySelector('.spotlight-layer');
-        if (spotlight) {
-          tl.to(spotlight, {
-            opacity: 1,
-            duration: 600,
-          }, '<'); 
-        }
-
-        // 4. Hold it on screen for the user to read
-        tl.to({}, { duration: 1000 });
-
-        // 5. Push it up and fade it out as we prepare to move to the next frame
-        tl.to(card, {
-          y: -800,
-          opacity: 0,
-          scale: 0.5,
-          duration: 800,
-          ease: 'power2.in'
-        });
-      });
-
-      // Scale up the background image slowly over the ENTIRE timeline duration
-      // to create a "walking forward" parallax illusion
-      if (bgRef.current) {
-        tl.to(bgRef.current, {
-          scale: 2.5,
-          ease: 'none',
-          duration: tl.duration() // stretches across the entire scroll
-        }, 0);
-      }
-      
-    }, containerRef);
-
-    return () => ctx.revert();
-  }, [images.length]);
-
-  return (
-    <div ref={containerRef} className="w-full h-screen bg-[#020202] overflow-hidden relative z-10 -mx-4 md:-mx-12 px-4 md:px-12">
-      
-      {/* AI Generated Haunted Hallway Background */}
-      <div className="absolute inset-0 z-0 flex items-center justify-center opacity-40 pointer-events-none">
-        <img 
-          ref={bgRef}
-          src="/images/seo-optimiz/haunted_hallway.png" 
-          alt="Haunted Hallway" 
-          className="w-full h-full object-cover origin-center"
-        />
-        {/* Dark vignette to blend edges */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_20%,#020202_100%)]"></div>
-      </div>
-
-      {/* 3D Scene */}
-      <div className="w-full h-full relative flex items-center justify-center z-10" style={{ perspective: '1000px' }}>
-        
-        <div ref={sceneRef} className="absolute inset-0" style={{ transformStyle: 'preserve-3d', transform: 'translateZ(0px)' }}>
-
-          {/* Cards along the hallway */}
-          {images.map((src, index) => {
-            const isLeft = index % 2 === 0;
-            return (
-              <div 
-                key={src}
-                ref={el => cardsRef.current[index] = el}
-                className="absolute top-1/2 left-1/2 w-full max-w-[900px] aspect-[16/10] -mt-[25%] md:-mt-[281px] -ml-[50%] md:-ml-[450px]"
-                style={{ transformStyle: 'preserve-3d' }}
-              >
-                <div className="card-container relative w-full h-full rounded-xl border border-[#FFA032]/20 bg-[#0a0a0c] shadow-[0_0_80px_-20px_rgba(255,160,50,0.3)] overflow-hidden">
-                  
-                  {/* Dimmed Background (On the wall) */}
-                  <div className="absolute inset-0 grayscale-[0.8] brightness-50 sepia-[0.3]">
-                     <img src={src} className="w-full h-full object-contain p-4 md:p-8" alt="" />
-                  </div>
-                  
-                  {/* Spotlight Layer (Revealed when card is centered) */}
-                  <div className="spotlight-layer absolute inset-0 z-20 opacity-0 pointer-events-none">
-                    {/* Golden Candlelight Glow */}
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,160,50,0.15)_0%,transparent_70%)] mix-blend-screen"></div>
-                    <div className="absolute inset-0 shadow-[inset_0_0_100px_rgba(255,160,50,0.15)]"></div>
-                    
-                    <img src={src} className="w-full h-full object-contain p-4 md:p-8 drop-shadow-[0_0_30px_rgba(255,160,50,0.4)]" alt="" />
-                  </div>
-
-                </div>
-
-                {/* Fake Wall Sconce / Candle Glow (Stays on the wall next to the frame) */}
-                <div 
-                  className="absolute top-1/2 w-32 h-32 bg-[#FFA032] rounded-full blur-[100px] opacity-20 -z-10"
-                  style={{ [isLeft ? 'left' : 'right']: '-150px', transform: 'translateY(-50%)' }}
-                ></div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* UI Overlay */}
-      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 text-center pointer-events-none z-40">
-        <span className="text-[#FFA032] text-[0.65rem] md:text-sm mono tracking-[0.2em] uppercase font-bold animate-pulse">Walk the Hallway</span>
-        <p className="text-[#FFA032]/60 text-xs mt-2 max-w-[200px] md:max-w-none mx-auto">Scroll to step forward and examine each frame.</p>
-        <div className="w-[1px] h-12 bg-gradient-to-b from-[#FFA032] to-transparent mx-auto mt-4"></div>
-      </div>
-    </div>
-  );
-};
 
 
 
@@ -354,8 +193,8 @@ export default function SEOOptimizCaseStudy({ project }: { project: Project }) {
         '--color-line-soft': 'color-mix(in oklch, var(--accent) 15%, #050505)'
       } as React.CSSProperties}
     >
-      {/* 00 — 3D Torchlight Hallway Gallery */}
-      <HallwayGallery 
+      {/* 00 — True 3D Three.js Hallway Gallery */}
+      <ThreeHallwayGallery 
         images={[
           '/images/seo-optimiz/6.png', 
           '/images/seo-optimiz/1.png', 
