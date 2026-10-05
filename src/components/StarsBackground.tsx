@@ -39,7 +39,7 @@ export default function StarsBackground({ intensity = 'normal' }: { intensity?: 
 
     // Initial stars setup
     const stars: { x: number; y: number; size: number; alpha: number; delta: number; color: string; baseY: number; phase: number }[] = [];
-    const numStars = intensity === 'low' ? 150 : 400; // Tone down for sections like Experience
+    const numStars = intensity === 'low' ? 250 : 400; // Bumped up from 150
 
     for (let i = 0; i < numStars; i++) {
       const isPurple = Math.random() > 0.8;
@@ -82,12 +82,12 @@ export default function StarsBackground({ intensity = 'normal' }: { intensity?: 
       const currentPercentage = percentageRef.current;
       
       const maxShootingStars = currentPercentage === 100 
-        ? (intensity === 'low' ? 15 : 40) 
-        : (intensity === 'low' ? 1 : 4);
+        ? (intensity === 'low' ? 25 : 40) 
+        : (intensity === 'low' ? 2 : 4);
         
       const spawnChance = currentPercentage === 100 
-        ? (intensity === 'low' ? 0.1 : 0.3) 
-        : (intensity === 'low' ? 0.02 : 0.08);
+        ? (intensity === 'low' ? 0.2 : 0.3) 
+        : (intensity === 'low' ? 0.05 : 0.08);
         
       if (shootingStars.length < maxShootingStars && Math.random() < spawnChance) { 
         // Spawn them just slightly off-screen or on the top/right edges so they are visible immediately
