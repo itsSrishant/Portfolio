@@ -45,7 +45,7 @@ export default function WorkDetail() {
         style={{ background: `radial-gradient(circle at 50% 20%, var(--theme-color), transparent 60%)` }}
       />
       <div 
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] pointer-events-none mix-blend-screen opacity-[0.4] z-[-1]"
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-full md:w-[800px] h-[400px] pointer-events-none mix-blend-screen opacity-[0.4] z-[-1]"
         style={{ background: `radial-gradient(ellipse at 50% 10%, var(--theme-color), transparent 70%)` }}
       />
 
@@ -57,7 +57,7 @@ export default function WorkDetail() {
 
         <div className="mt-8 group" data-reveal>
           <h1
-            className="font-semibold tracking-[-0.028em] text-white transition-all duration-700 hover:-translate-y-2"
+            className="font-semibold tracking-[-0.028em] text-white transition-all duration-700 md:hover:-translate-y-2"
             style={{ 
               fontSize: 'clamp(2rem, 4.4vw, 3.25rem)',
               textShadow: '0 0 40px var(--theme-color), 0 0 80px var(--theme-color)' 

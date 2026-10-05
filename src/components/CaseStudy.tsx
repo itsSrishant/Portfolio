@@ -206,7 +206,7 @@ function AudioWaveform() {
   return (
     <div
       ref={ref}
-      className="mt-12 flex h-32 w-full items-center justify-center gap-1.5 rounded-2xl border border-line-soft bg-bg-deep p-8 shadow-inner"
+      className="mt-12 flex h-32 w-full items-center justify-center gap-1 sm:gap-1.5 rounded-2xl border border-line-soft bg-bg-deep p-4 sm:p-8 shadow-inner overflow-hidden"
     >
       {Array.from({ length: 48 }).map((_, i) => {
         // Create a realistic-looking waveform shape using a sine wave envelope
@@ -218,7 +218,7 @@ function AudioWaveform() {
         return (
           <div
             key={i}
-            className="w-1.5 rounded-full bg-accent transition-all duration-300 ease-out"
+            className="w-1 sm:w-1.5 shrink-0 rounded-full bg-accent transition-all duration-300 ease-out"
             style={{
               height: `${height}%`,
               opacity: inView ? Math.random() * 0.5 + 0.5 : 0.2,
