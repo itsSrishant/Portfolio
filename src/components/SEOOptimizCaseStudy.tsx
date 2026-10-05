@@ -16,18 +16,31 @@ const SlideshowImage = ({ images, interval = 4000 }: { images: string[], interva
 
   return (
     <>
-      {images.map((src, idx) => (
-        <img 
-          key={src}
-          src={src} 
-          alt={`Screenshot ${idx + 1}`} 
-          className={`absolute inset-0 w-full h-full object-contain p-4 transition-all duration-1000 ${
-            idx === currentIndex 
-              ? 'opacity-80 group-hover:opacity-100 z-10 group-hover:scale-[1.03]' 
-              : 'opacity-0 z-0 scale-[0.97]'
-          }`} 
-        />
-      ))}
+      {images.map((src, idx) => {
+        const isActive = idx === currentIndex;
+        return (
+          <div 
+            key={src} 
+            className={`absolute inset-0 transition-opacity duration-1000 ${isActive ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
+          >
+            {/* Blurred background filler to prevent empty letterboxes */}
+            <img 
+              src={src} 
+              alt="" 
+              className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-40 scale-110" 
+              aria-hidden="true"
+            />
+            {/* Actual crisp foreground image */}
+            <img 
+              src={src} 
+              alt={`Screenshot ${idx + 1}`} 
+              className={`absolute inset-0 w-full h-full object-contain p-4 transition-transform duration-1000 ${
+                isActive ? 'group-hover:scale-[1.03]' : 'scale-[0.97]'
+              }`} 
+            />
+          </div>
+        );
+      })}
     </>
   );
 };
