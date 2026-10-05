@@ -50,7 +50,7 @@ export default function ExplorationPanel() {
         </div>
 
         {/* Progress Bar */}
-        <div className="mb-10">
+        <div className="mb-6">
           <div className="flex justify-between items-end mb-3">
             <span className="text-3xl font-heading font-semibold text-white">{percentage}%</span>
             <span className="text-ink-3 text-xs mono tracking-widest">{discoveredCount} / {totalCount} FOUND</span>
@@ -63,18 +63,30 @@ export default function ExplorationPanel() {
           </div>
         </div>
 
+        {/* Intro Description */}
+        <p className="text-ink-2 text-[0.9rem] leading-relaxed mb-8 bg-surface/30 p-4 rounded-xl border border-white/5">
+          This portfolio is a living system. Discover interactive components, hidden features, and unique UI states by exploring the site. 
+          <br/><br/>
+          <span className="text-accent/80 text-xs uppercase mono tracking-widest font-semibold">Tip: Click on any module below to investigate its location.</span>
+        </p>
+
         {/* Milestones List */}
         <div className="flex flex-col gap-4 flex-1">
           {milestones.map((milestone) => {
             const isDiscovered = milestone.discoveredAt !== null;
             
             return (
-              <div 
+              <a 
                 key={milestone.id}
-                className={`relative p-5 rounded-2xl border transition-all duration-500 ${
+                href={milestone.targetPath || '#'}
+                onClick={(e) => {
+                  if (!milestone.targetPath) e.preventDefault();
+                  else setPanelOpen(false); // Close panel when navigating
+                }}
+                className={`relative p-5 rounded-2xl border transition-all duration-500 block ${
                   isDiscovered 
-                    ? 'border-[var(--accent)]/30 bg-[var(--accent)]/5' 
-                    : 'border-white/5 bg-white/5 opacity-60'
+                    ? 'border-[var(--accent)]/30 bg-[var(--accent)]/5 hover:bg-[var(--accent)]/10 hover:border-[var(--accent)]/50 cursor-pointer' 
+                    : milestone.targetPath ? 'border-white/5 bg-white/5 opacity-60 hover:opacity-100 hover:border-white/20 cursor-pointer' : 'border-white/5 bg-white/5 opacity-60'
                 }`}
               >
                 <div className="flex items-start gap-4">
@@ -98,7 +110,7 @@ export default function ExplorationPanel() {
                     </p>
                   </div>
                 </div>
-              </div>
+              </a>
             );
           })}
         </div>

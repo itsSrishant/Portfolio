@@ -16,62 +16,70 @@ export interface Milestone {
   hint: string;
   description: string;
   discoveredAt: number | null;
+  targetPath?: string;
 }
 
 const INITIAL_MILESTONES: Milestone[] = [
   {
     id: 'system_boot',
-    title: 'System Boot',
-    hint: 'Scroll to the deepest layer of the interface.',
-    description: 'You reached the footer and mapped the entire homepage.',
-    discoveredAt: null
+    title: 'Contact Footer',
+    hint: 'Scroll all the way down to the bottom of the homepage.',
+    description: 'You mapped the entire homepage layout.',
+    discoveredAt: null,
+    targetPath: '/#contact'
   },
   {
     id: 'thermal_overload',
-    title: 'Thermal Overload',
-    hint: 'Apply maximum energy to a featured project.',
+    title: 'Featured Projects',
+    hint: 'Hover over a project card on the homepage to unleash its energy.',
     description: 'You triggered the fiery hover state on a project card.',
-    discoveredAt: null
+    discoveredAt: null,
+    targetPath: '/#work'
   },
   {
     id: 'xray_protocol',
-    title: 'X-Ray Protocol',
-    hint: 'Use the spotlight in the SEOOptimiz study.',
+    title: 'SEOOptimiz Case Study',
+    hint: 'Use the Spotlight tool inside the SEOOptimiz project gallery.',
     description: 'You revealed the hidden UI using the X-Ray spotlight.',
-    discoveredAt: null
+    discoveredAt: null,
+    targetPath: '/work/seooptimiz'
   },
   {
     id: 'architectural_analysis',
-    title: 'Architectural Analysis',
-    hint: 'Examine the technical blueprint.',
-    description: 'You highlighted a specific node in the Architecture Diagram.',
-    discoveredAt: null
+    title: 'Voice AI Architecture',
+    hint: 'Hover over the Voice AI architecture diagram nodes to highlight connections.',
+    description: 'You interacted with the technical blueprint.',
+    discoveredAt: null,
+    targetPath: '/work/voice-ai-platform'
   },
   {
     id: 'audio_technician',
-    title: 'Audio Technician',
-    hint: 'Observe the real-time visualization.',
+    title: 'Voice AI Waveform',
+    hint: 'Find and scroll past the real-time audio visualization in the Voice AI project.',
     description: 'You discovered the responsive Audio Waveform.',
-    discoveredAt: null
+    discoveredAt: null,
+    targetPath: '/work/voice-ai-platform'
   },
   {
     id: 'stargazer',
-    title: 'Stargazer',
-    hint: 'Observe the sky for 15 seconds.',
+    title: 'Shooting Stars',
+    hint: 'Stay in the homepage Hero section and watch the sky for 15 seconds.',
     description: 'You watched the multi-colored shooting stars streak by.',
-    discoveredAt: null
+    discoveredAt: null,
+    targetPath: '/#top'
   },
   {
     id: 'source_code',
-    title: 'Source Code Extraction',
-    hint: 'Access the raw data.',
+    title: 'GitHub Links',
+    hint: 'Find and click a GitHub link to access the raw data.',
     description: 'You clicked a GitHub link to view the actual code.',
-    discoveredAt: null
+    discoveredAt: null,
+    targetPath: '/#contact'
   },
   {
     id: 'terminal_hacker',
-    title: 'Terminal Hacker',
-    hint: 'Use the keyboard combination.',
+    title: 'Hidden Terminal',
+    hint: 'Press the backtick ( ` ) key on your keyboard anywhere on the site to hack in.',
     description: 'You discovered the hidden Terminal Easter Egg.',
     discoveredAt: null
   }
