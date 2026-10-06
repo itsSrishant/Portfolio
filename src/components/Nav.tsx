@@ -126,10 +126,12 @@ export default function Nav() {
           <div className="flex flex-1 items-center justify-start gap-4 md:gap-5">
             <HashLink
               hash="#top"
-              className="group inline-flex items-baseline gap-2.5"
+              className="group inline-flex items-center gap-3"
               aria-label={`${profile.name} — back to top`}
             >
-              <span className="text-[1.05rem] font-bold tracking-[-0.02em]">{profile.initials}</span>
+              <div className="w-8 h-8 md:w-9 md:h-9 flex items-center justify-center overflow-hidden mix-blend-screen rounded-full">
+                <img src="/favicon.png" alt="SK Logo" className="w-full h-full object-cover scale-[1.8]" />
+              </div>
               <span className="text-ink-3 hidden text-[0.9rem] lg:inline">{profile.name}</span>
             </HashLink>
           </div>
@@ -191,7 +193,9 @@ export default function Nav() {
         style={{ zIndex: 'var(--z-overlay)' }}
       >
         <div className="shell flex h-[68px] items-center justify-between">
-          <span className="text-[1.05rem] font-bold tracking-[-0.02em]">{profile.initials}</span>
+          <div className="w-8 h-8 flex items-center justify-center overflow-hidden mix-blend-screen rounded-full">
+            <img src="/favicon.png" alt="SK Logo" className="w-full h-full object-cover scale-[1.8]" />
+          </div>
           <button type="button" onClick={() => setOpen(false)} className="icon-link" aria-label="Close menu">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden className="h-[18px] w-[18px]">
               <path d="M6 6l12 12M18 6 6 18" strokeLinecap="round" />
