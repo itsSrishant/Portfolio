@@ -23,8 +23,9 @@ export default function StarsBackground({ intensity = 'normal' }: { intensity?: 
     window.addEventListener('resize', setCanvasSize);
 
     // Initial stars setup
+    const isMobile = width < 768;
     const stars: { x: number; y: number; size: number; alpha: number; delta: number; color: string; baseY: number; phase: number }[] = [];
-    const numStars = intensity === 'low' ? 250 : 400; // Bumped up from 150
+    const numStars = isMobile ? 60 : (intensity === 'low' ? 250 : 400); 
 
     for (let i = 0; i < numStars; i++) {
       const isPurple = Math.random() > 0.8;
@@ -64,8 +65,8 @@ export default function StarsBackground({ intensity = 'normal' }: { intensity?: 
       }
 
       // Maintain active shooting stars
-      const maxShootingStars = intensity === 'low' ? 2 : 4;
-      const spawnChance = intensity === 'low' ? 0.05 : 0.08;
+      const maxShootingStars = isMobile ? 1 : (intensity === 'low' ? 2 : 4);
+      const spawnChance = isMobile ? 0.02 : (intensity === 'low' ? 0.05 : 0.08);
         
       if (shootingStars.length < maxShootingStars && Math.random() < spawnChance) { 
         // Spawn them just slightly off-screen or on the top/right edges so they are visible immediately

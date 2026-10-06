@@ -38,7 +38,7 @@ const HeroContent = forwardRef<HTMLDivElement>(function HeroContent(_props, ref)
       {/* Interactive X-Ray Spotlight Layer */}
       <div 
         ref={spotlightRef}
-        className="absolute inset-0 z-0 pointer-events-none opacity-100 transition-opacity duration-1000"
+        className="absolute inset-0 z-0 pointer-events-none opacity-100 transition-opacity duration-1000 hidden md:block"
         style={{
           background: `radial-gradient(circle 500px at var(--x, 50%) var(--y, 50%), rgba(255, 122, 0, 0.08), transparent 70%)`,
         }}

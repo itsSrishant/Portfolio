@@ -168,7 +168,7 @@ export default function CinematicIntro() {
     if (stageRef.current) {
       const hudEls = stageRef.current.querySelectorAll('.cyberpunk-hud');
       const gridEl = stageRef.current.querySelector('.cyberpunk-grid');
-      tl.to(hudEls, { scale: 3, opacity: 0, filter: 'blur(15px)', ease: 'power2.in', duration: at(0.12) }, 0);
+      tl.to(hudEls, { scale: 3, opacity: 0, filter: isNarrow ? 'blur(2px)' : 'blur(15px)', ease: 'power2.in', duration: at(0.12) }, 0);
       tl.to(gridEl, { scale: 5, opacity: 0, ease: 'power3.in', duration: at(0.15) }, 0);
     }
 
@@ -339,7 +339,7 @@ export default function CinematicIntro() {
 
             {/* Dynamic Wakandan Spotlight (follows mouse) */}
             <div 
-              className="absolute inset-0 pointer-events-none opacity-40 mix-blend-screen transition-opacity duration-300"
+              className="absolute inset-0 pointer-events-none opacity-40 mix-blend-screen transition-opacity duration-300 hidden md:block"
               style={{
                 background: `radial-gradient(circle 600px at calc(50% + var(--mx, 0px) * 10) calc(50% + var(--my, 0px) * 10), rgba(255,122,0,0.15), transparent 60%)`,
               }}
