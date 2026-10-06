@@ -1,30 +1,11 @@
 import { GitHubIcon, LinkedInIcon, ArrowIcon, DocumentIcon } from './Icons';
 import { profile, linksReady } from '../data/profile';
-import { useEffect, useRef } from 'react';
-import { useExploration } from '../contexts/ExplorationContext';
 
 /** Oversized type, almost no chrome. The address is the interface. */
 export default function Contact() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const { unlockMilestone } = useExploration();
-
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          unlockMilestone('system_boot');
-        }
-      },
-      { threshold: 0.2 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [unlockMilestone]);
 
   return (
-    <section ref={sectionRef} id="contact" className="relative scroll-mt-24 py-10 sm:py-16 lg:py-20 overflow-hidden border-t border-line-soft bg-surface/10">
+    <section id="contact" className="relative scroll-mt-24 py-10 sm:py-16 lg:py-20 overflow-hidden border-t border-line-soft bg-surface/10">
       {/* Massive ambient background glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100vw] h-[100vw] max-w-[1200px] max-h-[1200px] bg-[radial-gradient(circle,rgba(255,122,0,0.06)_0%,rgba(155,48,255,0.04)_40%,transparent_70%)] pointer-events-none z-0"></div>
 
@@ -73,7 +54,7 @@ export default function Contact() {
               Resume
             </a>
             {linksReady.github && (
-              <a href={profile.github} target="_blank" rel="noreferrer noopener" className="btn btn-ghost" onClick={() => unlockMilestone('source_code')}>
+              <a href={profile.github} target="_blank" rel="noreferrer noopener" className="btn btn-ghost">
                 <GitHubIcon />
                 GitHub
               </a>

@@ -3,7 +3,6 @@ import { useLocation } from 'react-router-dom';
 import { GitHubIcon, LinkedInIcon, DocumentIcon } from './Icons';
 import HashLink from './HashLink';
 import { navItems, profile, linksReady } from '../data/profile';
-import { useExploration } from '../contexts/ExplorationContext';
 
 const chars = '█▓▒░<>-_\\\\/[]{}—=+*^?#_01';
 function GlitchText({ text }: { text: string }) {
@@ -63,7 +62,6 @@ export default function Nav() {
   const onHome = pathname === '/';
   const [scrolled, setScrolled] = useState(!onHome);
   const [open, setOpen] = useState(false);
-  const { percentage, setPanelOpen } = useExploration();
 
   useEffect(() => {
     if (!onHome) {
@@ -134,15 +132,6 @@ export default function Nav() {
               <span className="text-[1.05rem] font-bold tracking-[-0.02em]">{profile.initials}</span>
               <span className="text-ink-3 hidden text-[0.9rem] lg:inline">{profile.name}</span>
             </HashLink>
-
-            <button 
-              onClick={() => setPanelOpen(true)}
-              className="flex items-center gap-1.5 h-7 md:h-8 rounded-full px-2.5 md:px-3 text-[0.65rem] md:text-[0.7rem] font-medium tracking-widest uppercase border border-[var(--accent)]/15 bg-[var(--accent)]/5 hover:bg-[var(--accent)]/15 hover:border-[var(--accent)]/40 transition-all duration-300 text-ink-2 hover:text-white"
-            >
-              <span className="text-[var(--accent)] text-xs md:text-sm">✦</span>
-              <span className="hidden md:inline">EXPLORE</span>
-              <span className="mono text-[var(--accent)] font-semibold">{percentage}%</span>
-            </button>
           </div>
 
           {/* Center: Nav links */}

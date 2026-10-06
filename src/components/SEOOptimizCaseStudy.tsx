@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
 import ArchitectureDiagram, { type NodeDef, type EdgeDef } from './ArchitectureDiagram';
-import { useExploration } from '../contexts/ExplorationContext';
 import ProcessTimeline from './ProcessTimeline';
 import Beat from './casestudy/Beat';
 import type { Project } from '../data/profile';
@@ -40,7 +39,6 @@ const SlideshowImage = ({ images, interval = 4000 }: { images: string[], interva
 const SpotlightGallery = ({ images }: { images: string[] }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const { unlockMilestone } = useExploration();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -56,7 +54,6 @@ const SpotlightGallery = ({ images }: { images: string[] }) => {
     const y = e.clientY - rect.top;
     containerRef.current.style.setProperty('--mouse-x', `${x}px`);
     containerRef.current.style.setProperty('--mouse-y', `${y}px`);
-    unlockMilestone('xray_protocol');
   };
 
   const renderGrid = (isMasked: boolean) => (

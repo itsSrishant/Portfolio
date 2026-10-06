@@ -1,21 +1,6 @@
 import { useEffect, useRef } from 'react';
-import { useExploration } from '../contexts/ExplorationContext';
-
 export default function StarsBackground({ intensity = 'normal' }: { intensity?: 'normal' | 'low' }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { unlockMilestone, percentage } = useExploration();
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      unlockMilestone('stargazer');
-    }, 15000);
-    return () => clearTimeout(timer);
-  }, [unlockMilestone]);
-
-  const percentageRef = useRef(percentage);
-  useEffect(() => {
-    percentageRef.current = percentage;
-  }, [percentage]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -79,15 +64,8 @@ export default function StarsBackground({ intensity = 'normal' }: { intensity?: 
       }
 
       // Maintain active shooting stars
-      const currentPercentage = percentageRef.current;
-      
-      const maxShootingStars = currentPercentage === 100 
-        ? (intensity === 'low' ? 25 : 40) 
-        : (intensity === 'low' ? 2 : 4);
-        
-      const spawnChance = currentPercentage === 100 
-        ? (intensity === 'low' ? 0.2 : 0.3) 
-        : (intensity === 'low' ? 0.05 : 0.08);
+      const maxShootingStars = intensity === 'low' ? 2 : 4;
+      const spawnChance = intensity === 'low' ? 0.05 : 0.08;
         
       if (shootingStars.length < maxShootingStars && Math.random() < spawnChance) { 
         // Spawn them just slightly off-screen or on the top/right edges so they are visible immediately

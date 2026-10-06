@@ -9,9 +9,7 @@ import TerminalEasterEgg from './components/TerminalEasterEgg';
 import Home from './pages/Home';
 import WorkDetail from './pages/WorkDetail';
 import Privacy from './pages/Privacy';
-import { ExplorationProvider } from './contexts/ExplorationContext';
-import ExplorationPanel from './components/ExplorationPanel';
-import ExplorationToast from './components/ExplorationToast';
+
 
 export default function App() {
   useEffect(() => {
@@ -29,7 +27,7 @@ export default function App() {
   }, []);
 
   return (
-    <ExplorationProvider>
+    <>
       <RouteEffects />
       <DocumentMeta />
       <VectorCursor />
@@ -43,8 +41,6 @@ export default function App() {
         </Routes>
       </main>
       <Footer />
-      <ExplorationPanel />
-      <ExplorationToast />
-    </ExplorationProvider>
+    </>
   );
 }

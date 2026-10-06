@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import ArchitectureDiagram from './ArchitectureDiagram';
 import ProcessTimeline from './ProcessTimeline';
-import { useExploration } from '../contexts/ExplorationContext';
 import Beat from './casestudy/Beat';
 import type { Project } from '../data/profile';
 
@@ -195,18 +194,15 @@ const TECH: Array<{ name: string; reason: string; node: string | null }> = [
 function AudioWaveform() {
   const ref = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
-  const { unlockMilestone } = useExploration();
-  
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
     const observer = new IntersectionObserver(([entry]) => {
       setInView(entry.isIntersecting);
-      if (entry.isIntersecting) unlockMilestone('audio_technician');
     }, { threshold: 0.3 });
     observer.observe(el);
     return () => observer.disconnect();
-  }, [unlockMilestone]);
+  }, []);
 
   return (
     <div
