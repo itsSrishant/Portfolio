@@ -54,7 +54,7 @@ function ContributionRail({ articleRef, count }: { articleRef: React.RefObject<H
         const lit = progress >= (tickOffsets[i] ?? 1);
         el.style.backgroundColor = lit ? 'var(--accent)' : 'var(--bg)';
         el.style.borderColor = lit ? 'var(--accent)' : 'var(--line-soft)';
-        el.style.boxShadow = lit ? '0 0 10px 2px color-mix(in oklch, var(--accent) 40%, transparent)' : 'none';
+        el.style.boxShadow = lit ? '0 0 20px 4px color-mix(in oklch, var(--accent) 60%, transparent)' : 'none';
       });
     };
 
@@ -79,22 +79,22 @@ function ContributionRail({ articleRef, count }: { articleRef: React.RefObject<H
   }, [articleRef]);
 
   return (
-    <div ref={containerRef} className="absolute top-0 bottom-0 left-[1.1rem] md:left-1/2 w-[2px] md:-translate-x-1/2 z-0">
+    <div ref={containerRef} className="absolute top-0 bottom-0 left-[1.1rem] md:left-1/2 w-[4px] md:-translate-x-1/2 z-0">
       <div className="bg-line-soft/60 absolute top-0 left-0 h-full w-full rounded-full" />
       <div
         ref={fillRef}
         className="absolute top-0 left-0 h-full w-full scale-y-0 rounded-full"
         style={{
           backgroundImage: 'linear-gradient(to bottom, var(--color-accent), var(--color-accent-2))',
-          boxShadow: '0 0 20px 2px var(--color-accent-2)',
+          boxShadow: '0 0 25px 3px var(--color-accent-2), 0 0 10px 1px var(--color-accent-2)',
         }}
       />
       <div
         ref={nodeRef}
-        className="absolute left-[1px] h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-0"
+        className="absolute left-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-0"
         style={{
           backgroundColor: '#fff',
-          boxShadow: '0 0 20px 6px var(--color-accent-2)',
+          boxShadow: '0 0 25px 6px var(--color-accent-2)',
         }}
       />
       {Array.from({ length: count }).map((_, i) => (
@@ -103,7 +103,7 @@ function ContributionRail({ articleRef, count }: { articleRef: React.RefObject<H
           ref={(el) => {
             tickRefs.current[i] = el;
           }}
-          className="border-line-soft bg-bg absolute left-[1px] h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-[2px] transition-all duration-300"
+          className="border-line-soft bg-bg absolute left-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-[2px] transition-all duration-300"
         />
       ))}
     </div>
